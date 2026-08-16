@@ -2,6 +2,9 @@ import { useState } from "react";
 import { vehicles } from "../data/vehicles";
 import { CheckCircle2, Calendar, MapPin, User, Phone, Mail, FileText, Info, Hash } from "lucide-react";
 import { Link } from "react-router-dom";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/airbnb.css";
+import { Vietnamese } from "flatpickr/dist/l10n/vn.js";
 
 export default function BookingPage() {
   const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0].id);
@@ -11,7 +14,8 @@ export default function BookingPage() {
     email: "",
     pickupDate: "",
     dropoffDate: "",
-    pickupLocation: "Ninh Bình",
+    pickupLocation: "Tại cửa hàng",
+    deliveryAddress: "",
     quantity: "1",
     notes: ""
   });
@@ -23,15 +27,80 @@ export default function BookingPage() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.pickupDate || !formData.dropoffDate) {
+      alert("Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
+      return;
+    }
+
     setIsSubmitting(true);
-    // Giả lập gọi API
-    setTimeout(() => {
+
+    // Tên xe đang chọn
+    const vehicleName = vehicles.find(v => v.id === selectedVehicle)?.name || selectedVehicle;
+
+    // Format ngày giờ cho đẹp (Antd DatePicker đã tự trả về string đẹp)
+    const formatDateTime = (dt: string) => dt;
+
+    // Tạo nội dung tin nhắn gửi Telegram
+    const message = `
+🛎 <b>YÊU CẦU ĐẶT XE MỚI</b>
+--------------------------------
+⏱ <b>Ngày đặt:</b> ${new Date().toLocaleString('vi-VN')}
+👤 <b>Khách hàng:</b> ${formData.name}
+📞 <b>SĐT:</b> ${formData.phone}
+✉️ <b>Email:</b> ${formData.email || "Không có"}
+🛵 <b>Dòng xe:</b> ${vehicleName}
+🔢 <b>Số lượng:</b> ${formData.quantity} chiếc
+🗓 <b>Nhận xe:</b> ${formatDateTime(formData.pickupDate)}
+🗓 <b>Trả xe:</b> ${formatDateTime(formData.dropoffDate)}
+📍 <b>Khu vực nhận:</b> ${formData.pickupLocation}${formData.pickupLocation === 'Giao tận nơi' ? `\n🏠 <b>Địa chỉ giao:</b> ${formData.deliveryAddress}` : ''}
+📝 <b>Ghi chú:</b> ${formData.notes || "Không có"}
+    `;
+
+    // Lấy thông tin cấu hình từ file .env
+    const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      console.warn("Chưa cấu hình Telegram Bot Token hoặc Chat ID. Đang chạy ở chế độ giả lập (Mock).");
+      // Fallback: Chế độ giả lập
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setShowSuccess(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1500);
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML',
+        }),
+      });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error('Gửi tin nhắn Telegram thất bại');
+      }
+
       setIsSubmitting(false);
       setShowSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+      setIsSubmitting(false);
+      alert("Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử gọi điện trực tiếp cho chúng tôi!");
+    }
   };
 
   if (showSuccess) {
@@ -67,18 +136,17 @@ export default function BookingPage() {
             <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">1</span>
             Chọn Dòng Xe
           </h2>
-          <div className="flex overflow-x-auto lg:grid lg:grid-cols-1 gap-4 pt-4 pb-4 lg:pt-0 lg:pb-0 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 lg:mx-0 lg:px-0">
+          <div className="flex overflow-x-auto lg:overflow-visible lg:grid lg:grid-cols-1 gap-4 pt-4 pb-4 lg:pt-4 lg:pb-4 lg:pr-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 lg:mx-0 lg:px-0">
             {vehicles.map((vehicle) => {
               const isSelected = selectedVehicle === vehicle.id;
               return (
-                <div 
+                <div
                   key={vehicle.id}
                   onClick={() => setSelectedVehicle(vehicle.id)}
-                  className={`shrink-0 w-[85vw] sm:w-[320px] lg:w-auto snap-center group relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex items-center gap-4 lg:gap-5 ${
-                    isSelected 
-                      ? "border-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white shadow-[0_10px_40px_rgba(0,196,97,0.12)] scale-[1.02]" 
+                  className={`shrink-0 w-[85vw] sm:w-[320px] lg:w-auto snap-center group relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex items-center gap-4 lg:gap-5 ${isSelected
+                      ? "border-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white shadow-[0_10px_40px_rgba(0,196,97,0.12)] scale-[1.02]"
                       : "border-gray-100 bg-white hover:border-[#009e4e]/40 hover:shadow-lg hover:shadow-gray-200/50"
-                  }`}
+                    }`}
                 >
                   {/* Dấu tick khi được chọn */}
                   {isSelected && (
@@ -86,24 +154,22 @@ export default function BookingPage() {
                       <CheckCircle2 size={18} className="text-white" />
                     </div>
                   )}
-                  
+
                   {/* Hình ảnh xe */}
-                  <div className={`w-28 h-28 rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-2 transition-transform duration-300 ${
-                    isSelected ? "bg-white shadow-sm scale-105 border border-green-100" : "bg-gray-50 group-hover:scale-105"
-                  }`}>
+                  <div className={`w-28 h-28 rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-2 transition-transform duration-300 ${isSelected ? "bg-white shadow-sm scale-105 border border-green-100" : "bg-gray-50 group-hover:scale-105"
+                    }`}>
                     <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply" />
                   </div>
-                  
+
                   {/* Thông tin xe */}
                   <div className="flex-1">
                     <h3 className={`font-bold text-xl mb-1.5 transition-colors ${isSelected ? "text-[#009e4e]" : "text-[#0d1b2a] group-hover:text-[#009e4e]"}`}>
                       {vehicle.name}
                     </h3>
-                    <div className={`inline-flex items-center text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
-                      isSelected 
-                        ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30" 
+                    <div className={`inline-flex items-center text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${isSelected
+                        ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
                         : "bg-green-50 text-[#009e4e]"
-                    }`}>
+                      }`}>
                       Chỉ từ {vehicle.pricing.day1.split("/")[0]}
                     </div>
                   </div>
@@ -127,9 +193,9 @@ export default function BookingPage() {
               <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">2</span>
               Thông Tin Đặt Xe
             </h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              
+
               {/* Thông tin liên hệ */}
               <div className="space-y-4">
                 <h3 className="text-lg font-bold text-gray-700">Thông tin cá nhân</h3>
@@ -155,26 +221,67 @@ export default function BookingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />Nhận xe lúc *</label>
-                    <input required type="datetime-local" name="pickupDate" value={formData.pickupDate} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" />
+                    <Flatpickr
+                      data-enable-time
+                      value={formData.pickupDate}
+                      options={{
+                        locale: Vietnamese,
+                        minDate: "today",
+                        dateFormat: "d/m/Y H:i",
+                        time_24hr: true,
+                        disableMobile: true // Bắt buộc dùng giao diện tuỳ chỉnh đẹp, không dùng giao diện mặc định xấu của trình duyệt
+                      }}
+                      onChange={([date]) => {
+                        if(date) {
+                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                          setFormData(prev => ({ ...prev, pickupDate: dateStr }));
+                        }
+                      }}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
+                      placeholder="Chọn ngày giờ nhận"
+                    />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />Trả xe lúc *</label>
-                    <input required type="datetime-local" name="dropoffDate" value={formData.dropoffDate} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" />
+                    <Flatpickr
+                      data-enable-time
+                      value={formData.dropoffDate}
+                      options={{
+                        locale: Vietnamese,
+                        minDate: "today",
+                        dateFormat: "d/m/Y H:i",
+                        time_24hr: true,
+                        disableMobile: true
+                      }}
+                      onChange={([date]) => {
+                        if(date) {
+                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                          setFormData(prev => ({ ...prev, dropoffDate: dateStr }));
+                        }
+                      }}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
+                      placeholder="Chọn ngày giờ trả"
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />Khu vực nhận xe *</label>
                     <select required name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white appearance-none cursor-pointer">
-                      <option value="Ninh Bình">Cửa Hàng Cố Đô Xanh (Ninh Bình)</option>
-                      <option value="Sân Bay Nội Bài">Trạm giao nhận Sân Bay Nội Bài</option>
-                      <option value="Khác">Khu vực khác (Giao tận nơi)</option>
+                      <option value="Tại cửa hàng">Tại cửa hàng Cố Đô Xanh</option>
+                      <option value="Giao tận nơi">Giao xe tận nơi</option>
                     </select>
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Hash size={16} className="text-gray-400" />Số lượng xe *</label>
                     <input required type="number" min="1" max="50" name="quantity" value={formData.quantity} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="1" />
                   </div>
+                </div>
+                
+                {/* Địa chỉ giao xe (Chỉ hiện khi chọn Giao tận nơi) */}
+                <div className={`space-y-1.5 overflow-hidden transition-all duration-300 ${formData.pickupLocation === 'Giao tận nơi' ? 'max-h-24 mt-4 opacity-100' : 'max-h-0 mt-0 opacity-0'}`}>
+                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />Địa chỉ nhận xe *</label>
+                  <input required={formData.pickupLocation === 'Giao tận nơi'} type="text" name="deliveryAddress" value={formData.deliveryAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="Khách sạn, Homestay, Ga tàu, Bến xe..." />
                 </div>
               </div>
 
@@ -184,12 +291,11 @@ export default function BookingPage() {
                 <textarea name="notes" value={formData.notes} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white resize-none" placeholder="Ví dụ: Cần mượn thêm 2 mũ bảo hiểm, giao xe tại khách sạn ABC..."></textarea>
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all flex items-center justify-center gap-2 ${
-                  isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#009e4e] hover:bg-[#008c45] shadow-lg shadow-green-500/30 hover:shadow-green-500/40"
-                }`}
+                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all flex items-center justify-center gap-2 ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#009e4e] hover:bg-[#008c45] shadow-lg shadow-green-500/30 hover:shadow-green-500/40"
+                  }`}
               >
                 {isSubmitting ? (
                   <>

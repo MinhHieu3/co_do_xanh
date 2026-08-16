@@ -1,7 +1,62 @@
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { useState } from "react";
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
 import contactBg from "../assets/dulich/ninhbinh_slider_1.png";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    subject: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const text = `
+📩 <b>TIN NHẮN LIÊN HỆ MỚI</b>
+--------------------------------
+⏱ <b>Thời gian:</b> ${new Date().toLocaleString('vi-VN')}
+👤 <b>Người gửi:</b> ${formData.name}
+📞 <b>SĐT:</b> ${formData.phone}
+📌 <b>Tiêu đề:</b> ${formData.subject || "Không có"}
+📝 <b>Nội dung:</b>
+${formData.message}
+    `;
+
+    const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setShowSuccess(true);
+      }, 1000);
+      return;
+    }
+
+    try {
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'HTML' }),
+      });
+      setIsSubmitting(false);
+      setShowSuccess(true);
+    } catch (error) {
+      setIsSubmitting(false);
+      alert("Có lỗi xảy ra khi gửi tin nhắn!");
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center bg-gray-50/50 min-h-screen">
       {/* Hero Section */}
@@ -85,58 +140,95 @@ export default function ContactPage() {
           {/* Contact Form (Right) */}
           <div className="lg:col-span-7">
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 h-full">
-              <h2 className="text-2xl font-bold text-[#0d1b2a] mb-2 font-display">Gửi tin nhắn cho chúng tôi</h2>
-              <p className="text-gray-500 mb-8 text-[15px]">Vui lòng điền thông tin bên dưới, Cố Đô Xanh sẽ phản hồi bạn trong thời gian sớm nhất.</p>
-
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-700">Họ và Tên *</label>
-                    <input
-                      type="text"
-                      placeholder="Nhập họ tên của bạn"
-                      className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                      required
-                    />
+              {showSuccess ? (
+                <div className="flex flex-col items-center justify-center h-full text-center py-10 animate-fade-in-up">
+                  <div className="w-20 h-20 bg-green-100 text-[#00c461] rounded-full flex items-center justify-center mb-6">
+                    <CheckCircle2 size={40} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-700">Số điện thoại *</label>
-                    <input
-                      type="tel"
-                      placeholder="Nhập số điện thoại"
-                      className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                      required
-                    />
-                  </div>
+                  <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">Gửi Thành Công!</h3>
+                  <p className="text-gray-600">Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi lại trong thời gian sớm nhất qua số điện thoại của bạn.</p>
+                  <button 
+                    onClick={() => {
+                      setShowSuccess(false);
+                      setFormData({ name: "", phone: "", subject: "", message: "" });
+                    }}
+                    className="mt-8 px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors"
+                  >
+                    Gửi tin nhắn khác
+                  </button>
                 </div>
+              ) : (
+                <>
+                  <h2 className="text-2xl font-bold text-[#0d1b2a] mb-2 font-display">Gửi tin nhắn cho chúng tôi</h2>
+                  <p className="text-gray-500 mb-8 text-[15px]">Vui lòng điền thông tin bên dưới, Cố Đô Xanh sẽ phản hồi bạn trong thời gian sớm nhất.</p>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Tiêu đề</label>
-                  <input
-                    type="text"
-                    placeholder="Bạn cần hỗ trợ về vấn đề gì?"
-                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                  />
-                </div>
+                  <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-700">Họ và Tên *</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Nhập họ tên của bạn"
+                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-700">Số điện thoại *</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="Nhập số điện thoại"
+                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                          required
+                        />
+                      </div>
+                    </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Nội dung tin nhắn *</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Viết tin nhắn của bạn ở đây..."
-                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
-                    required
-                  ></textarea>
-                </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-gray-700">Tiêu đề</label>
+                      <input
+                        type="text"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        placeholder="Bạn cần hỗ trợ về vấn đề gì?"
+                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                      />
+                    </div>
 
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto px-10 py-4 bg-[#00c461] hover:bg-[#00a852] text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-2 mt-4"
-                >
-                  <Send size={18} />
-                  Gửi Tin Nhắn Ngay
-                </button>
-              </form>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-gray-700">Nội dung tin nhắn *</label>
+                      <textarea
+                        rows={4}
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Viết tin nhắn của bạn ở đây..."
+                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
+                        required
+                      ></textarea>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full sm:w-auto px-10 py-4 ${isSubmitting ? 'bg-gray-400' : 'bg-[#00c461] hover:bg-[#00a852] hover:-translate-y-1 shadow-lg shadow-green-500/30'} text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-4`}
+                    >
+                      {isSubmitting ? (
+                        <>Đang gửi...</>
+                      ) : (
+                        <><Send size={18} /> Gửi Tin Nhắn Ngay</>
+                      )}
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -201,3 +201,13 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #00c461; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #009e4e; }
+
+/* ── Fix Flatpickr Mobile Overflow ── */
+@media (max-width: 480px) {
+  .flatpickr-calendar {
+    transform: scale(0.85) !important;
+    transform-origin: top center !important;
+    left: 50% !important;
+    transform: translateX(-50%) scale(0.85) !important;
+  }
+}

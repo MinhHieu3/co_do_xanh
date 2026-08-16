@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Globe, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import logo from "../assets/logo/logo3.png";
 
 const NAV_LINKS = [
