@@ -1,5 +1,5 @@
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import newsBg from "../assets/dulich/ninhbinh_slider_1.png";
 import img1 from "../assets/dulich/ninhbinh_slider_2.png";
 import img2 from "../assets/dulich/blog_hoalu.png";
