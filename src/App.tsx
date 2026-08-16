@@ -12,7 +12,7 @@ function App() {
     <div className="min-h-screen flex flex-col w-full relative">
       <LeavesBackground />
       <Header />
-      <main className="flex-1 w-full pt-[90px] relative z-10">
+      <main className="flex-1 w-full pt-[90px] min-h-[100vh] relative z-10">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/dat-xe" element={<BookingPage />} />
