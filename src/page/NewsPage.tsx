@@ -1,5 +1,4 @@
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
-
 import newsBg from "../assets/dulich/ninhbinh_slider_1.png";
 import img1 from "../assets/dulich/ninhbinh_slider_2.png";
 import img2 from "../assets/dulich/blog_hoalu.png";
@@ -97,7 +96,7 @@ export default function NewsPage() {
       </div>
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24 relative z-10 pb-20">
-        
+
         {/* Tin nổi bật (Featured) */}
         <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-12 group cursor-pointer animate-fade-in-up">
           <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -160,7 +159,7 @@ export default function NewsPage() {
           <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors">2</button>
           <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors">3</button>
           <span className="w-10 h-10 flex items-center justify-center text-gray-400">...</span>
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors"><ArrowRight size={16}/></button>
+          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors"><ArrowRight size={16} /></button>
         </div>
 
       </div>
