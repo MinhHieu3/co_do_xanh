@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, ChevronRight } from "lucide-react";
 import logo from "../assets/logo/logo3.png";
 
 const NAV_LINKS = [
   { name: "TRANG CHỦ", path: "/" },
-  { name: "DỊCH VỤ", path: "/dich-vu" },
+  // { name: "DỊCH VỤ", path: "/dich-vu" },
   { name: "ĐẶT XE", path: "/dat-xe" },
-  { name: "BÁO GIÁ", path: "/bang-gia" },
+  // { name: "BÁO GIÁ", path: "/bang-gia" },
   { name: "TIN TỨC", path: "/tin-tuc" },
   { name: "LIÊN HỆ", path: "/lien-he" },
 ];
@@ -17,6 +17,25 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [language, setLanguage] = useState('VI');
   const location = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +47,7 @@ export default function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-[#00c461]/10 border-t-[3px] border-t-[#00c461] ${isScrolled
         ? "bg-white/95 shadow-md py-1"
         : "bg-gradient-to-b from-[#f2fdf5]/90 to-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-1.5"
@@ -72,21 +92,28 @@ export default function Header() {
             <div className="ml-4 pl-4 border-l border-gray-200 flex items-center">
               <button
                 onClick={() => setLanguage(lang => lang === 'VI' ? 'EN' : 'VI')}
-                className="flex items-center gap-1.5 text-sm font-bold text-[#0d1b2a] hover:text-[#009e4e] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 hover:border-[#009e4e]/30 hover:bg-[#e6fff2] group"
+                className="flex items-center gap-2 text-sm font-bold text-[#0d1b2a] hover:text-[#009e4e] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 hover:border-[#009e4e]/30 hover:bg-[#e6fff2] group"
               >
-                <Globe size={16} className="text-gray-400 group-hover:text-[#009e4e]" />
+                <img src={language === 'VI' ? "https://flagcdn.com/w20/vn.png" : "https://flagcdn.com/w20/gb.png"} alt={language} className="w-5 h-auto shadow-sm" />
                 <span className="font-display tracking-wider">{language}</span>
               </button>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          {/* Mobile Actions: Language + Hamburger */}
+          <div className="flex lg:hidden items-center space-x-1.5">
+            <button
+              onClick={() => setLanguage(lang => lang === 'VI' ? 'EN' : 'VI')}
+              className="flex items-center justify-center gap-1.5 font-bold text-[#0d1b2a] bg-white px-2.5 h-[34px] rounded-md border border-gray-100 shadow-sm hover:border-[#009e4e]/50 transition-all"
+            >
+              <img src={language === 'VI' ? "https://flagcdn.com/w20/vn.png" : "https://flagcdn.com/w20/gb.png"} alt={language} className="w-[18px] h-auto drop-shadow-sm rounded-[1px]" />
+              <span className="font-display tracking-wider text-[13px] leading-none mt-[1px]">{language}</span>
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#0d1b2a] hover:text-[#009e4e] transition-colors focus:outline-none"
+              className="w-[34px] h-[34px] flex items-center justify-center text-[#0d1b2a] hover:text-[#009e4e] transition-colors focus:outline-none"
             >
-              {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
@@ -94,10 +121,10 @@ export default function Header() {
 
       {/* Mobile Navigation Dropdown */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 origin-top overflow-hidden ${mobileMenuOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 origin-top overflow-hidden border-t border-gray-100 ${mobileMenuOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
           }`}
       >
-        <div className="py-4 px-4 flex flex-col space-y-4">
+        <div className="p-4 flex flex-col space-y-2.5">
           {NAV_LINKS.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -105,23 +132,17 @@ export default function Header() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-lg font-bold uppercase pb-3 border-b border-gray-100 font-display transition-colors ${isActive ? "text-[#009e4e]" : "text-[#0d1b2a] hover:text-[#009e4e]"
-                  }`}
+                className={`flex items-center justify-between px-4 py-3.5 rounded-xl font-bold uppercase tracking-wide font-display transition-all ${
+                  isActive
+                    ? "bg-[#009e4e]/10 text-[#009e4e] shadow-sm"
+                    : "text-[#0d1b2a] bg-gray-50 hover:bg-gray-100 hover:text-[#009e4e]"
+                }`}
               >
-                {link.name}
+                <span className="text-[15px]">{link.name}</span>
+                <ChevronRight size={18} className={isActive ? "text-[#009e4e]" : "text-gray-400 group-hover:text-[#009e4e]"} />
               </Link>
             );
           })}
-
-          <div className="pt-2">
-            <button
-              onClick={() => setLanguage(lang => lang === 'VI' ? 'EN' : 'VI')}
-              className="flex items-center gap-2 text-lg font-bold text-[#0d1b2a] uppercase font-display"
-            >
-              <Globe size={20} className="text-[#009e4e]" />
-              <span>Ngôn ngữ: {language === 'VI' ? 'Tiếng Việt (VI)' : 'English (EN)'}</span>
-            </button>
-          </div>
         </div>
       </div>
     </header>

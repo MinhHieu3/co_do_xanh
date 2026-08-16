@@ -5,6 +5,7 @@ import HomePage from "./page/HomePage";
 import BookingPage from "./page/BookingPage";
 import PricingPage from "./page/PricingPage";
 import ContactPage from "./page/ContactPage";
+import NewsPage from "./page/NewsPage";
 import LeavesBackground from "./component/LeavesBackground";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/dat-xe" element={<BookingPage />} />
           <Route path="/bang-gia" element={<PricingPage />} />
           <Route path="/lien-he" element={<ContactPage />} />
+          <Route path="/tin-tuc" element={<NewsPage />} />
         </Routes>
       </main>
       <div className="relative z-10">

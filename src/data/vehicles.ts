@@ -1,3 +1,8 @@
+import felizImage from "../assets/image/Vinfast Feliz II.webp";
+import evoImage from "../assets/image/Xe Máy Điện Vinfast Evo.jpg";
+import phoenixImage from "../assets/image/XE ĐẠP TRỢ LỰC ĐIỆN PHOENIX.jpeg";
+import waveAlphaImage from "../assets/image/Wave Alpha 110.jpeg";
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -12,47 +17,47 @@ export interface Vehicle {
 
 export const vehicles: Vehicle[] = [
   {
-    id: "sym-galaxy-50",
-    name: "SYM Galaxy 50cc",
-    image: "https://placehold.co/400x300/f8fafc/64748b?text=SYM+Galaxy+50cc",
-    pricing: {
-      day1: "120k/1 ngày",
-      day2: "220k/2 ngày",
-      day3: "300k/3 ngày",
-      day4: "360k/4 ngày"
-    }
-  },
-  {
-    id: "honda-wave-rsx-110",
-    name: "Honda Wave RSX 110cc",
-    image: "https://placehold.co/400x300/f8fafc/64748b?text=Honda+Wave+RSX",
-    pricing: {
-      day1: "110k/1 ngày",
-      day2: "200k/2 ngày",
-      day3: "270k/3 ngày",
-      day4: "320k/4 ngày"
-    }
-  },
-  {
-    id: "yamaha-sirius-110",
-    name: "Yamaha Sirius 110cc",
-    image: "https://placehold.co/400x300/f8fafc/64748b?text=Yamaha+Sirius",
-    pricing: {
-      day1: "110k/1 ngày",
-      day2: "200k/2 ngày",
-      day3: "270k/3 ngày",
-      day4: "320k/4 ngày"
-    }
-  },
-  {
-    id: "yamaha-pg1-2024",
-    name: "Yamaha PG1 2024",
-    image: "https://placehold.co/400x300/f8fafc/64748b?text=Yamaha+PG1+2024",
+    id: "vinfast-feliz-2",
+    name: "Vinfast Feliz II",
+    image: felizImage,
     pricing: {
       day1: "150k/1 ngày",
       day2: "280k/2 ngày",
       day3: "390k/3 ngày",
       day4: "480k/4 ngày"
+    }
+  },
+  {
+    id: "vinfast-evo",
+    name: "Vinfast Evo",
+    image: evoImage,
+    pricing: {
+      day1: "150k/1 ngày",
+      day2: "280k/2 ngày",
+      day3: "390k/3 ngày",
+      day4: "480k/4 ngày"
+    }
+  },
+  {
+    id: "xe-dap-phoenix",
+    name: "XE ĐẠP TRỢ LỰC PHOENIX",
+    image: phoenixImage,
+    pricing: {
+      day1: "100k/1 ngày",
+      day2: "180k/2 ngày",
+      day3: "250k/3 ngày",
+      day4: "300k/4 ngày"
+    }
+  },
+  {
+    id: "wave-alpha-110",
+    name: "Wave Alpha 110",
+    image: waveAlphaImage,
+    pricing: {
+      day1: "100k/1 ngày",
+      day2: "180k/2 ngày",
+      day3: "250k/3 ngày",
+      day4: "300k/4 ngày"
     }
   }
 ];
