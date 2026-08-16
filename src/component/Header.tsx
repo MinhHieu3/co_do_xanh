@@ -1,0 +1,129 @@
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Globe } from "lucide-react";
+import logo from "../assets/logo/logo3.png";
+
+const NAV_LINKS = [
+  { name: "TRANG CHỦ", path: "/" },
+  { name: "DỊCH VỤ", path: "/dich-vu" },
+  { name: "ĐẶT XE", path: "/dat-xe" },
+  { name: "BÁO GIÁ", path: "/bang-gia" },
+  { name: "TIN TỨC", path: "/tin-tuc" },
+  { name: "LIÊN HỆ", path: "/lien-he" },
+];
+
+export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState('VI');
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-[#00c461]/10 border-t-[3px] border-t-[#00c461] ${isScrolled
+        ? "bg-white/95 shadow-md py-1"
+        : "bg-gradient-to-b from-[#f2fdf5]/90 to-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-1.5"
+        }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo Area */}
+          <Link to="/" className="flex items-center group py-1">
+            <img
+              src={logo}
+              alt="Cố Đô Xanh"
+              className="h-[48px] md:h-[56px] lg:h-[70px] w-auto object-contain drop-shadow-md transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-lg"
+            />
+          </Link>
+
+          {/* Desktop Navigation and Language */}
+          <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+            <nav className="flex items-center space-x-1 xl:space-x-2">
+              {NAV_LINKS.map((link, index) => {
+                const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
+                return (
+                  <div key={link.name} className="flex items-center">
+                    <Link
+                      to={link.path}
+                      className={`px-3 py-2 text-[14px] font-bold transition-all uppercase font-display tracking-widest ${isActive
+                        ? "text-[#00c461] drop-shadow-sm"
+                        : "text-gray-600 hover:text-[#00c461]"
+                        }`}
+                    >
+                      {link.name}
+                    </Link>
+                    {index < NAV_LINKS.length - 1 && (
+                      <span className="text-gray-200 font-light mx-1 select-none">|</span>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+
+            {/* Language Selector */}
+            <div className="ml-4 pl-4 border-l border-gray-200 flex items-center">
+              <button
+                onClick={() => setLanguage(lang => lang === 'VI' ? 'EN' : 'VI')}
+                className="flex items-center gap-1.5 text-sm font-bold text-[#0d1b2a] hover:text-[#009e4e] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 hover:border-[#009e4e]/30 hover:bg-[#e6fff2] group"
+              >
+                <Globe size={16} className="text-gray-400 group-hover:text-[#009e4e]" />
+                <span className="font-display tracking-wider">{language}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-[#0d1b2a] hover:text-[#009e4e] transition-colors focus:outline-none"
+            >
+              {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Dropdown */}
+      <div
+        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 origin-top overflow-hidden ${mobileMenuOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+          }`}
+      >
+        <div className="py-4 px-4 flex flex-col space-y-4">
+          {NAV_LINKS.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-lg font-bold uppercase pb-3 border-b border-gray-100 font-display transition-colors ${isActive ? "text-[#009e4e]" : "text-[#0d1b2a] hover:text-[#009e4e]"
+                  }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+
+          <div className="pt-2">
+            <button
+              onClick={() => setLanguage(lang => lang === 'VI' ? 'EN' : 'VI')}
+              className="flex items-center gap-2 text-lg font-bold text-[#0d1b2a] uppercase font-display"
+            >
+              <Globe size={20} className="text-[#009e4e]" />
+              <span>Ngôn ngữ: {language === 'VI' ? 'Tiếng Việt (VI)' : 'English (EN)'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
