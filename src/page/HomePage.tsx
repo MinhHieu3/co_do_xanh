@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MousePointerClick, FileCheck, Map, RotateCcw } from "lucide-react";
 import { vehicles } from "../data/vehicles";
 import slide1 from "../assets/dulich/ninhbinh_slider_1.png";
@@ -88,12 +89,21 @@ export default function HomePage() {
               </h3>
 
               {/* Pricing details */}
-              <div className="text-[14px] text-gray-700 font-medium space-x-1 leading-relaxed max-w-[250px]">
+              <div className="text-[14px] text-gray-700 font-medium space-x-1 leading-relaxed max-w-[250px] mb-5">
                 <span>{vehicle.pricing.day1} -</span>
                 <span>{vehicle.pricing.day2} -</span>
                 <span>{vehicle.pricing.day3} -</span>
                 <span>{vehicle.pricing.day4}</span>
               </div>
+
+              {/* Action Button */}
+              <Link 
+                to="/dat-xe" 
+                className="mt-auto px-6 py-2.5 bg-[#009e4e] hover:bg-[#008c45] text-white font-bold rounded-full transition-all duration-300 shadow-md shadow-green-500/30 hover:shadow-lg hover:shadow-green-500/40 lg:hover:-translate-y-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Đặt Xe Ngay
+              </Link>
             </div>
           ))}
         </div>
