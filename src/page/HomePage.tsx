@@ -11,6 +11,7 @@ const SLIDER_IMAGES = [
 ];
 
 export default function HomePage() {
+  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -128,7 +129,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-[#e33527] font-bold text-[16px] md:text-[17px] mb-3 md:mb-4 uppercase tracking-wider font-display">Chọn xe và gọi xe</h3>
               <p className="text-gray-600 text-[14px] md:text-[15px] leading-relaxed max-w-[260px]">
-                Xem xe và chọn xe yêu thích trên trang, đặt xe hoặc liên hệ trực tiếp số hotline <span className="font-bold text-[#0d1b2a]">0866399986</span> để đặt xe.
+                Xem xe và chọn xe yêu thích trên trang, đặt xe hoặc liên hệ trực tiếp số hotline <span className="font-bold text-[#0d1b2a]">{phoneNumber}</span> để đặt xe.
               </p>
             </div>
 

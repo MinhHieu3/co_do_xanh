@@ -3,6 +3,11 @@ import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import logo from "../assets/logo/logo3.png";
 
 export default function Footer() {
+  const zaloNumber = import.meta.env.VITE_ZALO_NUMBER || "0866399986";
+  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
+  const messengerUrl = import.meta.env.VITE_MESSENGER_URL || "https://www.facebook.com/profile.php?id=61593578486189";
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "84866399986";
+
   return (
     <>
       <footer className="bg-[#1f1f1f] py-10 md:py-12 text-[#b0b0b0] text-[13px]">
@@ -17,13 +22,13 @@ export default function Footer() {
                 Cố Đô Xanh là dịch vụ cho thuê xe máy tự lái chuyên nghiệp tại Việt Nam.
               </p>
               <div className="space-y-1.5 mt-2 font-medium">
-                <p>Tổng đài (24/24H): <span className="text-white font-bold">0866 399 986</span></p>
-                <p>English speaking: <span className="text-white font-bold">0866 399 986</span></p>
+                <p>Tổng đài (24/24H): <span className="text-white font-bold">{phoneNumber}</span></p>
+                <p>English speaking: <span className="text-white font-bold">{phoneNumber}</span></p>
                 <p>Email: <span className="text-white font-bold">hieubyi@gmail.com</span></p>
                 <p>Thứ Hai - Chủ Nhật: <span className="text-white font-bold">7:00 - 22:00</span></p>
               </div>
               <div className="flex space-x-4 mt-4">
-                <a href="#" className="text-[#facc15] hover:text-white transition-colors">
+                <a href="https://www.facebook.com/profile.php?id=61593578486189" target="_blank" rel="noreferrer" className="text-[#facc15] hover:text-white transition-colors">
                   <Facebook size={18} className="fill-current" />
                 </a>
                 <a href="#" className="text-[#facc15] hover:text-white transition-colors">
@@ -105,7 +110,7 @@ export default function Footer() {
         <div className="relative group">
           <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-30"></div>
           <a
-            href="tel:0981355455"
+            href={`tel:${phoneNumber}`}
             className="flex items-center justify-start w-11 h-11 lg:hover:w-[130px] bg-gradient-to-tr from-[#ff3b3f] to-[#ff6b6b] text-white rounded-full shadow-lg shadow-red-500/30 transition-all duration-300 overflow-hidden relative z-10"
           >
             <div className="w-11 h-11 flex items-center justify-center shrink-0">
@@ -118,7 +123,7 @@ export default function Footer() {
         {/* WhatsApp Button */}
         <div className="relative group">
           <a
-            href="https://wa.me/84981355455"
+            href={`https://wa.me/${whatsappNumber}`}
             target="_blank" rel="noreferrer"
             className="flex items-center justify-start w-11 h-11 lg:hover:w-[130px] bg-gradient-to-tr from-[#20b558] to-[#25D366] text-white rounded-full shadow-lg shadow-green-500/20 transition-all duration-300 overflow-hidden relative z-10 hover:-translate-y-1"
           >
@@ -132,7 +137,7 @@ export default function Footer() {
         {/* Messenger Button */}
         <div className="relative group">
           <a
-            href="https://m.me/codoxanh"
+            href={messengerUrl}
             target="_blank" rel="noreferrer"
             className="flex items-center justify-start w-11 h-11 lg:hover:w-[130px] bg-gradient-to-tr from-[#0088ff] to-[#00B2FF] text-white rounded-full shadow-lg shadow-blue-400/20 transition-all duration-300 overflow-hidden relative z-10 hover:-translate-y-1"
           >
@@ -147,7 +152,7 @@ export default function Footer() {
         <div className="relative group">
           <div className="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-20 delay-300"></div>
           <a
-            href="https://zalo.me/0981355455"
+            href={`https://zalo.me/${zaloNumber}`}
             target="_blank" rel="noreferrer"
             className="flex items-center justify-start w-11 h-11 lg:hover:w-[110px] bg-gradient-to-tr from-[#0054cc] to-[#0088ff] text-white rounded-full shadow-lg shadow-blue-600/30 transition-all duration-300 overflow-hidden relative z-10 hover:-translate-y-1"
           >

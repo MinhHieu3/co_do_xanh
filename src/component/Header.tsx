@@ -48,7 +48,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-[#00c461]/10 border-t-[3px] border-t-[#00c461] ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-[#00c461]/10 ${isScrolled
         ? "bg-white/95 shadow-md py-1"
         : "bg-gradient-to-b from-[#f2fdf5]/90 to-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-1.5"
         }`}
@@ -60,7 +60,7 @@ export default function Header() {
             <img
               src={logo}
               alt="Cố Đô Xanh"
-              className="h-[48px] md:h-[56px] lg:h-[70px] w-auto object-contain drop-shadow-md transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-lg"
+              className="h-[60px] md:h-[60px] lg:h-[70px] w-auto object-contain drop-shadow-md transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-lg"
             />
           </Link>
 
@@ -132,11 +132,10 @@ export default function Header() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-4 py-3.5 rounded-xl font-bold uppercase tracking-wide font-display transition-all ${
-                  isActive
-                    ? "bg-[#009e4e]/10 text-[#009e4e] shadow-sm"
-                    : "text-[#0d1b2a] bg-gray-50 hover:bg-gray-100 hover:text-[#009e4e]"
-                }`}
+                className={`flex items-center justify-between px-4 py-3.5 rounded-xl font-bold uppercase tracking-wide font-display transition-all ${isActive
+                  ? "bg-[#009e4e]/10 text-[#009e4e] shadow-sm"
+                  : "text-[#0d1b2a] bg-gray-50 hover:bg-gray-100 hover:text-[#009e4e]"
+                  }`}
               >
                 <span className="text-[15px]">{link.name}</span>
                 <ChevronRight size={18} className={isActive ? "text-[#009e4e]" : "text-gray-400 group-hover:text-[#009e4e]"} />

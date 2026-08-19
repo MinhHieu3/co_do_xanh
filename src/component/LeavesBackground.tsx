@@ -40,7 +40,7 @@ export default function LeavesBackground() {
       {/* Soft background similar to image */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-[#fcfdfc] to-[#f4fbf4] opacity-90" />
       <div className="absolute inset-0 bg-noise opacity-[0.015]" />
-      
+
       {/* Floating leaves */}
       {leaves.map((leaf) => (
         <div

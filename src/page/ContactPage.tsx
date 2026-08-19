@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
 import contactBg from "../assets/dulich/ninhbinh_slider_1.png";
 
 export default function ContactPage() {
+  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -110,7 +111,7 @@ ${formData.message}
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 text-[16px] mb-1">Điện thoại / Zalo</h3>
-                    <p className="text-gray-600 font-bold text-[17px]">0866399986</p>
+                    <p className="text-gray-600 font-bold text-[17px]">{phoneNumber}</p>
                   </div>
                 </div>
 
