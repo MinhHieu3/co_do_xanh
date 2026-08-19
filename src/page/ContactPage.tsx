@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, Facebook, MessageCircle, Instagram } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
 import contactBg from "../assets/dulich/ninhbinh_slider_1.png";
 import { useLanguage } from "../context/LanguageContext";
 import toast from 'react-hot-toast';

@@ -19,7 +19,6 @@ const SLIDER_IMAGES = [
 export default function HomePage() {
   const { language, t } = useLanguage();
   const navigate = useNavigate();
-  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {

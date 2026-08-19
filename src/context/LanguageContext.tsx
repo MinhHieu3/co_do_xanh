@@ -2,8 +2,6 @@ import { createContext, useContext, useState, type ReactNode } from 'react';
 import { vi } from '../locales/vi';
 import { en } from '../locales/en';
 
-type Translations = typeof vi;
-
 interface LanguageContextType {
   language: string;
   setLanguage: (lang: string) => void;

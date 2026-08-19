@@ -98,7 +98,7 @@ export const vi = {
     pickupTimePlaceholder: "Chọn ngày giờ nhận",
     dropoffTime: "Trả xe lúc *",
     dropoffTimePlaceholder: "Chọn ngày giờ trả",
-    pickupLocation: "Khu vực nhận xe *",
+    pickupLocationLabel: "Khu vực nhận xe *",
     atStore: "Tại cửa hàng Cố Đô Xanh",
     delivery: "Giao xe tận nơi",
     quantity: "Số lượng xe *",

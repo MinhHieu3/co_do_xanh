@@ -98,7 +98,7 @@ export const en = {
     pickupTimePlaceholder: "Select pick-up time",
     dropoffTime: "Drop-off Time *",
     dropoffTimePlaceholder: "Select drop-off time",
-    pickupLocation: "Pick-up Location *",
+    pickupLocationLabel: "Pick-up Location *",
     atStore: "At Co Do Xanh Store",
     delivery: "Delivery to your location",
     quantity: "Quantity *",

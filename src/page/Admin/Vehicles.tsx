@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, message, Switch, Select, Radio, Tag } from 'antd';
-import { Edit, Trash2, Plus, Search } from 'lucide-react';
+import { Edit, Trash2, Plus } from 'lucide-react';
 import { fetchApi } from './api';
 
 const Vehicles: React.FC = () => {

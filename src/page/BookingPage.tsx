@@ -326,7 +326,7 @@ export default function BookingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.pickupLocation')}</label>
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.pickupLocationLabel')}</label>
                     <select required name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white appearance-none cursor-pointer">
                       <option value="Tại cửa hàng">{t('booking.atStore')}</option>
                       <option value="Giao tận nơi">{t('booking.delivery')}</option>
