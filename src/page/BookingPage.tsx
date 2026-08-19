@@ -63,34 +63,50 @@ export default function BookingPage() {
     const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
-    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.warn("Chưa cấu hình Telegram Bot Token hoặc Chat ID. Đang chạy ở chế độ giả lập (Mock).");
-      // Fallback: Chế độ giả lập
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setShowSuccess(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 1500);
-      return;
-    }
-
     try {
-      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      // 1. Lưu đơn hàng vào Database qua API
+      const BASE_URL = import.meta.env.VITE_API_URL || 'https://co_do_xanh_v2.hieubyipro.workers.dev/api';
+      const orderData = {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        time_start: formData.pickupDate,
+        time_end: formData.dropoffDate,
+        quantity: formData.quantity,
+        location: formData.pickupLocation === 'Giao tận nơi' ? formData.deliveryAddress : formData.pickupLocation,
+        type_category: vehicleName,
+        des_1: formData.notes
+      };
+
+      const apiResponse = await fetch(`${BASE_URL}/orders`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: 'HTML',
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
       });
+      const apiResult = await apiResponse.json();
 
-      console.log(response);
+      if (!apiResult.success) {
+        throw new Error('Lỗi khi lưu đơn hàng vào hệ thống');
+      }
 
-      if (!response.ok) {
-        throw new Error('Gửi tin nhắn Telegram thất bại');
+      // 2. Gửi thông báo Telegram (nếu có cấu hình)
+      if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML',
+          }),
+        });
+        if (!response.ok) {
+          console.error('Gửi tin nhắn Telegram thất bại');
+        }
+      } else {
+        console.warn("Chưa cấu hình Telegram Bot Token hoặc Chat ID.");
       }
 
       setIsSubmitting(false);

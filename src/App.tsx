@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 import HomePage from "./page/HomePage";
@@ -7,8 +7,20 @@ import PricingPage from "./page/PricingPage";
 import ContactPage from "./page/ContactPage";
 import NewsPage from "./page/NewsPage";
 import LeavesBackground from "./component/LeavesBackground";
+import AdminLayout from "./page/Admin/AdminLayout";
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        <Route path="/admin/*" element={<AdminLayout />} />
+      </Routes>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col w-full relative">
       <LeavesBackground />
