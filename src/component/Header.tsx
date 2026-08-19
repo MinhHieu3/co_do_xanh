@@ -101,22 +101,22 @@ export default function Header() {
       </header>
 
       {/* Mobile Sticky Bottom Tab Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-100 shadow-[0_-5px_20px_rgba(0,0,0,0.08)] flex items-center justify-between px-2 py-2 pb-safe backdrop-blur-md bg-white/90">
-        <Link to="/" className={`flex-1 flex flex-col items-center justify-center py-2 transition-colors ${location.pathname === '/' ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-100 shadow-[0_-5px_20px_rgba(0,0,0,0.08)] flex items-center justify-between px-2 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))] backdrop-blur-md bg-white/90">
+        <Link to="/" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname === '/' ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
           <Home size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.home')}</span>
         </Link>
-        <Link to="/news" className={`flex-1 flex flex-col items-center justify-center py-2 transition-colors ${location.pathname.startsWith('/news') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/news" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/news') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
           <Newspaper size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.news')}</span>
         </Link>
         
-        <Link to="/booking" className={`flex-1 flex flex-col items-center justify-center py-2 transition-colors ${location.pathname.startsWith('/booking') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/booking" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/booking') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
           <Calendar size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.booking')}</span>
         </Link>
 
-        <Link to="/contact" className={`flex-1 flex flex-col items-center justify-center py-2 transition-colors ${location.pathname.startsWith('/contact') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/contact" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/contact') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
           <MapPin size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.contact')}</span>
         </Link>
