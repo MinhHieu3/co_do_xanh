@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, Facebook, MessageCircle, Instagram } from "lucide-react";
 import contactBg from "../assets/dulich/ninhbinh_slider_1.png";
+import { useLanguage } from "../context/LanguageContext";
+import toast from 'react-hot-toast';
 
 export default function ContactPage() {
+  const { language, t } = useLanguage();
   const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
   const [formData, setFormData] = useState({
     name: "",
@@ -54,7 +57,7 @@ ${formData.message}
       setShowSuccess(true);
     } catch (error) {
       setIsSubmitting(false);
-      alert("Có lỗi xảy ra khi gửi tin nhắn!");
+      toast.error(language === 'EN' ? "An error occurred while sending the message!" : "Có lỗi xảy ra khi gửi tin nhắn!");
     }
   };
 
@@ -71,10 +74,10 @@ ${formData.message}
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 relative z-10 mt-8">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
-            Liên Hệ Với Chúng Tôi
+            {t('contact.title')}
           </h1>
           <p className="text-lg md:text-xl font-medium max-w-2xl text-center text-gray-200 drop-shadow-md">
-            Cố Đô Xanh luôn sẵn sàng lắng nghe và hỗ trợ bạn 24/7. Hãy gửi tin nhắn hoặc gọi trực tiếp cho chúng tôi!
+            {t('contact.subtitle')}
           </p>
         </div>
 
@@ -92,7 +95,7 @@ ${formData.message}
             <div className="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex-1 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-500"></div>
 
-              <h2 className="text-2xl font-bold text-[#0d1b2a] mb-8 font-display relative z-10">Thông tin liên hệ</h2>
+              <h2 className="text-2xl font-bold text-[#0d1b2a] mb-8 font-display relative z-10">{t('contact.infoTitle')}</h2>
 
               <div className="space-y-8 relative z-10">
                 <div className="flex items-start gap-5">
@@ -100,8 +103,8 @@ ${formData.message}
                     <MapPin size={22} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">Địa chỉ cửa hàng</h3>
-                    <p className="text-gray-600 leading-relaxed text-[15px]">Nhà Thi Đấu Thể Thao Tỉnh Ninh Bình<br />Đinh Tiên Hoàng, Đông Thành, Ninh Bình</p>
+                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.addressTitle')}</h3>
+                    <p className="text-gray-600 leading-relaxed text-[15px]">{t('contact.addressLine1')}<br />{t('contact.addressLine2')}</p>
                   </div>
                 </div>
 
@@ -110,7 +113,7 @@ ${formData.message}
                     <Phone size={22} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">Điện thoại / Zalo</h3>
+                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.phoneTitle')}</h3>
                     <p className="text-gray-600 font-bold text-[17px]">{phoneNumber}</p>
                   </div>
                 </div>
@@ -120,7 +123,7 @@ ${formData.message}
                     <Mail size={22} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">Email</h3>
+                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.emailTitle')}</h3>
                     <p className="text-gray-600 text-[15px]">hieubyi@gmail.com</p>
                   </div>
                 </div>
@@ -130,8 +133,8 @@ ${formData.message}
                     <Clock size={22} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">Giờ mở cửa</h3>
-                    <p className="text-gray-600 text-[15px]">24/7 - Phục vụ cả ngày lễ & Chủ Nhật</p>
+                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.hoursTitle')}</h3>
+                    <p className="text-gray-600 text-[15px]">{t('contact.hoursDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -146,8 +149,8 @@ ${formData.message}
                   <div className="w-20 h-20 bg-green-100 text-[#00c461] rounded-full flex items-center justify-center mb-6">
                     <CheckCircle2 size={40} />
                   </div>
-                  <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">Gửi Thành Công!</h3>
-                  <p className="text-gray-600">Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi lại trong thời gian sớm nhất qua số điện thoại của bạn.</p>
+                  <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">{t('contact.successTitle')}</h3>
+                  <p className="text-gray-600">{t('contact.successMsg')}</p>
                   <button 
                     onClick={() => {
                       setShowSuccess(false);
@@ -155,36 +158,36 @@ ${formData.message}
                     }}
                     className="mt-8 px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors"
                   >
-                    Gửi tin nhắn khác
+                    {t('contact.sendAnother')}
                   </button>
                 </div>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold text-[#0d1b2a] mb-2 font-display">Gửi tin nhắn cho chúng tôi</h2>
-                  <p className="text-gray-500 mb-8 text-[15px]">Vui lòng điền thông tin bên dưới, Cố Đô Xanh sẽ phản hồi bạn trong thời gian sớm nhất.</p>
+                  <h2 className="text-2xl font-bold text-[#0d1b2a] mb-2 font-display">{t('contact.formTitle')}</h2>
+                  <p className="text-gray-500 mb-8 text-[15px]">{t('contact.formSubtitle')}</p>
 
                   <form className="space-y-6" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Họ và Tên *</label>
+                        <label className="text-sm font-bold text-gray-700">{t('contact.fullName')}</label>
                         <input
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
-                          placeholder="Nhập họ tên của bạn"
+                          placeholder={t('contact.fullNamePlaceholder')}
                           className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Số điện thoại *</label>
+                        <label className="text-sm font-bold text-gray-700">{t('contact.phone')}</label>
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="Nhập số điện thoại"
+                          placeholder={t('contact.phonePlaceholder')}
                           className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                           required
                         />
@@ -192,25 +195,25 @@ ${formData.message}
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Tiêu đề</label>
+                      <label className="text-sm font-bold text-gray-700">{t('contact.subject')}</label>
                       <input
                         type="text"
                         name="subject"
                         value={formData.subject}
                         onChange={handleInputChange}
-                        placeholder="Bạn cần hỗ trợ về vấn đề gì?"
+                        placeholder={t('contact.subjectPlaceholder')}
                         className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Nội dung tin nhắn *</label>
+                      <label className="text-sm font-bold text-gray-700">{t('contact.message')}</label>
                       <textarea
                         rows={4}
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        placeholder="Viết tin nhắn của bạn ở đây..."
+                        placeholder={t('contact.messagePlaceholder')}
                         className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
                         required
                       ></textarea>
@@ -222,9 +225,9 @@ ${formData.message}
                       className={`w-full sm:w-auto px-10 py-4 ${isSubmitting ? 'bg-gray-400' : 'bg-[#00c461] hover:bg-[#00a852] hover:-translate-y-1 shadow-lg shadow-green-500/30'} text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-4`}
                     >
                       {isSubmitting ? (
-                        <>Đang gửi...</>
+                        <>{t('contact.submitting')}</>
                       ) : (
-                        <><Send size={18} /> Gửi Tin Nhắn Ngay</>
+                        <><Send size={18} /> {t('contact.submitBtn')}</>
                       )}
                     </button>
                   </form>

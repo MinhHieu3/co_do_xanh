@@ -1,8 +1,10 @@
 import { MapPin, Phone, Facebook, Youtube, Instagram, ChevronRight } from "lucide-react";
 import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import logo from "../assets/logo/logo3.png";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
   const zaloNumber = import.meta.env.VITE_ZALO_NUMBER || "0866399986";
   const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
   const messengerUrl = import.meta.env.VITE_MESSENGER_URL || "https://www.facebook.com/profile.php?id=61593578486189";
@@ -19,13 +21,13 @@ export default function Footer() {
                 <img src={logo} alt="Cố Đô Xanh" className="h-[35px] w-auto object-contain" />
               </div>
               <p className="leading-relaxed mt-1">
-                Cố Đô Xanh là dịch vụ cho thuê xe máy tự lái chuyên nghiệp tại Việt Nam.
+                {t('footer.about')}
               </p>
               <div className="space-y-1.5 mt-2 font-medium">
-                <p>Tổng đài (24/24H): <span className="text-white font-bold">{phoneNumber}</span></p>
-                <p>English speaking: <span className="text-white font-bold">{phoneNumber}</span></p>
-                <p>Email: <span className="text-white font-bold">hieubyi@gmail.com</span></p>
-                <p>Thứ Hai - Chủ Nhật: <span className="text-white font-bold">7:00 - 22:00</span></p>
+                <p>{t('footer.hotline')}: <span className="text-white font-bold">{phoneNumber}</span></p>
+                <p>{t('footer.englishSpeaking')}: <span className="text-white font-bold">{phoneNumber}</span></p>
+                <p>{t('footer.email')}: <span className="text-white font-bold">hieubyi@gmail.com</span></p>
+                <p>{t('footer.workingHours')}: <span className="text-white font-bold">7:00 - 22:00</span></p>
               </div>
               <div className="flex space-x-4 mt-4">
                 <a href="https://www.facebook.com/profile.php?id=61593578486189" target="_blank" rel="noreferrer" className="text-[#facc15] hover:text-white transition-colors">
@@ -42,19 +44,19 @@ export default function Footer() {
 
             {/* Cột 2: Về chúng tôi */}
             <div className="md:col-span-4 flex flex-col space-y-3">
-              <h3 className="font-bold text-[14px] uppercase tracking-wide text-[#facc15] mb-1">Về Cố Đô Xanh</h3>
+              <h3 className="font-bold text-[14px] uppercase tracking-wide text-[#facc15] mb-1">{t('footer.aboutUs')}</h3>
               <ul className="space-y-2 font-medium">
                 {[
-                  "Giới thiệu về Cố Đô Xanh",
-                  "Liên hệ",
-                  "FAQs",
-                  "Tuyển dụng",
-                  "Cửa hàng Cố Đô Xanh",
-                  "Chính sách thủ tục thuê xe máy",
-                  "Chính sách bảo mật thông tin cá nhân",
-                  "Cố Đô Xanh Tours"
-                ].map(item => (
-                  <li key={item}>
+                  t('footer.intro'),
+                  t('footer.contactTitle'),
+                  t('footer.faqs'),
+                  t('footer.career'),
+                  t('footer.store'),
+                  t('footer.policy'),
+                  t('footer.privacy'),
+                  t('footer.tours')
+                ].map((item, idx) => (
+                  <li key={idx}>
                     <a href="#" className="flex items-center group hover:text-white transition-colors">
                       <ChevronRight size={13} className="mr-1.5 text-[#facc15] shrink-0" />
                       <span>{item}</span>
@@ -66,15 +68,15 @@ export default function Footer() {
 
             {/* Cột 3: Địa điểm */}
             <div className="md:col-span-4 flex flex-col space-y-3">
-              <h3 className="font-bold text-[14px] uppercase tracking-wide text-[#facc15] mb-1">Địa Điểm</h3>
+              <h3 className="font-bold text-[14px] uppercase tracking-wide text-[#facc15] mb-1">{t('footer.location')}</h3>
 
               <div className="space-y-4">
                 <div>
                   <h4 className="flex items-center text-white font-bold mb-1.5">
                     <MapPin size={16} className="text-[#facc15] mr-1.5" />
-                    Cửa Hàng Cố Đô Xanh
+                    {t('footer.storeLocation')}
                   </h4>
-                  <p className="pl-6 mb-2 leading-relaxed">CS1: Cửa Hàng Cố Đô Xanh</p>
+                  <p className="pl-6 mb-2 leading-relaxed">{t('footer.address1')}</p>
                   {/* <p className="pl-6 text-[13.5px] leading-relaxed">CS2: Khu du lịch Tam Cốc, Ninh Hải, Hoa Lư, Ninh Bình</p> */}
                   
                   <div className="w-full h-28 bg-gray-800 rounded-lg overflow-hidden shadow-inner border border-[#333] ml-1 mt-1.5 opacity-90 hover:opacity-100 transition-opacity">
@@ -104,7 +106,7 @@ export default function Footer() {
       </footer>
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3.5 z-50">
+      <div className="fixed bottom-[90px] lg:bottom-6 right-4 lg:right-6 flex flex-col items-end gap-3.5 z-50">
 
         {/* Phone Button */}
         <div className="relative group">
@@ -116,7 +118,7 @@ export default function Footer() {
             <div className="w-11 h-11 flex items-center justify-center shrink-0">
               <Phone size={20} className="fill-current animate-pulse" />
             </div>
-            <span className="font-bold text-[14px] whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 pr-4">Điện thoại</span>
+            <span className="font-bold text-[14px] whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 pr-4">{t('footer.phone')}</span>
           </a>
         </div>
 

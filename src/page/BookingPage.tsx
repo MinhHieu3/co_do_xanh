@@ -1,13 +1,23 @@
 import { useState } from "react";
 import { vehicles } from "../data/vehicles";
 import { CheckCircle2, Calendar, MapPin, User, Phone, Mail, FileText, Info, Hash } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
 import { Vietnamese } from "flatpickr/dist/l10n/vn.js";
+import { useLanguage } from "../context/LanguageContext";
+import toast from 'react-hot-toast';
 
 export default function BookingPage() {
-  const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0].id);
+  const { language, t } = useLanguage();
+  const location = useLocation();
+  
+  const [selectedVehicle, setSelectedVehicle] = useState(() => {
+    if (location.state && location.state.selectedVehicle) {
+      return location.state.selectedVehicle;
+    }
+    return vehicles[0].id;
+  });
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -31,7 +41,7 @@ export default function BookingPage() {
     e.preventDefault();
     
     if (!formData.pickupDate || !formData.dropoffDate) {
-      alert("Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
+      toast.error("Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
       return;
     }
 
@@ -125,12 +135,12 @@ export default function BookingPage() {
         <div className="w-24 h-24 bg-green-100 text-[#009e4e] rounded-full flex items-center justify-center mb-6">
           <CheckCircle2 size={50} />
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold text-[#0d1b2a] mb-4 font-display">Gửi Yêu Cầu Thành Công!</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-[#0d1b2a] mb-4 font-display">{t('booking.successTitle')}</h2>
         <p className="text-gray-600 text-lg mb-8 max-w-lg">
-          Cảm ơn bạn đã lựa chọn Cố Đô Xanh. Yêu cầu đặt xe của bạn đã được tiếp nhận. Nhân viên tư vấn sẽ liên hệ lại qua số điện thoại <span className="font-bold text-[#0d1b2a]">{formData.phone}</span> trong thời gian sớm nhất để xác nhận.
+          {t('booking.successMsg')}
         </p>
         <Link to="/" className="px-8 py-3 bg-[#009e4e] hover:bg-[#008c45] text-white font-bold rounded-lg transition-colors shadow-lg shadow-green-500/30">
-          Về Trang Chủ
+          {language === 'EN' ? 'Back to Home' : 'Về Trang Chủ'}
         </Link>
       </div>
     );
@@ -139,9 +149,9 @@ export default function BookingPage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
       <div className="text-center mb-10 md:mb-14 mt-4 md:mt-8">
-        <h1 className="text-3xl md:text-5xl font-bold text-[#0d1b2a] mb-4 font-display uppercase tracking-wide">Đặt Xe Trực Tuyến</h1>
+        <h1 className="text-3xl md:text-5xl font-bold text-[#0d1b2a] mb-4 font-display uppercase tracking-wide">{t('booking.title')}</h1>
         <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
-          Lựa chọn dòng xe yêu thích và để lại thông tin, Cố Đô Xanh sẽ chuẩn bị xe sẵn sàng cho chuyến đi của bạn.
+          {t('booking.subtitle')}
         </p>
       </div>
 
@@ -150,7 +160,7 @@ export default function BookingPage() {
         <div className="lg:col-span-5 flex flex-col space-y-4 lg:space-y-6">
           <h2 className="text-2xl font-bold text-[#0d1b2a] flex items-center">
             <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">1</span>
-            Chọn Dòng Xe
+            {t('booking.chooseVehicle')}
           </h2>
           <div className="flex overflow-x-auto lg:overflow-visible lg:grid lg:grid-cols-1 gap-4 pt-4 pb-4 lg:pt-4 lg:pb-4 lg:pr-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 lg:mx-0 lg:px-0">
             {vehicles.map((vehicle) => {
@@ -186,7 +196,7 @@ export default function BookingPage() {
                         ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
                         : "bg-green-50 text-[#009e4e]"
                       }`}>
-                      Chỉ từ {vehicle.pricing.day1.split("/")[0]}
+                      {t('booking.fromOnly')} {language === 'EN' ? vehicle.pricingEn.day1.split("/")[0] : vehicle.pricing.day1.split("/")[0]}
                     </div>
                   </div>
                 </div>
@@ -194,10 +204,44 @@ export default function BookingPage() {
             })}
           </div>
 
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3 mt-4">
+          {/* Hiển thị bảng giá chi tiết của xe đang chọn */}
+          <div className="bg-gradient-to-br from-[#f2fdf5] to-white p-5 rounded-2xl border border-[#009e4e]/20 shadow-sm mt-2">
+            <h3 className="font-bold text-lg text-[#009e4e] mb-3 flex items-center gap-2">
+              <Info size={20} />
+              {language === 'EN' ? `Rental Pricing: ${vehicles.find(v => v.id === selectedVehicle)?.name}` : `Bảng giá thuê: ${vehicles.find(v => v.id === selectedVehicle)?.name}`}
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: language === 'EN' ? '1 Day' : '1 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day1 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day1 },
+                { label: language === 'EN' ? '2 Days' : '2 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day2 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day2 },
+                { label: language === 'EN' ? '3 Days' : '3 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day3 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day3 },
+                { label: language === 'EN' ? '4 Days' : '4 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day4 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day4 },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col bg-white p-3 rounded-xl border border-green-50 shadow-[0_2px_10px_rgba(0,196,97,0.04)]">
+                  <span className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
+                  <span className="font-bold text-[#0d1b2a]">{item.price?.split('/')[0]}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Thông số kỹ thuật xe */}
+            <div className="mt-4 pt-4 border-t border-[#009e4e]/10">
+              <h4 className="font-bold text-sm text-[#0d1b2a] mb-2 uppercase tracking-wide">{language === 'EN' ? 'Vehicle Specifications' : 'Thông tin xe'}</h4>
+              <ul className="space-y-2">
+                {Object.entries(language === 'EN' ? (vehicles.find(v => v.id === selectedVehicle)?.specsEn || {}) : (vehicles.find(v => v.id === selectedVehicle)?.specs || {})).map(([key, val], i) => (
+                  <li key={i} className="flex items-start text-sm">
+                    <span className="font-medium text-gray-500 min-w-[130px] shrink-0">{key}:</span>
+                    <span className="text-gray-800 font-bold">{val}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3 mt-2">
             <Info className="text-yellow-600 shrink-0 mt-0.5" size={20} />
             <p className="text-sm text-yellow-800 leading-relaxed">
-              <strong>Lưu ý:</strong> Giá có thể thay đổi nhẹ tùy thuộc vào dịp lễ/tết hoặc các yêu cầu đặc biệt. Nhân viên sẽ báo giá chính xác nhất khi liên hệ.
+              <strong>{t('booking.noteTitle')}</strong> {t('booking.noteDesc')}
             </p>
           </div>
         </div>
@@ -207,36 +251,36 @@ export default function BookingPage() {
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 sticky top-24">
             <h2 className="text-2xl font-bold text-[#0d1b2a] mb-6 flex items-center pb-4 border-b border-gray-100">
               <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">2</span>
-              Thông Tin Đặt Xe
+              {t('booking.formTitle')}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
 
               {/* Thông tin liên hệ */}
               <div className="space-y-4">
-                <h3 className="text-lg font-bold text-gray-700">Thông tin cá nhân</h3>
+                <h3 className="text-lg font-bold text-gray-700">{t('booking.personalInfo')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><User size={16} className="text-gray-400" />Họ và tên *</label>
-                    <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="Nguyễn Văn A" />
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><User size={16} className="text-gray-400" />{t('booking.fullName')}</label>
+                    <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.fullNamePlaceholder')} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Phone size={16} className="text-gray-400" />Số điện thoại *</label>
-                    <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="0981 355 455" />
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Phone size={16} className="text-gray-400" />{t('booking.phone')}</label>
+                    <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.phonePlaceholder')} />
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Mail size={16} className="text-gray-400" />Email (Không bắt buộc)</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="email@example.com" />
+                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Mail size={16} className="text-gray-400" />{t('booking.emailOptional')}</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.emailPlaceholder')} />
                 </div>
               </div>
 
               {/* Chi tiết thuê xe */}
               <div className="space-y-4 pt-4 border-t border-gray-100">
-                <h3 className="text-lg font-bold text-gray-700">Lịch trình & Địa điểm</h3>
+                <h3 className="text-lg font-bold text-gray-700">{t('booking.scheduleLocation')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />Nhận xe lúc *</label>
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />{t('booking.pickupTime')}</label>
                     <Flatpickr
                       data-enable-time
                       value={formData.pickupDate}
@@ -254,11 +298,11 @@ export default function BookingPage() {
                         }
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
-                      placeholder="Chọn ngày giờ nhận"
+                      placeholder={t('booking.pickupTimePlaceholder')}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />Trả xe lúc *</label>
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />{t('booking.dropoffTime')}</label>
                     <Flatpickr
                       data-enable-time
                       value={formData.dropoffDate}
@@ -276,35 +320,35 @@ export default function BookingPage() {
                         }
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
-                      placeholder="Chọn ngày giờ trả"
+                      placeholder={t('booking.dropoffTimePlaceholder')}
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />Khu vực nhận xe *</label>
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.pickupLocation')}</label>
                     <select required name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white appearance-none cursor-pointer">
-                      <option value="Tại cửa hàng">Tại cửa hàng Cố Đô Xanh</option>
-                      <option value="Giao tận nơi">Giao xe tận nơi</option>
+                      <option value="Tại cửa hàng">{t('booking.atStore')}</option>
+                      <option value="Giao tận nơi">{t('booking.delivery')}</option>
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Hash size={16} className="text-gray-400" />Số lượng xe *</label>
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Hash size={16} className="text-gray-400" />{t('booking.quantity')}</label>
                     <input required type="number" min="1" max="50" name="quantity" value={formData.quantity} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="1" />
                   </div>
                 </div>
                 
                 {/* Địa chỉ giao xe (Chỉ hiện khi chọn Giao tận nơi) */}
                 <div className={`space-y-1.5 overflow-hidden transition-all duration-300 ${formData.pickupLocation === 'Giao tận nơi' ? 'max-h-24 mt-4 opacity-100' : 'max-h-0 mt-0 opacity-0'}`}>
-                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />Địa chỉ nhận xe *</label>
-                  <input required={formData.pickupLocation === 'Giao tận nơi'} type="text" name="deliveryAddress" value={formData.deliveryAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="Khách sạn, Homestay, Ga tàu, Bến xe..." />
+                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.deliveryAddress')}</label>
+                  <input required={formData.pickupLocation === 'Giao tận nơi'} type="text" name="deliveryAddress" value={formData.deliveryAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.deliveryAddressPlaceholder')} />
                 </div>
               </div>
 
               {/* Lời nhắn */}
               <div className="space-y-1.5 pt-4 border-t border-gray-100">
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><FileText size={16} className="text-gray-400" />Ghi chú đặc biệt</label>
-                <textarea name="notes" value={formData.notes} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white resize-none" placeholder="Ví dụ: Cần mượn thêm 2 mũ bảo hiểm, giao xe tại khách sạn ABC..."></textarea>
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><FileText size={16} className="text-gray-400" />{t('booking.specialNotes')}</label>
+                <textarea name="notes" value={formData.notes} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white resize-none" placeholder={t('booking.specialNotesPlaceholder')}></textarea>
               </div>
 
               <button
@@ -319,10 +363,10 @@ export default function BookingPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Đang xử lý...
+                    {t('booking.submitting')}
                   </>
                 ) : (
-                  "Gửi Yêu Cầu Đặt Xe"
+                  t('booking.submitBtn')
                 )}
               </button>
             </form>
