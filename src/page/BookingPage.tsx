@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 export default function BookingPage() {
   const { language, t } = useLanguage();
   const location = useLocation();
-  
+
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
     if (location.state && location.state.selectedVehicle) {
       return location.state.selectedVehicle;
@@ -39,7 +39,7 @@ export default function BookingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.pickupDate || !formData.dropoffDate) {
       toast.error("Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
       return;
@@ -170,8 +170,8 @@ export default function BookingPage() {
                   key={vehicle.id}
                   onClick={() => setSelectedVehicle(vehicle.id)}
                   className={`shrink-0 w-[85vw] sm:w-[320px] lg:w-auto snap-center group relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex items-center gap-4 lg:gap-5 ${isSelected
-                      ? "border-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white shadow-[0_10px_40px_rgba(0,196,97,0.12)] scale-[1.02]"
-                      : "border-gray-100 bg-white hover:border-[#009e4e]/40 hover:shadow-lg hover:shadow-gray-200/50"
+                    ? "border-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white shadow-[0_10px_40px_rgba(0,196,97,0.12)] scale-[1.02]"
+                    : "border-gray-100 bg-white hover:border-[#009e4e]/40 hover:shadow-lg hover:shadow-gray-200/50"
                     }`}
                 >
                   {/* Dấu tick khi được chọn */}
@@ -193,8 +193,8 @@ export default function BookingPage() {
                       {vehicle.name}
                     </h3>
                     <div className={`inline-flex items-center text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${isSelected
-                        ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
-                        : "bg-green-50 text-[#009e4e]"
+                      ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
+                      : "bg-green-50 text-[#009e4e]"
                       }`}>
                       {t('booking.fromOnly')} {language === 'EN' ? vehicle.pricingEn.day1.split("/")[0] : vehicle.pricing.day1.split("/")[0]}
                     </div>
@@ -213,9 +213,6 @@ export default function BookingPage() {
             <div className="grid grid-cols-2 gap-3">
               {[
                 { label: language === 'EN' ? '24 Hours' : '24 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day1 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day1 },
-                { label: language === 'EN' ? '48 Hours' : '48 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day2 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day2 },
-                { label: language === 'EN' ? '72 Hours' : '72 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day3 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day3 },
-                { label: language === 'EN' ? '96 Hours' : '96 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day4 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day4 },
               ].filter(item => item.price).map((item, i, arr) => (
                 <div key={i} className={`${arr.length === 1 ? 'col-span-2' : ''} flex flex-col bg-white p-4 rounded-xl border border-green-100/50 shadow-[0_4px_20px_rgba(0,196,97,0.08)] items-center justify-center transition-transform hover:-translate-y-1`}>
                   <span className="text-sm text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
@@ -293,8 +290,8 @@ export default function BookingPage() {
                         disableMobile: true // Bắt buộc dùng giao diện tuỳ chỉnh đẹp, không dùng giao diện mặc định xấu của trình duyệt
                       }}
                       onChange={([date]) => {
-                        if(date) {
-                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                        if (date) {
+                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                           setFormData(prev => ({ ...prev, pickupDate: dateStr }));
                         }
                       }}
@@ -315,8 +312,8 @@ export default function BookingPage() {
                         disableMobile: true
                       }}
                       onChange={([date]) => {
-                        if(date) {
-                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                        if (date) {
+                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                           setFormData(prev => ({ ...prev, dropoffDate: dateStr }));
                         }
                       }}
@@ -338,7 +335,7 @@ export default function BookingPage() {
                     <input required type="number" min="1" max="50" name="quantity" value={formData.quantity} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="1" />
                   </div>
                 </div>
-                
+
                 {/* Địa chỉ giao xe (Chỉ hiện khi chọn Giao tận nơi) */}
                 <div className={`space-y-1.5 overflow-hidden transition-all duration-300 ${formData.pickupLocation === 'Giao tận nơi' ? 'max-h-24 mt-4 opacity-100' : 'max-h-0 mt-0 opacity-0'}`}>
                   <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.deliveryAddress')}</label>
