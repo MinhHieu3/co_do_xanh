@@ -114,7 +114,7 @@ ${formData.message}
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.phoneTitle')}</h3>
-                    <p className="text-gray-600 font-bold text-[17px]">{phoneNumber}</p>
+                    <p className="text-gray-600 text-[15px]">{phoneNumber}</p>
                   </div>
                 </div>
 
@@ -241,7 +241,7 @@ ${formData.message}
         <div className="mt-12 md:mt-16 bg-white p-3 md:p-4 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100">
           <div className="w-full h-[350px] md:h-[500px] rounded-2xl overflow-hidden bg-gray-100">
             <iframe
-              src="https://maps.google.com/maps?q=20.2815256,105.9653496&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=Xe+C%E1%BB%91+%C4%90%C3%B4+Xanh,+Ninh+B%C3%ACnh&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}

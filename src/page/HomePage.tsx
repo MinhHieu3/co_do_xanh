@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, MousePointerClick, FileCheck, Map, RotateCcw } from "lucide-react";
+import { ChevronLeft, ChevronRight, MousePointerClick, FileCheck, Map, RotateCcw, Shield, Gift, BatteryCharging } from "lucide-react";
 import { vehicles } from "../data/vehicles";
 import slide1 from "../assets/dulich/ninhbinh_slider_1.png";
 import slide2 from "../assets/dulich/ninhbinh_slider_2.png";
@@ -79,7 +79,7 @@ export default function HomePage() {
           {t('home.ourVehicles')}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-5xl mx-auto">
           {vehicles.map((vehicle, idx) => (
             <motion.div 
               key={vehicle.id} 
@@ -88,41 +88,88 @@ export default function HomePage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => navigate('/booking', { state: { selectedVehicle: vehicle.id } })}
-              className="flex flex-col items-center text-center group cursor-pointer"
+              className={`relative flex flex-col items-center text-center group cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 ${
+                vehicle.isPopular 
+                  ? 'border border-[#009e4e]/40 shadow-[0_15px_50px_rgba(0,196,97,0.12)] -translate-y-2 order-first md:order-none' 
+                  : 'shadow-sm border border-gray-100 hover:border-[#009e4e]/30 hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1'
+              }`}
             >
+              {/* Popular Badge */}
+              {vehicle.isPopular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#009e4e] to-[#00c461] text-white text-[11px] font-bold px-4 py-1.5 rounded-full shadow-md whitespace-nowrap z-10 flex items-center gap-1.5 uppercase tracking-wider">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  {language === 'EN' ? 'Most Popular' : 'Được Ưa Chuộng Nhất'}
+                </div>
+              )}
+
               {/* Vehicle Image */}
-              <div className="w-full relative pt-[75%] mb-6 bg-transparent">
+              <div className="w-full relative pt-[75%] mb-4 transition-all">
                 <img
                   src={vehicle.image}
                   alt={vehicle.name}
-                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-110 drop-shadow-md group-hover:drop-shadow-2xl"
+                  className={`absolute inset-0 w-full h-full object-contain mix-blend-multiply transition-transform duration-700 ease-out p-4 ${
+                    vehicle.isPopular 
+                      ? 'scale-110 drop-shadow-xl' 
+                      : 'drop-shadow-md group-hover:scale-110 group-hover:drop-shadow-2xl'
+                  }`}
                 />
               </div>
 
               {/* Vehicle Name */}
-              <div className="h-[48px] flex items-center justify-center mb-3">
-                <h3 className="text-[#e33527] font-bold text-[17px] uppercase tracking-wider group-hover:text-[#00c461] transition-colors font-display line-clamp-2">
+              <div className="h-[48px] flex items-center justify-center mb-3 mt-2">
+                <h3 className={`font-bold text-[18px] uppercase tracking-wider transition-colors font-display line-clamp-2 ${
+                  vehicle.isPopular ? 'text-[#00c461]' : 'text-[#0d1b2a] group-hover:text-[#00c461]'
+                }`}>
                   {vehicle.name}
                 </h3>
               </div>
 
               {/* Pricing details */}
-              <div className="text-[14px] text-gray-800 py-2 w-full text-center leading-relaxed px-2 font-medium">
-                {language === 'EN' ? vehicle.pricingEn.day1 : vehicle.pricing.day1} - {language === 'EN' ? vehicle.pricingEn.day2 : vehicle.pricing.day2} - {language === 'EN' ? vehicle.pricingEn.day3 : vehicle.pricing.day3} - {language === 'EN' ? vehicle.pricingEn.day4 : vehicle.pricing.day4}
+              <div className="text-[14px] text-gray-600 py-1 w-full text-center leading-relaxed px-2 font-medium flex items-center justify-center">
+                <span className="text-[#009e4e] font-bold text-xl drop-shadow-sm">
+                  {language === 'EN' ? vehicle.pricingEn.day1 : vehicle.pricing.day1}
+                </span>
+              </div>
+
+              {/* Specs: Battery, Accessories & License */}
+              <div className="w-full flex flex-col gap-2 mt-3 mb-2 text-left px-1">
+                <div className="flex items-start gap-2 text-[13px] text-gray-500">
+                  <BatteryCharging size={15} className="text-[#009e4e] shrink-0 mt-0.5" />
+                  <span className="line-clamp-2 leading-tight">
+                    {language === 'EN' ? vehicle.specsEn["Battery"] : vehicle.specs["Dạng pin"]}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2 text-[13px] text-gray-500">
+                  <Gift size={15} className="text-[#009e4e] shrink-0 mt-0.5" />
+                  <span className="line-clamp-2 leading-tight">
+                    {language === 'EN' ? vehicle.specsEn["Accessories"] : vehicle.specs["Phụ kiện"]}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2 text-[13px] text-gray-500">
+                  <Shield size={15} className="text-[#009e4e] shrink-0 mt-0.5" />
+                  <span className="line-clamp-2 leading-tight">
+                    {language === 'EN' ? vehicle.specsEn["License"] : vehicle.specs["Bằng lái"]}
+                  </span>
+                </div>
               </div>
 
               {/* Action Button */}
-              <div className="w-full mt-3 flex justify-center">
+              <div className="w-full mt-4 flex justify-center">
                 <Link 
                   to="/booking" 
                   state={{ selectedVehicle: vehicle.id }}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-[#0d1b2a] group-hover:text-[#009e4e] font-bold text-[13px] uppercase tracking-wider transition-all duration-300 relative overflow-hidden"
+                  className={`inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-xl font-bold text-[14px] uppercase tracking-wider transition-all duration-300 shadow-sm ${
+                    vehicle.isPopular 
+                      ? 'bg-[#00c461] text-white shadow-md hover:bg-[#009e4e]' 
+                      : 'bg-gray-50 text-[#0d1b2a] group-hover:bg-[#00c461] group-hover:text-white group-hover:shadow-md'
+                  }`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <span className="relative z-10">{t('home.bookVehicleBtn')}</span>
-                  <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-[#e6fff2] flex items-center justify-center transition-colors">
-                    <ChevronRight size={14} className="transform group-hover:translate-x-0.5 transition-transform" />
-                  </div>
+                  <span>{t('home.bookVehicleBtn')}</span>
+                  <ChevronRight size={16} strokeWidth={2.5} />
                 </Link>
               </div>
             </motion.div>

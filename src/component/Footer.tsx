@@ -18,7 +18,7 @@ export default function Footer() {
             {/* Cột 1: Thông tin cửa hàng */}
             <div className="md:col-span-4 flex flex-col space-y-3">
               <div className="bg-white inline-block px-3 py-1.5 rounded-lg self-start shadow-sm mb-1">
-                <img src={logo} alt="Cố Đô Xanh" className="h-[35px] w-auto object-contain" />
+                <img src={logo} alt="Xe Cố Đô Xanh" className="h-[35px] w-auto object-contain" />
               </div>
               <p className="leading-relaxed mt-1">
                 {t('footer.about')}
@@ -81,7 +81,7 @@ export default function Footer() {
                   
                   <div className="w-full h-28 bg-gray-800 rounded-lg overflow-hidden shadow-inner border border-[#333] ml-1 mt-1.5 opacity-90 hover:opacity-100 transition-opacity">
                     <iframe
-                      src="https://maps.google.com/maps?q=20.2815256,105.9653496&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                      src="https://maps.google.com/maps?q=Xe+C%E1%BB%91+%C4%90%C3%B4+Xanh,+Ninh+B%C3%ACnh&t=&z=16&ie=UTF8&iwloc=&output=embed"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -112,7 +112,7 @@ export default function Footer() {
         <div className="relative group">
           <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-30"></div>
           <a
-            href={`tel:${phoneNumber}`}
+            href={`tel:${phoneNumber.split(/[|\-]/)[0].trim()}`}
             className="flex items-center justify-start w-11 h-11 lg:hover:w-[130px] bg-gradient-to-tr from-[#ff3b3f] to-[#ff6b6b] text-white rounded-full shadow-lg shadow-red-500/30 transition-all duration-300 overflow-hidden relative z-10"
           >
             <div className="w-11 h-11 flex items-center justify-center shrink-0">

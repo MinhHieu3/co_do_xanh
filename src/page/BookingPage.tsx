@@ -212,14 +212,14 @@ export default function BookingPage() {
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: language === 'EN' ? '1 Day' : '1 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day1 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day1 },
-                { label: language === 'EN' ? '2 Days' : '2 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day2 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day2 },
-                { label: language === 'EN' ? '3 Days' : '3 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day3 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day3 },
-                { label: language === 'EN' ? '4 Days' : '4 ngày', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day4 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day4 },
-              ].map((item, i) => (
-                <div key={i} className="flex flex-col bg-white p-3 rounded-xl border border-green-50 shadow-[0_2px_10px_rgba(0,196,97,0.04)]">
-                  <span className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
-                  <span className="font-bold text-[#0d1b2a]">{item.price?.split('/')[0]}</span>
+                { label: language === 'EN' ? '24 Hours' : '24 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day1 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day1 },
+                { label: language === 'EN' ? '48 Hours' : '48 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day2 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day2 },
+                { label: language === 'EN' ? '72 Hours' : '72 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day3 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day3 },
+                { label: language === 'EN' ? '96 Hours' : '96 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day4 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day4 },
+              ].filter(item => item.price).map((item, i, arr) => (
+                <div key={i} className={`${arr.length === 1 ? 'col-span-2' : ''} flex flex-col bg-white p-4 rounded-xl border border-green-100/50 shadow-[0_4px_20px_rgba(0,196,97,0.08)] items-center justify-center transition-transform hover:-translate-y-1`}>
+                  <span className="text-sm text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
+                  <span className="font-black text-2xl text-[#009e4e]">{item.price?.split('/')[0]}</span>
                 </div>
               ))}
             </div>
@@ -240,9 +240,10 @@ export default function BookingPage() {
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3 mt-2">
             <Info className="text-yellow-600 shrink-0 mt-0.5" size={20} />
-            <p className="text-sm text-yellow-800 leading-relaxed">
-              <strong>{t('booking.noteTitle')}</strong> {t('booking.noteDesc')}
-            </p>
+            <div className="text-sm text-yellow-800 leading-relaxed space-y-1.5">
+              <p><strong>{t('booking.noteTitle')}</strong> {t('booking.noteDesc')}</p>
+              <p><strong>{t('booking.overtimeTitle')}</strong> {t('booking.overtimePolicy')}</p>
+            </div>
           </div>
         </div>
 

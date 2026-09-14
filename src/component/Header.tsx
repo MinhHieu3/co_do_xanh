@@ -37,7 +37,7 @@ export default function Header() {
             <Link to="/" className="flex items-center group py-1">
               <img
                 src={logo}
-                alt="Cố Đô Xanh"
+                alt="Xe Cố Đô Xanh"
                 className="h-[53px] md:h-[70px] w-auto object-contain drop-shadow-md transition-transform duration-300 scale-[1.5] md:scale-[1.6] origin-left group-hover:scale-[1.55] md:group-hover:scale-[1.65]"
               />
             </Link>

@@ -16,7 +16,7 @@ const newsData = [
     excerptEn: "Fully explore the majestic beauty of Trang An and the sacredness of Bai Dinh pagoda in just 24 hours with this detailed itinerary.",
     image: img1,
     date: "12/08/2026",
-    author: "Cố Đô Xanh",
+    author: "Xe Cố Đô Xanh",
     category: "Cẩm nang du lịch",
     categoryEn: "Travel Guide",
     featured: true
@@ -42,7 +42,7 @@ const newsData = [
     excerptEn: "Mountain goat meat, burned rice, mountain snails... Let's explore the rich culinary map of the ancient capital.",
     image: img3,
     date: "28/07/2026",
-    author: "Cố Đô Xanh",
+    author: "Xe Cố Đô Xanh",
     category: "Ẩm thực",
     categoryEn: "Cuisine",
     featured: false
@@ -55,7 +55,7 @@ const newsData = [
     excerptEn: "Known as the miniature Great Wall of Vietnam, Mua Cave is a must-visit destination for stunning photos.",
     image: img5,
     date: "01/07/2026",
-    author: "Cố Đô Xanh",
+    author: "Xe Cố Đô Xanh",
     category: "Điểm đến",
     categoryEn: "Destination",
     featured: false
@@ -64,7 +64,7 @@ const newsData = [
     id: 6,
     title: "Bảo dưỡng dàn xe điện chuẩn bị đón khách dịp Lễ",
     titleEn: "Maintenance of Electric Fleet for Upcoming Holidays",
-    excerpt: "Cố Đô Xanh vừa hoàn tất việc kiểm tra và bảo dưỡng toàn bộ hệ thống xe điện, sẵn sàng phục vụ du khách một cách an toàn nhất.",
+    excerpt: "Xe Cố Đô Xanh vừa hoàn tất việc kiểm tra và bảo dưỡng toàn bộ hệ thống xe điện, sẵn sàng phục vụ du khách một cách an toàn nhất.",
     excerptEn: "Co Do Xanh has just completed inspecting and maintaining the entire electric vehicle system, ready to serve tourists safely.",
     image: img6,
     date: "20/06/2026",
