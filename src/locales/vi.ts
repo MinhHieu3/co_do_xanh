@@ -49,7 +49,7 @@ export const vi = {
     step2: "Thủ tục nhận xe",
     step2Desc: "Nhận xe tại cửa hàng hoặc giao tận nơi bán kính 3km (quá 3km có phụ phí). Khách hàng cần cung cấp CCCD và GPLX (đối với xe yêu cầu bằng lái). Ký hợp đồng nhận xe (Không yêu cầu đặt cọc).",
     step3: "Tận hưởng chuyến đi",
-    step3Desc: "Khi pin dưới 20%, shop hỗ trợ đổi pin miễn phí lần đầu tại tủ. Từ lần thứ 2 trở đi, phí đổi pin là 9.000đ/lần.",
+    step3Desc: "Dưới 20% lần đầu shop sẽ hỗ trợ đổi pin mới tại cửa hàng, hoặc chia sẻ app để đổi tại tủ đổi pin. Từ lần thứ 2 trở đi, phí đổi pin là 9.000đ/lần.",
     step4: "Trả xe đã thuê",
     step4Desc: "Có thể trả xe tại cửa hàng hoặc yêu cầu nhân viên đến tận nơi lấy. Nhân viên kiểm tra tình trạng xe, nếu phát sinh hư hỏng hoặc mất mát, khách hàng cần đền bù theo giá trị thực tế.",
     ourVehicles: "Tất cả xe máy",

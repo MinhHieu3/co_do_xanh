@@ -1,6 +1,7 @@
 import felizImage from "../assets/image/Vinfast Feliz II.webp";
 import evoImage from "../assets/image/Xe Máy Điện Vinfast Evo.jpg";
 import evoLiteImage from "../assets/image/Evo lite.png";
+// import phoenixImage from "../assets/image/phoenix-c1-3.jpg";
 
 export interface Vehicle {
   id: string;
@@ -101,7 +102,7 @@ export const vehicles: Vehicle[] = [
       "Vận tốc tối đa": "60 km/h",
       "Thể tích cốp": "20 Lít",
       "Phụ kiện": "2 Mũ bảo hiểm, Áo mưa, Sạc pin",
-      "Bằng lái": "Không yêu cầu giấy phép lái xe"
+      "Bằng lái": "Không yêu cầu giấy phép lái xe (từ 16 tuổi trở lên)"
     },
     specsEn: {
       "Type": "Electric Motorbike",
@@ -112,22 +113,18 @@ export const vehicles: Vehicle[] = [
       "Accessories": "2 Helmets, Raincoat, Charger",
       "License": "No driver's license required"
     }
-  }
+  },
   // {
   //   id: "xe-dap-phoenix",
   //   name: "XE ĐẠP TRỢ LỰC PHOENIX",
   //   image: phoenixImage,
   //   pricing: {
   //     day1: "100k/1 ngày",
-  //     day2: "180k/2 ngày",
-  //     day3: "250k/3 ngày",
-  //     day4: "300k/4 ngày"
+
   //   },
   //   pricingEn: {
   //     day1: "$4/1 day",
-  //     day2: "$7/2 days",
-  //     day3: "$10/3 days",
-  //     day4: "$12/4 days"
+
   //   },
   //   specs: {
   //     "Loại xe": "Xe đạp trợ lực điện",

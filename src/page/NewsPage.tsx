@@ -19,25 +19,27 @@ const newsData = [
     author: "Xe Cố Đô Xanh",
     category: "Cẩm nang du lịch",
     categoryEn: "Travel Guide",
-    featured: true
+    featured: true,
+    link: "https://bamozo.vn/du-lich-trang-an-ninh-binh-1-ngay"
   },
-  {
-    id: 2,
-    title: "5 Cung đường phượt xe máy đẹp nhất Ninh Bình",
-    titleEn: "Top 5 Most Beautiful Motorbike Routes in Ninh Binh",
-    excerpt: "Thuê một chiếc xe máy và vi vu trên những cung đường uốn lượn quanh những dãy núi đá vôi tuyệt đẹp tại Ninh Bình.",
-    excerptEn: "Rent a motorbike and cruise along the winding roads around the stunning limestone mountains in Ninh Binh.",
-    image: img2,
-    date: "05/08/2026",
-    author: "Admin",
-    category: "Kinh nghiệm phượt",
-    categoryEn: "Travel Experience",
-    featured: false
-  },
+  // {
+  //   id: 2,
+  //   title: "5 Cung đường phượt xe máy đẹp nhất Ninh Bình",
+  //   titleEn: "Top 5 Most Beautiful Motorbike Routes in Ninh Binh",
+  //   excerpt: "Thuê một chiếc xe máy và vi vu trên những cung đường uốn lượn quanh những dãy núi đá vôi tuyệt đẹp tại Ninh Bình.",
+  //   excerptEn: "Rent a motorbike and cruise along the winding roads around the stunning limestone mountains in Ninh Binh.",
+  //   image: img2,
+  //   date: "05/08/2026",
+  //   author: "Admin",
+  //   category: "Kinh nghiệm phượt",
+  //   categoryEn: "Travel Experience",
+  //   featured: false,
+  //   link: ""
+  // },
   {
     id: 3,
     title: "Ăn gì ở Ninh Bình? Top 10 đặc sản không thể bỏ lỡ",
-    titleEn: "What to Eat in Ninh Binh? Top 10 Must-Try Specialties",
+    titleEn: "What to Eat in Ninh Binh? Top 25 Must-Try Specialties",
     excerpt: "Thịt dê núi, cơm cháy, ốc núi... Hãy cùng khám phá bản đồ ẩm thực phong phú của vùng đất cố đô ngàn năm văn hiến.",
     excerptEn: "Mountain goat meat, burned rice, mountain snails... Let's explore the rich culinary map of the ancient capital.",
     image: img3,
@@ -45,7 +47,8 @@ const newsData = [
     author: "Xe Cố Đô Xanh",
     category: "Ẩm thực",
     categoryEn: "Cuisine",
-    featured: false
+    featured: false,
+    link: "https://www.klook.com/vi/blog/dac-san-ninh-binh/"
   },
   {
     id: 5,
@@ -58,7 +61,8 @@ const newsData = [
     author: "Xe Cố Đô Xanh",
     category: "Điểm đến",
     categoryEn: "Destination",
-    featured: false
+    featured: false,
+    link: "http://bamozo.vn/du-lich-hang-mua-ninh-binh"
   },
   {
     id: 6,
@@ -71,7 +75,36 @@ const newsData = [
     author: "Thông báo",
     category: "Tin nội bộ",
     categoryEn: "Internal News",
-    featured: false
+    featured: false,
+    link: ""
+  },
+  {
+    id: 7,
+    title: "Tổng hợp các địa điểm du lịch Ninh Bình miễn phí siêu đẹp",
+    titleEn: "Top Free and Beautiful Tourist Destinations in Ninh Binh",
+    excerpt: "Ninh Bình không chỉ có những khu du lịch nổi tiếng bán vé mà còn rất nhiều điểm tham quan check-in tuyệt đẹp hoàn toàn miễn phí. Cùng khám phá ngay!",
+    excerptEn: "Ninh Binh not only has famous ticketed tourist areas but also many absolutely stunning check-in spots completely for free. Let's explore now!",
+    image: img1,
+    date: "15/09/2026",
+    author: "Admin",
+    category: "Cẩm nang du lịch",
+    categoryEn: "Travel Guide",
+    featured: false,
+    link: "https://blog.vexere.com/dia-diem-du-lich-ninh-binh-mien-phi/"
+  },
+  {
+    id: 8,
+    title: "Cẩm nang du lịch Ninh Bình 2025 từ A-Z: Top 11 địa điểm phải đến",
+    titleEn: "Ninh Binh Travel Guide 2025 from A-Z: Top 11 Must-Visit Destinations",
+    excerpt: "Đi thuyền khám phá Tràng An, thăm chùa Bái Đính là những trải nghiệm không thể bỏ qua khi đến Ninh Bình.",
+    excerptEn: "Exploring Trang An by boat and visiting Bai Dinh pagoda are unmissable experiences when coming to Ninh Binh.",
+    image: img2,
+    date: "15/09/2026",
+    author: "VnExpress",
+    category: "Cẩm nang du lịch",
+    categoryEn: "Travel Guide",
+    featured: false,
+    link: "https://vnexpress.net/cam-nang-du-lich-ninh-binh-4127327.html"
   }
 ];
 
@@ -105,7 +138,10 @@ export default function NewsPage() {
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24 relative z-10 pb-20">
 
         {/* Tin nổi bật (Featured) */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-12 group cursor-pointer animate-fade-in-up">
+        <div
+          className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-12 group cursor-pointer animate-fade-in-up"
+          onClick={() => featuredArticle.link && window.open(featuredArticle.link, '_blank')}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
               <img src={featuredArticle.image} alt={featuredArticle.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -135,7 +171,11 @@ export default function NewsPage() {
         {/* Danh sách tin tức */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {otherArticles.map((article, idx) => (
-            <div key={article.id} className={`bg-white rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden group cursor-pointer card-hover animate-fade-in-up delay-${(idx % 3 + 1) * 100}`}>
+            <div
+              key={article.id}
+              className={`bg-white rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden group cursor-pointer card-hover animate-fade-in-up delay-${(idx % 3 + 1) * 100}`}
+              onClick={() => article.link && window.open(article.link, '_blank')}
+            >
               <div className="relative h-[220px] overflow-hidden">
                 <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#009e4e] text-xs font-bold px-3 py-1 rounded-lg">

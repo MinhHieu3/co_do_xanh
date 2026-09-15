@@ -49,7 +49,7 @@ export const en = {
     step2: "Pickup Procedure",
     step2Desc: "Pick up at the store or get free delivery within 3km (extra fee if over 3km). Provide ID/Passport and Driver's License (if required). Sign the rental contract (No deposit required).",
     step3: "Enjoy the Ride",
-    step3Desc: "When the battery drops below 20%, we offer the 1st battery swap for free at our cabinets. From the 2nd time, the fee is 9,000 VND per swap.",
+    step3Desc: "When the battery drops below 20%, we offer the first battery replacement at the store, or share an app for you to swap it at our cabinets. From the 2nd time, the fee is 9,000 VND per swap.",
     step4: "Return the Bike",
     step4Desc: "You can return the vehicle at the store or request a pickup. Our staff will inspect the vehicle; any damages or losses must be compensated at their actual value.",
     ourVehicles: "All Motorbikes",
