@@ -323,7 +323,7 @@ export default function BookingPage() {
                       data-enable-time
                       value={formData.pickupDate}
                       options={flatpickrOptions}
-                      onChange={(selectedDates, dateStr, instance) => {
+                      onChange={(selectedDates, _dateStr, instance: any) => {
                         handleFlatpickrTimeRestricton(selectedDates, instance);
                         const date = selectedDates[0];
                         if (date) {
@@ -331,7 +331,7 @@ export default function BookingPage() {
                           setFormData(prev => ({ ...prev, pickupDate: str }));
                         }
                       }}
-                      onOpen={(selectedDates, dateStr, instance) => {
+                      onOpen={(selectedDates, _dateStr, instance: any) => {
                         handleFlatpickrTimeRestricton(selectedDates.length ? selectedDates : [new Date()], instance);
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
@@ -344,7 +344,7 @@ export default function BookingPage() {
                       data-enable-time
                       value={formData.dropoffDate}
                       options={dropoffOptions}
-                      onChange={(selectedDates, dateStr, instance) => {
+                      onChange={(selectedDates, _dateStr, instance: any) => {
                         const date = selectedDates[0];
                         if (date) {
                           const now = new Date();
@@ -367,7 +367,7 @@ export default function BookingPage() {
                           setFormData(prev => ({ ...prev, dropoffDate: str }));
                         }
                       }}
-                      onOpen={(selectedDates, dateStr, instance) => {
+                      onOpen={(selectedDates, _dateStr, instance: any) => {
                         const date = selectedDates.length ? selectedDates[0] : new Date();
                         const now = new Date();
                         let expectedMinTime: string | null = null;

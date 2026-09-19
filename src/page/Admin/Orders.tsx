@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, message, Select, Form, Popconfirm, Tag, Radio, Input, InputNumber } from 'antd';
-import { Car, CreditCard, Edit } from 'lucide-react';
+import { Table, Button, Space, Modal, message, Select, Form, Tag, Radio, Input, InputNumber } from 'antd';
+import { Car, CreditCard } from 'lucide-react';
 import { fetchApi } from './api';
+// @ts-ignore
 import qrImage from '../../assets/image/IMG_8501.JPG';
 
 const Orders: React.FC = () => {
@@ -15,7 +16,6 @@ const Orders: React.FC = () => {
   const [assigningOrderId, setAssigningOrderId] = useState<number | null>(null);
   const [isCheckoutModalVisible, setIsCheckoutModalVisible] = useState(false);
   const [checkoutOrderId, setCheckoutOrderId] = useState<number | null>(null);
-  const [checkoutAmount, setCheckoutAmount] = useState<number>(0);
   const [form] = Form.useForm();
   const [checkoutForm] = Form.useForm();
 
@@ -103,7 +103,6 @@ const Orders: React.FC = () => {
   const showCheckoutModal = (record: any) => {
     setCheckoutOrderId(record.id);
     setIsCheckoutModalVisible(true);
-    setCheckoutAmount(0);
     checkoutForm.resetFields();
   };
 
@@ -288,10 +287,9 @@ const Orders: React.FC = () => {
             <InputNumber 
                style={{ width: '100%' }} 
                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
-               parser={(value) => value!.replace(/\$\s?|(,*)/g, '')} 
+               parser={(value) => (value ? Number(value.replace(/\$\s?|(,*)/g, '')) : 0) as any}
                min={0}
                size="large"
-               onChange={(val) => setCheckoutAmount(val as number || 0)}
                placeholder="Nhập số tiền khách phải trả..."
             />
           </Form.Item>

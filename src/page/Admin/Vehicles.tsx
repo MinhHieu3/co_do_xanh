@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, message, Switch, Select, Radio, Tag } from 'antd';
-import { Edit, Trash2, Plus } from 'lucide-react';
+import { Table, Button, Space, Modal, Form, Input, message, Switch, Select, Radio } from 'antd';
+import { Plus } from 'lucide-react';
 import { fetchApi } from './api';
 
 const Vehicles: React.FC = () => {
@@ -39,15 +39,7 @@ const Vehicles: React.FC = () => {
     } catch (e) {}
   };
 
-  const handleDelete = async (id: number) => {
-    try {
-      await fetchApi(`/vehicles/${id}`, { method: 'DELETE' });
-      message.success('Xóa thành công');
-      loadData();
-    } catch (e) {
-      message.error('Xóa thất bại');
-    }
-  };
+
 
   const showModal = (record?: any) => {
     setIsModalVisible(true);
