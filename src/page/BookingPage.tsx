@@ -121,7 +121,7 @@ export default function BookingPage() {
 
       setIsSubmitting(false);
       setShowSuccess(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo(0, 0);
     } catch (error) {
       console.error(error);
       setIsSubmitting(false);

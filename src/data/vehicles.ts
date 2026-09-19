@@ -1,7 +1,9 @@
 import felizImage from "../assets/image/Vinfast Feliz II.webp";
 import evoImage from "../assets/image/Xe Máy Điện Vinfast Evo.jpg";
 import evoLiteImage from "../assets/image/Evo lite.png";
-// import phoenixImage from "../assets/image/phoenix-c1-3.jpg";
+import phoenixImageNam from "../assets/image/TLNAM.jpg";
+import phoenixImageNu from "../assets/image/TLN.jpg";
+
 
 export interface Vehicle {
   id: string;
@@ -114,33 +116,68 @@ export const vehicles: Vehicle[] = [
       "License": "No driver's license required"
     }
   },
-  // {
-  //   id: "xe-dap-phoenix",
-  //   name: "XE ĐẠP TRỢ LỰC PHOENIX",
-  //   image: phoenixImage,
-  //   pricing: {
-  //     day1: "100k/1 ngày",
+  {
+    id: "xe-dap-phoenix-nam",
+    name: "XE ĐẠP TRỢ LỰC PHOENIX (NAM)",
+    image: phoenixImageNam,
+    pricing: {
+      day1: "100k/1 ngày",
 
-  //   },
-  //   pricingEn: {
-  //     day1: "$4/1 day",
+    },
+    pricingEn: {
+      day1: "$4/1 day",
 
-  //   },
-  //   specs: {
-  //     "Loại xe": "Xe đạp trợ lực điện",
-  //     "Quãng đường": "50 - 100km / lần sạc",
-  //     "Vận tốc tối đa": "25 - 40 km/h",
-  //     "Khung xe": "Hợp kim siêu nhẹ",
-  //     "Phụ kiện": "Khóa xe, Sạc pin, Mũ bảo hiểm"
-  //   },
-  //   specsEn: {
-  //     "Type": "Electric Bicycle",
-  //     "Range": "50 - 100km / charge",
-  //     "Max Speed": "25 - 40 km/h",
-  //     "Frame": "Ultra-lightweight alloy",
-  //     "Accessories": "Lock, Charger, Helmet"
-  //   }
-  // },
+    },
+    specs: {
+      "Loại xe": "Xe đạp trợ lực điện",
+      "Dạng pin": "Sạc pin",
+      "Quãng đường": "50 - 80km / lần sạc",
+      "Vận tốc tối đa": "25 - 40 km/h",
+      "Khung xe": "Hợp kim siêu nhẹ",
+      "Phụ kiện": "Khóa xe, Sạc pin",
+      "Bằng lái": "Không yêu cầu giấy phép lái xe"
+    },
+    specsEn: {
+      "Type": "Electric Bicycle",
+      "Battery": "Charge",
+      "Range": "50 - 80km / charge",
+      "Max Speed": "25 - 40 km/h",
+      "Frame": "Ultra-lightweight alloy",
+      "Accessories": "Lock, Charger",
+      "License": "No driver's license required"
+    }
+  },
+  {
+    id: "xe-dap-phoenix-nu",
+    name: "XE ĐẠP TRỢ LỰC PHOENIX (NỮ)",
+    image: phoenixImageNu,
+    pricing: {
+      day1: "100k/1 ngày",
+
+    },
+    pricingEn: {
+      day1: "$4/1 day",
+
+    },
+    specs: {
+      "Loại xe": "Xe đạp trợ lực điện",
+      "Dạng pin": "Sạc pin",
+      "Quãng đường": "50 - 80km / lần sạc",
+      "Vận tốc tối đa": "25 - 40 km/h",
+      "Khung xe": "Hợp kim siêu nhẹ",
+      "Phụ kiện": "Khóa xe, Sạc pin",
+      "Bằng lái": "Không yêu cầu giấy phép lái xe"
+    },
+    specsEn: {
+      "Type": "Electric Bicycle",
+      "Battery": "Charge",
+      "Range": "50 - 80km / charge",
+      "Max Speed": "25 - 40 km/h",
+      "Frame": "Ultra-lightweight alloy",
+      "Accessories": "Lock, Charger",
+      "License": "No driver's license required"
+    }
+  },
   // {
   //   id: "wave-alpha-110",
   //   name: "Wave Alpha 110",
