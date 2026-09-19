@@ -16,7 +16,7 @@ const Login: React.FC = () => {
         body: JSON.stringify(values),
       });
       const data = await response.json();
-      
+
       if (data.success && data.token) {
         localStorage.setItem('admin_token', data.token);
         message.success('Đăng nhập thành công');
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f0f2f5', width: '100vw', position: 'absolute', top: 0, left: 0, zIndex: 9999 }}>
-      <Card title="Quản trị Cờ Đỏ Xanh" style={{ width: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+      <Card title="Quản trị XE CỐ ĐÔ XANH" style={{ width: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         <Form name="login" onFinish={onFinish} layout="vertical">
           <Form.Item
             name="username"

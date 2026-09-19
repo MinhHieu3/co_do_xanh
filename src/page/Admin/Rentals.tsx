@@ -16,7 +16,7 @@ const Rentals: React.FC = () => {
     try {
       const res = await fetchApi('/statistics/details');
       const json = await res.json();
-      if (json.success) setData(json.data);
+      if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
     } catch (e) {
       message.error('Lỗi tải dữ liệu');
     }

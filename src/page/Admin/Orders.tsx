@@ -1,29 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, message, Select, Form, Popconfirm, Tag, Radio, Input } from 'antd';
+import { Table, Button, Space, Modal, message, Select, Form, Popconfirm, Tag, Radio, Input, InputNumber } from 'antd';
 import { Car, CreditCard, Edit } from 'lucide-react';
 import { fetchApi } from './api';
+import qrImage from '../../assets/image/IMG_8501.JPG';
 
 const Orders: React.FC = () => {
   const [data, setData] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [vehicles, setVehicles] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
   const [assigningOrderId, setAssigningOrderId] = useState<number | null>(null);
+  const [isCheckoutModalVisible, setIsCheckoutModalVisible] = useState(false);
+  const [checkoutOrderId, setCheckoutOrderId] = useState<number | null>(null);
+  const [checkoutAmount, setCheckoutAmount] = useState<number>(0);
   const [form] = Form.useForm();
+  const [checkoutForm] = Form.useForm();
 
   useEffect(() => {
     loadData();
     loadVehicles();
+    loadCategories();
   }, []);
+
+  const loadCategories = async () => {
+    try {
+      const res = await fetchApi('/categories');
+      const json = await res.json();
+      if (json.success) setCategories(json.data);
+    } catch (e) { }
+  };
 
   const loadData = async () => {
     setLoading(true);
     try {
       const res = await fetchApi('/orders');
       const json = await res.json();
-      if (json.success) setData(json.data);
+      if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
     } catch (e) {
       message.error('Lỗi tải dữ liệu');
     }
@@ -66,10 +81,13 @@ const Orders: React.FC = () => {
       });
       const json = await res.json();
       if (json.success) {
-        // Cập nhật trạng thái đơn thành Đang thuê (status = true)
+        // Cập nhật trạng thái đơn thành Đang thuê và cập nhật ngày nhận xe thành thời điểm hiện tại
+        const now = new Date();
+        const formattedNow = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        
         await fetchApi(`/orders/${assigningOrderId}`, {
           method: 'PUT',
-          body: JSON.stringify({ status: true }),
+          body: JSON.stringify({ status: true, time_start: formattedNow }),
         });
         message.success('Đã giao xe thành công');
         setIsAssignModalVisible(false);
@@ -82,30 +100,61 @@ const Orders: React.FC = () => {
     }
   };
 
-  const handleCheckout = async (id: number) => {
+  const showCheckoutModal = (record: any) => {
+    setCheckoutOrderId(record.id);
+    setIsCheckoutModalVisible(true);
+    setCheckoutAmount(0);
+    checkoutForm.resetFields();
+  };
+
+  const handleCheckoutSubmit = async () => {
     try {
-      const res = await fetchApi(`/orders/${id}/checkout`, {
-        method: 'POST'
+      const values = await checkoutForm.validateFields();
+      const res = await fetchApi(`/orders/${checkoutOrderId}/checkout`, {
+        method: 'POST',
+        body: JSON.stringify({ amount: Number(values.amount) })
       });
       const json = await res.json();
       if (json.success) {
         message.success('Thanh toán và trả xe thành công');
+        setIsCheckoutModalVisible(false);
         loadData();
       } else {
         message.error(json.message || 'Lỗi thanh toán');
       }
-    } catch (e) {
-      message.error('Lỗi kết nối');
+    } catch (e: any) {
+      if (e?.name !== 'ValidationError') {
+        message.error('Lỗi kết nối hoặc lỗi server');
+        console.error(e);
+      }
     }
   };
 
-  const columns = [
-    { title: 'Mã', dataIndex: 'id', key: 'id' },
-    { title: 'Khách hàng', dataIndex: 'name', key: 'name' },
-    { title: 'SĐT', dataIndex: 'phone', key: 'phone' },
-    { title: 'Ngày nhận', dataIndex: 'time_start', key: 'time_start' },
-    { title: 'Loại xe', dataIndex: 'type_category', key: 'type_category' },
-    { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
+  const columns: any = [
+    { title: 'Mã', dataIndex: 'id', key: 'id', responsive: ['md'] },
+    { 
+      title: 'Khách hàng', 
+      dataIndex: 'name', 
+      key: 'name',
+      render: (text: string, record: any) => (
+        <a style={{ fontWeight: 600, color: '#009e4e', cursor: 'pointer' }} onClick={() => {
+          if (!record.status) showAssignModal(record);
+          else message.info('Chức năng sửa thông tin xe đang cập nhật');
+        }}>
+          {text}
+        </a>
+      )
+    },
+    { title: 'SĐT', dataIndex: 'phone', key: 'phone', responsive: ['md'] },
+    { 
+      title: 'Ngày nhận', 
+      dataIndex: 'time_start', 
+      key: 'time_start', 
+      responsive: ['md'],
+      render: (text: string, record: any) => record.status ? <span style={{ fontWeight: 500, color: '#009e4e' }}>{text}</span> : <span style={{ color: '#ccc' }}>-</span>
+    },
+    { title: 'Loại xe', dataIndex: 'type_category', key: 'type_category', responsive: ['md'] },
+    { title: 'SL', dataIndex: 'quantity', key: 'quantity', responsive: ['md'] },
     {
       title: 'Biển số',
       key: 'assigned_plates',
@@ -128,19 +177,10 @@ const Orders: React.FC = () => {
       render: (_: any, record: any) => (
         <Space size="middle">
           {!record.status ? (
-            <Button type="default" icon={<Car size={16} />} onClick={() => showAssignModal(record)}>
-              Giao xe
-            </Button>
+            <Button type="default" icon={<Car size={16} />} onClick={() => showAssignModal(record)} />
           ) : (
-            <Button type="default" icon={<Edit size={16} />} onClick={() => message.info('Chức năng sửa thông tin xe đang cập nhật')}>
-              Chỉnh sửa
-            </Button>
+            <Button type="primary" icon={<CreditCard size={16} />} onClick={() => showCheckoutModal(record)} />
           )}
-          <Popconfirm title="Xác nhận khách thanh toán và trả xe?" onConfirm={() => handleCheckout(record.id)}>
-            <Button type="primary" icon={<CreditCard size={16} />}>
-              Thanh toán
-            </Button>
-          </Popconfirm>
         </Space>
       ),
     },
@@ -161,16 +201,16 @@ const Orders: React.FC = () => {
   });
 
   return (
-    <div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 16 }}>
-        <h2 style={{ margin: 0 }}>Quản lý Đơn Đặt</h2>
+    <div className="w-full flex flex-col">
+      <div className="flex flex-col gap-4 mb-4">
+        <h2 className="m-0 text-xl font-bold">Quản lý Đơn Đặt</h2>
         
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
           <Radio.Group 
             value={filterStatus} 
             onChange={e => setFilterStatus(e.target.value)} 
             buttonStyle="solid"
-            style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}
+            className="flex whitespace-nowrap overflow-x-auto hide-scrollbar w-full sm:w-auto"
           >
             <Radio.Button value="all">Tất cả</Radio.Button>
             <Radio.Button value="waiting">Chờ giao xe</Radio.Button>
@@ -181,7 +221,7 @@ const Orders: React.FC = () => {
             placeholder="Tìm theo Tên hoặc SĐT..." 
             allowClear
             onChange={e => setSearchText(e.target.value)}
-            style={{ maxWidth: 300, minWidth: 200, width: '100%' }} 
+            className="w-full sm:max-w-[300px]" 
           />
         </div>
       </div>
@@ -190,17 +230,70 @@ const Orders: React.FC = () => {
         dataSource={filteredData} 
         rowKey="id" 
         loading={loading} 
-        scroll={{ x: 1000 }}
+        scroll={{ x: 500 }}
+        size="middle"
       />
 
       <Modal title="Giao xe cho khách" open={isAssignModalVisible} onOk={handleAssignOk} onCancel={() => setIsAssignModalVisible(false)}>
         <Form form={form} layout="vertical">
           <Form.Item name="vehicle_ids" label="Chọn xe" rules={[{ required: true, message: 'Vui lòng chọn ít nhất 1 xe' }]}>
-            <Select mode="multiple" placeholder="Chọn xe (có thể chọn nhiều)">
-              {vehicles.map((v: any) => (
-                <Select.Option key={v.id} value={v.id}>{v.license_plate}</Select.Option>
-              ))}
+            <Select 
+              mode="multiple" 
+              placeholder="Chọn xe (có thể chọn nhiều)"
+              showSearch
+              virtual={false}
+              optionFilterProp="children"
+              filterOption={(input, option) => {
+                const text = String(option?.children ?? '').toLowerCase();
+                return text.includes(input.toLowerCase());
+              }}
+            >
+              {vehicles.map((v: any) => {
+                const cat: any = categories.find((c: any) => c.id === v.id_category);
+                const categoryName = cat ? `${cat.brand} - ${cat.type}` : '';
+                return (
+                  <Select.Option key={v.id} value={v.id}>
+                    {v.license_plate} {categoryName ? `- ${categoryName}` : ''}
+                  </Select.Option>
+                );
+              })}
             </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal title="Thanh toán đơn hàng" open={isCheckoutModalVisible} onOk={handleCheckoutSubmit} onCancel={() => setIsCheckoutModalVisible(false)} okText="Xác nhận thanh toán">
+        <Form form={checkoutForm} layout="vertical">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+             <div style={{ 
+                width: 260, 
+                height: 300, 
+                overflow: 'hidden', 
+                borderRadius: 16, 
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff'
+             }}>
+               <img src={qrImage} alt="QR Code" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.15)', objectPosition: 'center 48%' }} />
+             </div>
+             <div style={{ marginTop: 16, textAlign: 'center', fontSize: 14 }}>
+               Quét mã để chuyển tiền đến<br/>
+               <strong style={{ fontSize: 16 }}>BUI MINH HIEU</strong><br/>
+               3586 8683 86 - TECHCOMBANK
+             </div>
+          </div>
+          <Form.Item name="amount" label="Số tiền thanh toán (VNĐ)" rules={[{ required: true, message: 'Vui lòng nhập số tiền' }]}>
+            <InputNumber 
+               style={{ width: '100%' }} 
+               formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
+               parser={(value) => value!.replace(/\$\s?|(,*)/g, '')} 
+               min={0}
+               size="large"
+               onChange={(val) => setCheckoutAmount(val as number || 0)}
+               placeholder="Nhập số tiền khách phải trả..."
+            />
           </Form.Item>
         </Form>
       </Modal>
