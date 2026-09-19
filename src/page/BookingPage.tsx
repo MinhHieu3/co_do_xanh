@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { vehicles } from "../data/vehicles";
 import { CheckCircle2, Calendar, MapPin, User, Phone, Mail, FileText, Info, Hash } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -7,6 +7,32 @@ import "flatpickr/dist/themes/airbnb.css";
 import { Vietnamese } from "flatpickr/dist/l10n/vn.js";
 import { useLanguage } from "../context/LanguageContext";
 import toast from 'react-hot-toast';
+
+const flatpickrOptions = {
+  locale: Vietnamese,
+  minDate: "today",
+  dateFormat: "d/m/Y H:i",
+  time_24hr: true,
+  disableMobile: true
+};
+
+const handleFlatpickrTimeRestricton = (selectedDates: Date[], instance: any) => {
+  const date = selectedDates[0];
+  if (!date) return;
+  const now = new Date();
+  if (date.toDateString() === now.toDateString()) {
+    const newMinTime = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+    if (instance._customMinTime !== newMinTime) {
+      instance.set("minTime", newMinTime);
+      instance._customMinTime = newMinTime;
+    }
+  } else {
+    if (instance._customMinTime !== null) {
+      instance.set("minTime", null);
+      instance._customMinTime = null;
+    }
+  }
+};
 
 export default function BookingPage() {
   const { language, t } = useLanguage();
@@ -31,6 +57,20 @@ export default function BookingPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const dropoffOptions = useMemo(() => {
+    let minD = "today";
+    if (formData.pickupDate) {
+      minD = formData.pickupDate.split(' ')[0];
+    }
+    return {
+      locale: Vietnamese,
+      minDate: minD,
+      dateFormat: "d/m/Y H:i",
+      time_24hr: true,
+      disableMobile: true
+    };
+  }, [formData.pickupDate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -282,18 +322,17 @@ export default function BookingPage() {
                     <Flatpickr
                       data-enable-time
                       value={formData.pickupDate}
-                      options={{
-                        locale: Vietnamese,
-                        minDate: "today",
-                        dateFormat: "d/m/Y H:i",
-                        time_24hr: true,
-                        disableMobile: true // Bắt buộc dùng giao diện tuỳ chỉnh đẹp, không dùng giao diện mặc định xấu của trình duyệt
-                      }}
-                      onChange={([date]) => {
+                      options={flatpickrOptions}
+                      onChange={(selectedDates, dateStr, instance) => {
+                        handleFlatpickrTimeRestricton(selectedDates, instance);
+                        const date = selectedDates[0];
                         if (date) {
-                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                          setFormData(prev => ({ ...prev, pickupDate: dateStr }));
+                          const str = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                          setFormData(prev => ({ ...prev, pickupDate: str }));
                         }
+                      }}
+                      onOpen={(selectedDates, dateStr, instance) => {
+                        handleFlatpickrTimeRestricton(selectedDates.length ? selectedDates : [new Date()], instance);
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
                       placeholder={t('booking.pickupTimePlaceholder')}
@@ -304,17 +343,47 @@ export default function BookingPage() {
                     <Flatpickr
                       data-enable-time
                       value={formData.dropoffDate}
-                      options={{
-                        locale: Vietnamese,
-                        minDate: "today",
-                        dateFormat: "d/m/Y H:i",
-                        time_24hr: true,
-                        disableMobile: true
-                      }}
-                      onChange={([date]) => {
+                      options={dropoffOptions}
+                      onChange={(selectedDates, dateStr, instance) => {
+                        const date = selectedDates[0];
                         if (date) {
-                          const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                          setFormData(prev => ({ ...prev, dropoffDate: dateStr }));
+                          const now = new Date();
+                          let expectedMinTime: string | null = null;
+                          if (formData.pickupDate) {
+                            const [pDate, pTime] = formData.pickupDate.split(' ');
+                            const dStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                            if (dStr === pDate) {
+                              expectedMinTime = pTime;
+                            }
+                          }
+                          if (!expectedMinTime && date.toDateString() === now.toDateString()) {
+                            expectedMinTime = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+                          }
+                          if (instance._customMinTime !== expectedMinTime) {
+                            instance.set("minTime", expectedMinTime);
+                            instance._customMinTime = expectedMinTime;
+                          }
+                          const str = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                          setFormData(prev => ({ ...prev, dropoffDate: str }));
+                        }
+                      }}
+                      onOpen={(selectedDates, dateStr, instance) => {
+                        const date = selectedDates.length ? selectedDates[0] : new Date();
+                        const now = new Date();
+                        let expectedMinTime: string | null = null;
+                        if (formData.pickupDate) {
+                          const [pDate, pTime] = formData.pickupDate.split(' ');
+                          const dStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                          if (dStr === pDate) {
+                            expectedMinTime = pTime;
+                          }
+                        }
+                        if (!expectedMinTime && date.toDateString() === now.toDateString()) {
+                          expectedMinTime = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+                        }
+                        if (instance._customMinTime !== expectedMinTime) {
+                          instance.set("minTime", expectedMinTime);
+                          instance._customMinTime = expectedMinTime;
                         }
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
