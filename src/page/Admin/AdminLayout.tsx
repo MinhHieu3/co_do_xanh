@@ -6,7 +6,6 @@ import {
   Tags,
   Car,
   ShoppingCart,
-  History,
   LogOut,
   PanelLeftOpen,
   PanelLeftClose
