@@ -1,1 +1,0 @@
-import"./jsx-runtime-CXrijb2r.js";import"./main-CXoWu7Nc.js";import"./client-Z4fJX_tL.js";import"./react-dom-CpYOTVvf.js";import"./dist-JhqRRMTD.js";import"./LanguageContext-wHyyAOug.js";localStorage.setItem(`language`,`EN`);

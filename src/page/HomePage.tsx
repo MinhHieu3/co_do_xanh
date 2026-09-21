@@ -22,18 +22,17 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-5xl mx-auto">
           {vehicles.map((vehicle, idx) => (
-            <motion.div 
-              key={vehicle.id} 
+            <motion.div
+              key={vehicle.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => navigate('/booking', { state: { selectedVehicle: vehicle.id } })}
-              className={`relative flex flex-col items-center text-center group cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 ${
-                vehicle.isPopular 
-                  ? 'border border-[#0d9488]/40 shadow-[0_15px_50px_rgba(0,196,97,0.12)] -translate-y-2 order-first md:order-none' 
+              className={`relative flex flex-col items-center text-center group cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 ${vehicle.isPopular
+                  ? 'border border-[#0d9488]/40 shadow-[0_15px_50px_rgba(0,196,97,0.12)] -translate-y-2 order-first md:order-none'
                   : 'shadow-sm border border-gray-100 hover:border-[#0d9488]/30 hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1'
-              }`}
+                }`}
             >
               {/* Popular Badge */}
               {vehicle.isPopular && (
@@ -51,19 +50,17 @@ export default function HomePage() {
                 <img
                   src={vehicle.image}
                   alt={vehicle.name}
-                  className={`absolute inset-0 w-full h-full object-contain mix-blend-multiply transition-transform duration-700 ease-out p-4 ${
-                    vehicle.isPopular 
-                      ? 'scale-110 drop-shadow-xl' 
+                  className={`absolute inset-0 w-full h-full object-contain mix-blend-multiply transition-transform duration-700 ease-out p-4 ${vehicle.isPopular
+                      ? 'scale-110 drop-shadow-xl'
                       : 'drop-shadow-md group-hover:scale-110 group-hover:drop-shadow-2xl'
-                  }`}
+                    }`}
                 />
               </div>
 
               {/* Vehicle Name */}
               <div className="h-[48px] flex items-center justify-center mb-3 mt-2">
-                <h3 className={`font-bold text-[18px] uppercase tracking-wider transition-colors font-display line-clamp-2 ${
-                  vehicle.isPopular ? 'text-[#14b8a6]' : 'text-[#0d1b2a] group-hover:text-[#14b8a6]'
-                }`}>
+                <h3 className={`font-bold text-[18px] uppercase tracking-wider transition-colors font-display line-clamp-2 ${vehicle.isPopular ? 'text-[#14b8a6]' : 'text-[#0d1b2a] group-hover:text-[#14b8a6]'
+                  }`}>
                   {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn : vehicle.name}
                 </h3>
               </div>
@@ -99,14 +96,13 @@ export default function HomePage() {
 
               {/* Action Button */}
               <div className="w-full mt-4 flex justify-center">
-                <Link 
-                  to="/booking" 
+                <Link
+                  to="/booking"
                   state={{ selectedVehicle: vehicle.id }}
-                  className={`inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-xl font-bold text-[14px] uppercase tracking-wider transition-all duration-300 shadow-sm ${
-                    vehicle.isPopular 
-                      ? 'bg-[#14b8a6] text-white shadow-md hover:bg-[#0d9488]' 
+                  className={`inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-xl font-bold text-[14px] uppercase tracking-wider transition-all duration-300 shadow-sm ${vehicle.isPopular
+                      ? 'bg-[#14b8a6] text-white shadow-md hover:bg-[#0d9488]'
                       : 'bg-gray-50 text-[#0d1b2a] group-hover:bg-[#14b8a6] group-hover:text-white group-hover:shadow-md'
-                  }`}
+                    }`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <span>{t('home.bookVehicleBtn')}</span>
@@ -135,7 +131,7 @@ export default function HomePage() {
               { num: 3, icon: Map, titleKey: 'home.step3', descKey: 'home.step3Desc' },
               { num: 4, icon: RotateCcw, titleKey: 'home.step4', descKey: 'home.step4Desc' }
             ].map((step, idx) => (
-              <motion.div 
+              <motion.div
                 key={step.num}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}

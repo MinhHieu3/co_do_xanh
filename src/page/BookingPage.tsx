@@ -64,7 +64,8 @@ export default function BookingPage() {
   const selectedVehicleData = useMemo(() => vehicles.find(v => v.id === selectedVehicle), [selectedVehicle]);
 
   const calculateTotalEstimate = () => {
-    if (!formData.pickupDate || !formData.dropoffDate) return 0;
+    const fallback = { total: 0, base: 0, overtime: 0, overtimeHours: 0 };
+    if (!formData.pickupDate || !formData.dropoffDate) return fallback;
     try {
       const parseDate = (str: string) => {
         const [d, t] = str.split(' ');
@@ -74,36 +75,52 @@ export default function BookingPage() {
       };
       const p = parseDate(formData.pickupDate);
       const d = parseDate(formData.dropoffDate);
-      const diffMs = d.getTime() - p.getTime();
-      const diffHours = diffMs / (1000 * 60 * 60);
-      if (diffHours <= 0) return 0;
-      
-      const vInfo = selectedVehicleData;
-      if (!vInfo) return 0;
-      
-      if (rentalType === 'hour') {
-        const isEbike = !selectedVehicle.includes('phoenix');
-        const halfDayRate = isEbike ? 100000 : 80000;
-        const fullDayRate = isEbike ? 150000 : 100000;
-        const hourlyRate = isEbike ? 30000 : 20000;
+      const diffHours = (d.getTime() - p.getTime()) / (1000 * 60 * 60);
+      if (diffHours <= 0) return fallback;
 
-        let costPerVehicle = 0;
+      const vInfo = selectedVehicleData;
+      if (!vInfo) return fallback;
+
+      const quantity = parseInt(formData.quantity) || 1;
+
+      if (rentalType === 'hour') {
+        const isMoto = !selectedVehicle.includes('phoenix'); // true for xe điện
+        const halfDayRate = isMoto ? 100000 : 80000;
+
+        const priceStr = vInfo.pricing.day1;
+        const fullDayRate = parseInt(priceStr.split('/')[0].replace(/\D/g, ''));
+
+        const hourlyRate = isMoto ? 15000 : 10000;
+
+        let base = 0;
+        let overtime = 0;
+        let overtimeHours = 0;
+
         if (diffHours <= 5) {
-          costPerVehicle = halfDayRate;
+          base = halfDayRate * quantity;
         } else if (diffHours >= 10) {
-          costPerVehicle = fullDayRate;
+          base = fullDayRate * quantity;
         } else {
-          costPerVehicle = Math.min(halfDayRate + (Math.ceil(diffHours) - 5) * hourlyRate, fullDayRate);
+          base = halfDayRate * quantity;
+          overtimeHours = Math.ceil(diffHours) - 5;
+          overtime = overtimeHours * hourlyRate * quantity;
         }
-        
-        return costPerVehicle * parseInt(formData.quantity);
+
+        if (base + overtime >= fullDayRate * quantity) {
+          base = fullDayRate * quantity;
+          overtime = 0;
+          overtimeHours = 0;
+        }
+
+        return { total: base + overtime, base, overtime, overtimeHours, hourlyRate };
       } else {
         const priceStr = vInfo.pricing.day1;
         const price = parseInt(priceStr.split('/')[0].replace(/\D/g, ''));
-        return Math.ceil(diffHours / 24) * price * parseInt(formData.quantity);
+        const total = Math.ceil(diffHours / 24) * price * quantity;
+        return { total, base: total, overtime: 0, overtimeHours: 0 };
       }
     } catch (e) {
-      return 0;
+      return fallback;
     }
   };
 
@@ -191,7 +208,9 @@ export default function BookingPage() {
 ⏳ <b>Loại hình:</b> ${rentalType === 'hour' ? 'Thuê theo giờ' : 'Thuê theo ngày'}
 📍 <b>Khu vực nhận:</b> ${formData.pickupLocation}${formData.pickupLocation === 'Giao tận nơi' ? `\n🏠 <b>Địa chỉ giao:</b> ${formData.deliveryAddress}` : ''}
 📝 <b>Ghi chú:</b> ${formData.notes || "Không có"}
-💰 <b>Tổng tiền dự kiến:</b> ${calculateTotalEstimate().toLocaleString('vi-VN')}đ
+${calculateTotalEstimate().overtime > 0 ? `💰 <b>Giá gốc (0-5h):</b> ${calculateTotalEstimate().base.toLocaleString('vi-VN')}đ
+⏳ <b>Phụ thu quá giờ (${calculateTotalEstimate().overtimeHours}h):</b> ${calculateTotalEstimate().overtime.toLocaleString('vi-VN')}đ` : ''}
+💰 <b>Tổng tiền dự kiến:</b> ${calculateTotalEstimate().total.toLocaleString('vi-VN')}đ
     `;
 
     // Lấy thông tin cấu hình từ file .env
@@ -289,14 +308,14 @@ export default function BookingPage() {
           </h2>
 
           <div className="flex bg-gray-100 p-1.5 rounded-xl w-full">
-            <button 
+            <button
               type="button"
               onClick={() => setRentalType('day')}
               className={`flex-1 px-5 py-2.5 rounded-lg font-bold transition-all text-sm ${rentalType === 'day' ? 'bg-white text-[#0d9488] shadow-[0_2px_8px_rgba(0,196,97,0.15)]' : 'text-gray-500 hover:text-[#0d9488]'}`}
             >
               {language === 'EN' ? 'Rent by Day' : 'Thuê theo ngày'}
             </button>
-            <button 
+            <button
               type="button"
               onClick={() => setRentalType('hour')}
               className={`flex-1 px-5 py-2.5 rounded-lg font-bold transition-all text-sm ${rentalType === 'hour' ? 'bg-white text-[#0d9488] shadow-[0_2px_8px_rgba(0,196,97,0.15)]' : 'text-gray-500 hover:text-[#0d9488]'}`}
@@ -333,11 +352,10 @@ export default function BookingPage() {
                   key={vehicle.id}
                   type="button"
                   onClick={() => setSelectedVehicle(vehicle.id)}
-                  className={`shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-2xl p-2 flex flex-col items-center justify-center transition-all duration-300 snap-center relative outline-none ${
-                    isSelected 
-                      ? "bg-white border-2 border-[#0d9488] shadow-[0_4px_16px_rgba(0,196,97,0.15)] scale-[1.02]" 
-                      : "bg-gray-50 border-2 border-transparent hover:bg-white hover:border-teal-200 hover:shadow-md opacity-60 hover:opacity-100"
-                  }`}
+                  className={`shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-2xl p-2 flex flex-col items-center justify-center transition-all duration-300 snap-center relative outline-none ${isSelected
+                    ? "bg-white border-2 border-[#0d9488] shadow-[0_4px_16px_rgba(0,196,97,0.15)] scale-[1.02]"
+                    : "bg-gray-50 border-2 border-transparent hover:bg-white hover:border-teal-200 hover:shadow-md opacity-60 hover:opacity-100"
+                    }`}
                 >
                   <div className="w-full h-[60%] flex items-center justify-center mb-1">
                     <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
@@ -358,15 +376,25 @@ export default function BookingPage() {
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { 
-                  label: rentalType === 'hour' ? (language === 'EN' ? 'Hourly Rate' : 'Giá Theo Giờ') : (language === 'EN' ? '24 Hours' : '24 Giờ'), 
-                  price: rentalType === 'hour' ? (language === 'EN' ? selectedVehicleData?.hourlyPricingEn?.price : selectedVehicleData?.hourlyPricing?.price) : (language === 'EN' ? selectedVehicleData?.pricingEn.day1 : selectedVehicleData?.pricing.day1)
+                {
+                  label: rentalType === 'hour' ? (language === 'EN' ? '0-5 Hours' : 'Thuê 0-5 tiếng') : (language === 'EN' ? '24 Hours' : '24 Giờ'),
+                  price: rentalType === 'hour' ? (language === 'EN' ? selectedVehicleData?.hourlyPricingEn?.price : selectedVehicleData?.hourlyPricing?.price) : (language === 'EN' ? selectedVehicleData?.pricingEn.day1 : selectedVehicleData?.pricing.day1),
+                  isHourInfo: rentalType === 'hour',
+                  hideUnit: rentalType === 'hour'
                 },
+                ...(rentalType === 'hour' ? [{
+                  label: language === 'EN' ? '≥10 Hours' : 'Từ 10 tiếng',
+                  price: language === 'EN' ? selectedVehicleData?.pricingEn.day1 : selectedVehicleData?.pricing.day1,
+                  isHourInfo: false,
+                  hideUnit: true
+                }] : [])
               ].filter(item => item.price).map((item, i, arr) => (
                 <div key={i} className={`${arr.length === 1 ? 'col-span-2' : ''} flex flex-col bg-white p-4 rounded-xl border border-teal-100/50 shadow-[0_4px_20px_rgba(0,196,97,0.08)] items-center justify-center transition-transform hover:-translate-y-1`}>
                   <span className="text-sm text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
                   <span className="font-black text-2xl text-[#0d9488]">{item.price?.split('/')[0]}</span>
-                  {rentalType === 'hour' && <span className="text-xs text-gray-400 mt-1">{language === 'EN' ? '/ hour' : '/ giờ'}</span>}
+                  {!item.hideUnit && (
+                    <span className="text-xs text-gray-400 mt-1">{language === 'EN' ? '/ 24 hours' : '/ 24h'}</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -389,21 +417,9 @@ export default function BookingPage() {
             <Info className="text-yellow-600 shrink-0 mt-0.5" size={20} />
             <div className="text-sm text-yellow-800 leading-relaxed space-y-1.5">
               <p><strong>{t('booking.noteTitle')}</strong> {t('booking.noteDesc')}</p>
-              <p>
-                <strong>{t('booking.overtimeTitle')}</strong>{' '}
-                {(() => {
-                  const isEbike = selectedVehicleData?.name.toLowerCase().includes('đạp');
-                  const price = isEbike ? '10.000đ' : '15.000đ';
-                  const priceEn = isEbike ? '$0.4' : '$0.6';
-                  const halfDayPrice = isEbike ? '80.000đ' : '100.000đ';
-                  const halfDayPriceEn = isEbike ? '$3.2' : '$4';
-                  return t('booking.overtimePolicy')
-                    .replace('{price}', language === 'EN' ? priceEn : price)
-                    .replace('{halfDayPrice}', language === 'EN' ? halfDayPriceEn : halfDayPrice);
-                })()}
-              </p>
             </div>
           </div>
+
         </div>
 
         {/* Cột Phải: Biểu Mẫu Thông Tin */}
@@ -438,6 +454,26 @@ export default function BookingPage() {
               {/* Chi tiết thuê xe */}
               <div className="space-y-4 pt-4 border-t border-gray-100">
                 <h3 className="text-lg font-bold text-gray-700">{t('booking.scheduleLocation')}</h3>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3">
+                  <Info className="text-yellow-600 shrink-0 mt-0.5" size={20} />
+                  <div className="text-sm text-yellow-800 leading-relaxed space-y-1.5">
+                    <p>
+                      <strong>{t('booking.overtimeTitle')}</strong>{' '}
+                      {(() => {
+                        const isEbike = selectedVehicleData?.name.toLowerCase().includes('đạp');
+                        const price = isEbike ? '10.000đ' : '15.000đ';
+                        const priceEn = isEbike ? '$0.4' : '$0.6';
+                        const halfDayPrice = isEbike ? '80.000đ' : '100.000đ';
+                        const halfDayPriceEn = isEbike ? '$3.2' : '$4';
+                        return t('booking.overtimePolicy')
+                          .replace('{price}', language === 'EN' ? priceEn : price)
+                          .replace('{halfDayPrice}', language === 'EN' ? halfDayPriceEn : halfDayPrice);
+                      })()}
+                    </p>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Calendar size={16} className="text-gray-400" />{t('booking.pickupTime')}</label>
@@ -574,7 +610,7 @@ export default function BookingPage() {
             <div className="p-5 md:p-6 space-y-4 max-h-[75vh] overflow-y-auto">
               <div className="flex items-center gap-4">
                 <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center p-2 border border-gray-100 shrink-0">
-                   <img src={selectedVehicleData?.image} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" alt="Vehicle" />
+                  <img src={selectedVehicleData?.image} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" alt="Vehicle" />
                 </div>
                 <div>
                   <div className="font-black text-gray-800 text-xl mb-1">{(language === 'EN' && selectedVehicleData?.nameEn) ? selectedVehicleData?.nameEn : selectedVehicleData?.name}</div>
@@ -583,7 +619,7 @@ export default function BookingPage() {
                       {rentalType === 'hour' ? (language === 'EN' ? 'Rent by Hour' : 'Thuê theo giờ') : (language === 'EN' ? 'Rent by Day' : 'Thuê theo ngày')} x {formData.quantity} {language === 'EN' ? 'vehicle(s)' : 'xe'}
                     </div>
                     <div className="inline-flex items-center text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">
-                      {rentalType === 'hour' 
+                      {rentalType === 'hour'
                         ? (language === 'EN' ? selectedVehicleData?.hourlyPricingEn?.price : selectedVehicleData?.hourlyPricing?.price)?.replace('/ ', language === 'EN' ? '/vehicle/' : '/xe/')
                         : (language === 'EN' ? selectedVehicleData?.pricingEn?.day1 : selectedVehicleData?.pricing?.day1)?.replace('/ ', language === 'EN' ? '/vehicle/' : '/xe/')}
                     </div>
@@ -625,7 +661,22 @@ export default function BookingPage() {
 
               <div className="bg-gradient-to-r from-teal-50 to-emerald-50 p-5 rounded-2xl border border-teal-100/50 flex flex-col items-center text-center">
                 <span className="text-sm font-bold text-teal-800 mb-1">{language === 'EN' ? 'Estimated Total' : 'Tổng tiền dự kiến'}</span>
-                <span className="font-black text-3xl text-[#0d9488]">{calculateTotalEstimate().toLocaleString('vi-VN')}đ</span>
+
+                {calculateTotalEstimate().overtime > 0 && (
+                  <div className="w-full flex flex-col items-center mb-2 mt-1 space-y-1">
+                    <div className="flex justify-between w-full max-w-[200px] text-xs text-gray-600">
+                      <span>{language === 'EN' ? 'Base (0-5h):' : 'Giá gốc (0-5h):'}</span>
+                      <span className="font-bold">{calculateTotalEstimate().base.toLocaleString('vi-VN')}đ</span>
+                    </div>
+                    <div className="flex justify-between w-full max-w-[200px] text-xs text-gray-600">
+                      <span>{language === 'EN' ? `Overtime (${calculateTotalEstimate().overtimeHours}h):` : `Phụ thu quá giờ (${calculateTotalEstimate().overtimeHours}h):`}</span>
+                      <span className="font-bold">{calculateTotalEstimate().overtime.toLocaleString('vi-VN')}đ</span>
+                    </div>
+                    <div className="w-full max-w-[200px] h-px bg-teal-200 my-1"></div>
+                  </div>
+                )}
+
+                <span className="font-black text-3xl text-[#0d9488]">{calculateTotalEstimate().total.toLocaleString('vi-VN')}đ</span>
                 <p className="text-[10px] text-teal-600/80 mt-2 italic max-w-[90%]">
                   {language === 'EN' ? '* Prices may vary slightly during holidays. Exact price will be confirmed upon contact.' : '* Giá có thể thay đổi nhẹ dịp Lễ/Tết. Nhân viên sẽ liên hệ xác nhận giá chính xác nhất.'}
                 </p>

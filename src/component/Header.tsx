@@ -7,9 +7,9 @@ import { useLanguage } from "../context/LanguageContext";
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
-    const location = useLocation();
+  const location = useLocation();
   const headerRef = useRef<HTMLElement>(null);
-  
+
   useEffect(() => {
     // No more mobile menu state needed since it's a bottom bar now
   }, [location.pathname]);

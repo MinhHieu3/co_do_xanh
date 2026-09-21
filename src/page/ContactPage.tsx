@@ -24,7 +24,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const text = `
 📩 <b>TIN NHẮN LIÊN HỆ MỚI</b>
 --------------------------------
@@ -151,7 +151,7 @@ ${formData.message}
                   </div>
                   <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">{t('contact.successTitle')}</h3>
                   <p className="text-gray-600">{t('contact.successMsg')}</p>
-                  <button 
+                  <button
                     onClick={() => {
                       setShowSuccess(false);
                       setFormData({ name: "", phone: "", subject: "", message: "" });

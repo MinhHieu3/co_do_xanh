@@ -92,7 +92,7 @@ export const vi = {
     noteTitle: "Lưu ý:",
     noteDesc: "Giá có thể thay đổi nhẹ tùy thuộc vào dịp lễ/tết hoặc các yêu cầu đặc biệt. Nhân viên sẽ báo giá chính xác nhất khi liên hệ.",
     overtimeTitle: "Chính sách quá giờ:",
-    overtimePolicy: "Phụ phí quá giờ là {price}/giờ. Từ 5-10 tiếng tính nửa ngày ({halfDayPrice}), từ 10 tiếng trở lên tính 1 ngày.",
+    overtimePolicy: "Phụ phí quá giờ là {price}/giờ.",
     personalInfo: "Thông tin cá nhân",
     emailOptional: "Email (Không bắt buộc)",
     emailPlaceholder: "Ví dụ: email@gmail.com",

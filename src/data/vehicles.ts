@@ -44,10 +44,10 @@ export const vehicles: Vehicle[] = [
       day1: "$6/ 24h",
     },
     hourlyPricing: {
-      price: "30.000đ/ 1h"
+      price: "100.000đ/5h"
     },
     hourlyPricingEn: {
-      price: "$1.2/ 1h"
+      price: "$4/5h"
     },
     specs: {
       "Loại xe": "Xe máy điện",
@@ -81,10 +81,10 @@ export const vehicles: Vehicle[] = [
       day1: "$6/ 24h",
     },
     hourlyPricing: {
-      price: "30.000đ/ 1h"
+      price: "100.000đ/5h"
     },
     hourlyPricingEn: {
-      price: "$1.2/ 1h"
+      price: "$4/5h"
     },
     specs: {
       "Loại xe": "Xe máy điện",
@@ -117,10 +117,10 @@ export const vehicles: Vehicle[] = [
       day1: "$6/ 24h",
     },
     hourlyPricing: {
-      price: "30.000đ/ 1h"
+      price: "100.000đ/ 5h"
     },
     hourlyPricingEn: {
-      price: "$1.2/ 1h"
+      price: "$4/ 5h"
     },
     specs: {
       "Loại xe": "Xe máy điện",
@@ -147,18 +147,18 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Men)",
     image: phoenixImageNam,
     pricing: {
-      day1: "100.000đ/ 24h",
+      day1: "120.000đ/ 24h",
 
     },
     pricingEn: {
-      day1: "$4/ 24h",
+      day1: "$5/ 24h",
 
     },
     hourlyPricing: {
-      price: "20.000đ/ 1h"
+      price: "80.000đ/ 5h"
     },
     hourlyPricingEn: {
-      price: "$0.8/ 1h"
+      price: "$3.2/ 5h"
     },
     specs: {
       "Loại xe": "Xe đạp trợ lực điện",
@@ -185,18 +185,18 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Women)",
     image: phoenixImageNu,
     pricing: {
-      day1: "100.000đ/ 24h",
+      day1: "120.000đ/ 24h",
 
     },
     pricingEn: {
-      day1: "$4/ 24h",
+      day1: "$5/ 24h",
 
     },
     hourlyPricing: {
-      price: "20.000đ/ 1h"
+      price: "80.000đ/ 5h"
     },
     hourlyPricingEn: {
-      price: "$0.8/ 1h"
+      price: "$3.2/ 5h"
     },
     specs: {
       "Loại xe": "Xe đạp trợ lực điện",
