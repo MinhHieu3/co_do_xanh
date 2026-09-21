@@ -123,10 +123,10 @@ export default function NewsPage() {
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[15s] ease-out scale-100 group-hover:scale-110"
           style={{ backgroundImage: `url(${newsBg})` }}
         ></div>
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 via-[#00c461]/40 to-black/80 mix-blend-multiply"></div>
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 via-[#14b8a6]/40 to-black/80 mix-blend-multiply"></div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 relative z-10 mt-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
             {t('news.title')}
           </h1>
           <p className="text-lg md:text-xl font-medium max-w-2xl text-center text-gray-200 drop-shadow-md">
@@ -145,7 +145,7 @@ export default function NewsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
               <img src={featuredArticle.image} alt={featuredArticle.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute top-6 left-6 bg-[#00c461] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg shadow-green-500/30">
+              <div className="absolute top-6 left-6 bg-[#14b8a6] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg shadow-teal-500/30">
                 {t('news.featured')}
               </div>
             </div>
@@ -153,15 +153,15 @@ export default function NewsPage() {
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                 <span className="flex items-center gap-1.5"><Calendar size={16} /> {featuredArticle.date}</span>
                 <span className="flex items-center gap-1.5"><User size={16} /> {featuredArticle.author}</span>
-                <span className="flex items-center gap-1.5 text-[#009e4e] font-medium"><BookOpen size={16} /> {language === 'EN' ? featuredArticle.categoryEn : featuredArticle.category}</span>
+                <span className="flex items-center gap-1.5 text-[#0d9488] font-medium"><BookOpen size={16} /> {language === 'EN' ? featuredArticle.categoryEn : featuredArticle.category}</span>
               </div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-[#0d1b2a] mb-4 font-display group-hover:text-[#00c461] transition-colors line-clamp-2">
+              <h2 className="text-2xl lg:text-3xl font-bold text-[#0d1b2a] mb-4 font-display group-hover:text-[#14b8a6] transition-colors line-clamp-2">
                 {language === 'EN' ? featuredArticle.titleEn : featuredArticle.title}
               </h2>
               <p className="text-gray-600 mb-8 leading-relaxed line-clamp-3 lg:line-clamp-none">
                 {language === 'EN' ? featuredArticle.excerptEn : featuredArticle.excerpt}
               </p>
-              <button className="self-start px-6 py-3 border-2 border-[#00c461] text-[#009e4e] font-bold rounded-xl hover:bg-[#00c461] hover:text-white transition-colors flex items-center gap-2">
+              <button className="self-start px-6 py-3 border-2 border-[#14b8a6] text-[#0d9488] font-bold rounded-xl hover:bg-[#14b8a6] hover:text-white transition-colors flex items-center gap-2">
                 {t('news.readMore')} <ArrowRight size={18} />
               </button>
             </div>
@@ -178,7 +178,7 @@ export default function NewsPage() {
             >
               <div className="relative h-[220px] overflow-hidden">
                 <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#009e4e] text-xs font-bold px-3 py-1 rounded-lg">
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0d9488] text-xs font-bold px-3 py-1 rounded-lg">
                   {language === 'EN' ? article.categoryEn : article.category}
                 </div>
               </div>
@@ -186,13 +186,13 @@ export default function NewsPage() {
                 <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                   <span className="flex items-center gap-1.5"><Calendar size={14} /> {article.date}</span>
                 </div>
-                <h3 className="text-xl font-bold text-[#0d1b2a] mb-3 font-display group-hover:text-[#00c461] transition-colors line-clamp-2">
+                <h3 className="text-xl font-bold text-[#0d1b2a] mb-3 font-display group-hover:text-[#14b8a6] transition-colors line-clamp-2">
                   {language === 'EN' ? article.titleEn : article.title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-6 line-clamp-2">
                   {language === 'EN' ? article.excerptEn : article.excerpt}
                 </p>
-                <div className="flex items-center text-[#009e4e] font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                <div className="flex items-center text-[#0d9488] font-semibold text-sm group-hover:translate-x-1 transition-transform">
                   {t('news.readMoreShort')} <ArrowRight size={16} className="ml-1" />
                 </div>
               </div>
@@ -202,11 +202,11 @@ export default function NewsPage() {
 
         {/* Phân trang (Giả) */}
         <div className="mt-16 flex justify-center gap-2">
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-[#00c461] text-white shadow-md shadow-green-500/20">1</button>
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors">2</button>
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors">3</button>
+          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-[#14b8a6] text-white shadow-md shadow-teal-500/20">1</button>
+          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#14b8a6] hover:text-[#14b8a6] transition-colors">2</button>
+          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#14b8a6] hover:text-[#14b8a6] transition-colors">3</button>
           <span className="w-10 h-10 flex items-center justify-center text-gray-400">...</span>
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#00c461] hover:text-[#00c461] transition-colors"><ArrowRight size={16} /></button>
+          <button className="w-10 h-10 rounded-lg flex items-center justify-center font-bold bg-white text-gray-600 border border-gray-200 hover:border-[#14b8a6] hover:text-[#14b8a6] transition-colors"><ArrowRight size={16} /></button>
         </div>
 
       </div>

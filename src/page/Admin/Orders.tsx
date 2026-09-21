@@ -70,8 +70,15 @@ const Orders: React.FC = () => {
         method: 'POST',
         body: JSON.stringify({ vehicle_ids: values.vehicle_ids }),
       });
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = {};
+      try {
+        json = text ? JSON.parse(text) : {};
+      } catch (err) {
+        console.warn('Response is not JSON:', text);
+      }
+
+      if (res.ok || json.success) {
         const now = new Date();
         const formattedNow = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         
@@ -103,8 +110,15 @@ const Orders: React.FC = () => {
         method: 'POST',
         body: JSON.stringify({ amount: Number(values.amount), note: values.note })
       });
-      const json = await res.json();
-      if (json.success) {
+      const text = await res.text();
+      let json: any = {};
+      try {
+        json = text ? JSON.parse(text) : {};
+      } catch (err) {
+        console.warn('Response is not JSON:', text);
+      }
+
+      if (res.ok || json.success) {
         message.success('Thanh toán và trả xe thành công');
         setIsCheckoutModalVisible(false);
         loadData();
@@ -126,7 +140,7 @@ const Orders: React.FC = () => {
       dataIndex: 'name', 
       key: 'name',
       render: (text: string, record: any) => (
-        <a style={{ fontWeight: 600, color: '#009e4e', cursor: 'pointer' }} onClick={() => {
+        <a style={{ fontWeight: 600, color: '#0d9488', cursor: 'pointer' }} onClick={() => {
           if (!record.status) showAssignModal(record);
           else message.info('Chức năng sửa thông tin xe đang cập nhật');
         }}>
@@ -140,7 +154,7 @@ const Orders: React.FC = () => {
       dataIndex: 'time_start', 
       key: 'time_start', 
       responsive: ['md'],
-      render: (text: string, record: any) => record.status ? <span style={{ fontWeight: 500, color: '#009e4e' }}>{text}</span> : <span style={{ color: '#ccc' }}>-</span>
+      render: (text: string, record: any) => record.status ? <span style={{ fontWeight: 500, color: '#0d9488' }}>{text}</span> : <span style={{ color: '#ccc' }}>-</span>
     },
     { title: 'Loại xe', dataIndex: 'type_category', key: 'type_category', responsive: ['md'] },
     { title: 'SL', dataIndex: 'quantity', key: 'quantity', responsive: ['md'] },
@@ -148,7 +162,7 @@ const Orders: React.FC = () => {
       title: 'Biển số',
       key: 'assigned_plates',
       render: (_: any, record: any) => (
-        <span style={{ fontWeight: 500, color: '#00c461' }}>
+        <span style={{ fontWeight: 500, color: '#14b8a6' }}>
           {record.assigned_plates || '-'}
         </span>
       )

@@ -70,10 +70,10 @@ ${formData.message}
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[15s] ease-out scale-100 group-hover:scale-110"
           style={{ backgroundImage: `url(${contactBg})` }}
         ></div>
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 via-[#00c461]/40 to-black/80 mix-blend-multiply"></div>
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 via-[#14b8a6]/40 to-black/80 mix-blend-multiply"></div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 relative z-10 mt-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
             {t('contact.title')}
           </h1>
           <p className="text-lg md:text-xl font-medium max-w-2xl text-center text-gray-200 drop-shadow-md">
@@ -83,7 +83,7 @@ ${formData.message}
 
         {/* Decorative elements */}
         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl z-10 pointer-events-none"></div>
-        <div className="absolute top-10 right-10 w-60 h-60 bg-[#00c461]/30 rounded-full blur-3xl z-10 pointer-events-none"></div>
+        <div className="absolute top-10 right-10 w-60 h-60 bg-[#14b8a6]/30 rounded-full blur-3xl z-10 pointer-events-none"></div>
       </div>
 
       {/* Main Content Area */}
@@ -93,13 +93,13 @@ ${formData.message}
           {/* Contact Information Cards (Left) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex-1 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-500"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-500"></div>
 
               <h2 className="text-2xl font-bold text-[#0d1b2a] mb-8 font-display relative z-10">{t('contact.infoTitle')}</h2>
 
               <div className="space-y-8 relative z-10">
                 <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-green-100/50 text-[#00c461]">
+                  <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-teal-100/50 text-[#14b8a6]">
                     <MapPin size={22} />
                   </div>
                   <div>
@@ -146,7 +146,7 @@ ${formData.message}
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 h-full">
               {showSuccess ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-10 animate-fade-in-up">
-                  <div className="w-20 h-20 bg-green-100 text-[#00c461] rounded-full flex items-center justify-center mb-6">
+                  <div className="w-20 h-20 bg-teal-100 text-[#14b8a6] rounded-full flex items-center justify-center mb-6">
                     <CheckCircle2 size={40} />
                   </div>
                   <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">{t('contact.successTitle')}</h3>
@@ -176,7 +176,7 @@ ${formData.message}
                           value={formData.name}
                           onChange={handleInputChange}
                           placeholder={t('contact.fullNamePlaceholder')}
-                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                           required
                         />
                       </div>
@@ -188,7 +188,7 @@ ${formData.message}
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder={t('contact.phonePlaceholder')}
-                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                           required
                         />
                       </div>
@@ -202,7 +202,7 @@ ${formData.message}
                         value={formData.subject}
                         onChange={handleInputChange}
                         placeholder={t('contact.subjectPlaceholder')}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
+                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
                       />
                     </div>
 
@@ -214,7 +214,7 @@ ${formData.message}
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder={t('contact.messagePlaceholder')}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#00c461] focus:ring-2 focus:ring-[#00c461]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
+                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
                         required
                       ></textarea>
                     </div>
@@ -222,7 +222,7 @@ ${formData.message}
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full sm:w-auto px-10 py-4 ${isSubmitting ? 'bg-gray-400' : 'bg-[#00c461] hover:bg-[#00a852] hover:-translate-y-1 shadow-lg shadow-green-500/30'} text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-4`}
+                      className={`w-full sm:w-auto px-10 py-4 ${isSubmitting ? 'bg-gray-400' : 'bg-[#14b8a6] hover:bg-[#00a852] hover:-translate-y-1 shadow-lg shadow-teal-500/30'} text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-4`}
                     >
                       {isSubmitting ? (
                         <>{t('contact.submitting')}</>

@@ -14,7 +14,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState(() => {
     const saved = localStorage.getItem('language');
     if (saved === 'VI' || saved === 'EN') return saved;
-    
+
     // Auto-detect browser language
     const browserLang = navigator.language || (navigator as any).userLanguage || '';
     if (browserLang.toLowerCase().startsWith('vi')) {
@@ -25,7 +25,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Update document title for SEO and UX based on selected language
-    document.title = language === 'EN' ? 'Hue Electric Motorbike Rental | Xe Cố Đô Xanh' : 'Xe Cố Đô Xanh | Thuê Xe Máy Điện';
+    document.title = language === 'EN' ? 'Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh' : 'Xe Cố Đô Xanh | Thuê Xe Máy Điện';
   }, [language]);
 
   const setLanguage = (lang: string) => {

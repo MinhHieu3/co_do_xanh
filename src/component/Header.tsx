@@ -26,9 +26,9 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-[#00c461]/10 ${isScrolled
-          ? "bg-white/95 shadow-md py-1"
-          : "bg-gradient-to-b from-[#f2fdf5]/90 to-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-1.5"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#14b8a6]/10 ${isScrolled
+          ? "bg-white shadow-md py-1"
+          : "bg-white shadow-sm py-1.5"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +38,7 @@ export default function Header() {
               <img
                 src={logo}
                 alt="Xe Cố Đô Xanh"
-                className="h-[53px] md:h-[70px] w-auto object-contain drop-shadow-md transition-transform duration-300 scale-[1.5] md:scale-[1.6] origin-left group-hover:scale-[1.55] md:group-hover:scale-[1.65]"
+                className="h-[40px] md:h-[50px] w-auto object-contain drop-shadow-md transition-transform duration-300 scale-[1.3] md:scale-[1.4] origin-left group-hover:scale-[1.35] md:group-hover:scale-[1.45]"
               />
             </Link>
 
@@ -57,8 +57,8 @@ export default function Header() {
                       <Link
                         to={link.path}
                         className={`px-3 py-2 text-[14px] font-bold transition-all uppercase font-display tracking-widest ${isActive
-                          ? "text-[#00c461] drop-shadow-sm"
-                          : "text-gray-600 hover:text-[#00c461]"
+                          ? "text-[#14b8a6] drop-shadow-sm"
+                          : "text-gray-600 hover:text-[#14b8a6]"
                           }`}
                       >
                         {link.name}
@@ -75,7 +75,7 @@ export default function Header() {
               <div className="ml-4 pl-4 border-l border-gray-200 flex items-center">
                 <button
                   onClick={() => setLanguage(language === 'VI' ? 'EN' : 'VI')}
-                  className="flex items-center gap-2 text-sm font-bold text-[#0d1b2a] hover:text-[#009e4e] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 hover:border-[#009e4e]/30 hover:bg-[#e6fff2] group shadow-sm"
+                  className="flex items-center gap-2 text-sm font-bold text-[#0d1b2a] hover:text-[#0d9488] transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 hover:border-[#0d9488]/30 hover:bg-[#e6fff2] group shadow-sm"
                 >
                   <img src={language === 'VI' ? "https://flagcdn.com/w20/vn.png" : "https://flagcdn.com/w20/gb.png"} alt={language} className="w-5 h-auto shadow-sm rounded-sm" />
                   <span className="font-display tracking-wider">{language}</span>
@@ -87,7 +87,7 @@ export default function Header() {
             <div className="flex lg:hidden items-center space-x-1.5">
               <button
                 onClick={() => setLanguage(language === 'VI' ? 'EN' : 'VI')}
-                className="flex items-center justify-center gap-2 font-bold text-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white px-3.5 h-[38px] rounded-full border border-[#00c461]/30 shadow-sm hover:shadow-md transition-all active:scale-95"
+                className="flex items-center justify-center gap-2 font-bold text-[#0d9488] bg-gradient-to-r from-[#f2fdf5] to-white px-3.5 h-[38px] rounded-full border border-[#14b8a6]/30 shadow-sm hover:shadow-md transition-all active:scale-95"
               >
                 <img src={language === 'VI' ? "https://flagcdn.com/w20/vn.png" : "https://flagcdn.com/w20/gb.png"} alt={language} className="w-[20px] h-[14px] object-cover drop-shadow-sm rounded-[2px]" />
                 <span className="font-display tracking-widest text-[14px] leading-none mt-[1px]">{language}</span>
@@ -99,21 +99,21 @@ export default function Header() {
 
       {/* Mobile Sticky Bottom Tab Bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-100 shadow-[0_-5px_20px_rgba(0,0,0,0.08)] flex items-center justify-between px-2 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))] backdrop-blur-md bg-white/90">
-        <Link to="/" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname === '/' ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname === '/' ? 'text-[#0d9488]' : 'text-gray-500 hover:text-[#0d9488]'}`}>
           <Home size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.home')}</span>
         </Link>
-        <Link to="/news" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/news') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/news" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/news') ? 'text-[#0d9488]' : 'text-gray-500 hover:text-[#0d9488]'}`}>
           <Newspaper size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.news')}</span>
         </Link>
 
-        <Link to="/booking" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/booking') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/booking" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/booking') ? 'text-[#0d9488]' : 'text-gray-500 hover:text-[#0d9488]'}`}>
           <Calendar size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.booking')}</span>
         </Link>
 
-        <Link to="/contact" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/contact') ? 'text-[#009e4e]' : 'text-gray-500 hover:text-[#009e4e]'}`}>
+        <Link to="/contact" className={`flex-1 flex flex-col items-center justify-center transition-colors ${location.pathname.startsWith('/contact') ? 'text-[#0d9488]' : 'text-gray-500 hover:text-[#0d9488]'}`}>
           <MapPin size={26} className="mb-1" />
           <span className="text-[10px] font-bold uppercase tracking-wider">{t('header.contact')}</span>
         </Link>

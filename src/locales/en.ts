@@ -92,7 +92,7 @@ export const en = {
     noteTitle: "Note:",
     noteDesc: "Prices may vary slightly depending on holidays/festivals or special requests. Our staff will provide the exact quote upon contact.",
     overtimeTitle: "Overtime Policy:",
-    overtimePolicy: "Overtime fee is 10,000 VND/hour. Over 5 hours = half day, over 10 hours = 1 day.",
+    overtimePolicy: "Overtime fee is {price}/hour. 5-10 hours = half day ({halfDayPrice}), over 10 hours = 1 day.",
     personalInfo: "Personal Information",
     emailOptional: "Email (Optional)",
     emailPlaceholder: "Example: email@gmail.com",

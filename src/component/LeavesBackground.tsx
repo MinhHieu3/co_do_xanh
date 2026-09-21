@@ -26,7 +26,7 @@ export default function LeavesBackground() {
         animationDuration: Math.random() * 20 + 15, // 15s to 35s
         animationDelay: Math.random() * 10, // 0s to 10s
         opacity: Math.random() * 0.4 + 0.1, // 0.1 to 0.5
-        color: Math.random() > 0.5 ? "text-[#8CC63F]" : "text-[#009e4e]",
+        color: Math.random() > 0.5 ? "text-[#8CC63F]" : "text-[#0d9488]",
         blur: Math.random() > 0.5 ? "blur-[2px]" : "blur-[1px]",
       }));
       setLeaves(newLeaves);

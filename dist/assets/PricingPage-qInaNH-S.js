@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-CXrijb2r.js";import{n as t}from"./LanguageContext-GcF7oKPn.js";var n=e();function r(){let{t:e}=t();return(0,n.jsx)(`div`,{className:`p-8 max-w-7xl mx-auto min-h-[50vh]`,children:(0,n.jsx)(`h1`,{className:`text-4xl font-bold text-center mt-10`,children:e(`pricing.title`)})})}export{r as default};

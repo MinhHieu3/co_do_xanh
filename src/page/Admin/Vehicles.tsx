@@ -103,7 +103,7 @@ const Vehicles: React.FC = () => {
       dataIndex: 'license_plate', 
       key: 'license_plate',
       render: (text: string, record: any) => (
-        <a onClick={() => showModal(record)} style={{ fontWeight: 600, color: '#009e4e', cursor: 'pointer' }}>
+        <a onClick={() => showModal(record)} style={{ fontWeight: 600, color: '#0d9488', cursor: 'pointer' }}>
           {text}
         </a>
       )

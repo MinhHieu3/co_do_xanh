@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { vehicles } from "../data/vehicles";
-import { CheckCircle2, Calendar, MapPin, User, Phone, Mail, FileText, Info, Hash } from "lucide-react";
+import { CheckCircle2, Calendar, MapPin, User, Phone, Mail, FileText, Info, Hash, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
@@ -44,6 +45,7 @@ export default function BookingPage() {
     }
     return vehicles[0].id;
   });
+  const [rentalType, setRentalType] = useState<'day' | 'hour'>('day');
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -57,6 +59,53 @@ export default function BookingPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const selectedVehicleData = useMemo(() => vehicles.find(v => v.id === selectedVehicle), [selectedVehicle]);
+
+  const calculateTotalEstimate = () => {
+    if (!formData.pickupDate || !formData.dropoffDate) return 0;
+    try {
+      const parseDate = (str: string) => {
+        const [d, t] = str.split(' ');
+        const [day, mo, yr] = d.split('/');
+        const [hr, min] = t.split(':');
+        return new Date(Number(yr), Number(mo) - 1, Number(day), Number(hr), Number(min));
+      };
+      const p = parseDate(formData.pickupDate);
+      const d = parseDate(formData.dropoffDate);
+      const diffMs = d.getTime() - p.getTime();
+      const diffHours = diffMs / (1000 * 60 * 60);
+      if (diffHours <= 0) return 0;
+      
+      const vInfo = selectedVehicleData;
+      if (!vInfo) return 0;
+      
+      if (rentalType === 'hour') {
+        const isEbike = !selectedVehicle.includes('phoenix');
+        const halfDayRate = isEbike ? 100000 : 80000;
+        const fullDayRate = isEbike ? 150000 : 100000;
+        const hourlyRate = isEbike ? 30000 : 20000;
+
+        let costPerVehicle = 0;
+        if (diffHours <= 5) {
+          costPerVehicle = halfDayRate;
+        } else if (diffHours >= 10) {
+          costPerVehicle = fullDayRate;
+        } else {
+          costPerVehicle = Math.min(halfDayRate + (Math.ceil(diffHours) - 5) * hourlyRate, fullDayRate);
+        }
+        
+        return costPerVehicle * parseInt(formData.quantity);
+      } else {
+        const priceStr = vInfo.pricing.day1;
+        const price = parseInt(priceStr.split('/')[0].replace(/\D/g, ''));
+        return Math.ceil(diffHours / 24) * price * parseInt(formData.quantity);
+      }
+    } catch (e) {
+      return 0;
+    }
+  };
 
   const dropoffOptions = useMemo(() => {
     let minD = "today";
@@ -72,23 +121,56 @@ export default function BookingPage() {
     };
   }, [formData.pickupDate]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePreSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!formData.pickupDate || !formData.dropoffDate) {
-      toast.error("Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
+      toast.error(language === 'EN' ? "Please select both pickup and drop-off dates and times!" : "Vui lòng chọn đầy đủ ngày giờ nhận và trả xe!");
       return;
     }
 
+    const parseDate = (str: string) => {
+      const [d, t] = str.split(' ');
+      const [day, mo, yr] = d.split('/');
+      const [hr, min] = t.split(':');
+      return new Date(Number(yr), Number(mo) - 1, Number(day), Number(hr), Number(min));
+    };
+    const p = parseDate(formData.pickupDate);
+    const d = parseDate(formData.dropoffDate);
+    const diffHours = (d.getTime() - p.getTime()) / (1000 * 60 * 60);
+
+    if (diffHours <= 0) {
+      toast.error(language === 'EN' ? "Drop-off time must be after pickup time!" : "Thời gian trả xe phải sau thời gian nhận xe!");
+      return;
+    }
+
+    if (rentalType === 'day' && diffHours < 24) {
+      toast.error(language === 'EN' ? "Rent by Day requires at least 24 hours. Please select Rent by Hour instead." : "Thuê theo ngày yêu cầu thời gian tối thiểu 24h. Nếu ngắn hơn, vui lòng chọn Thuê theo giờ!");
+      return;
+    }
+
+    if (rentalType === 'hour' && diffHours < 2) {
+      toast.error(language === 'EN' ? "Hourly rental requires a minimum of 2 hours." : "Thuê theo giờ yêu cầu thời gian tối thiểu là 2 tiếng!");
+      return;
+    }
+
+    if (rentalType === 'hour' && diffHours >= 24) {
+      toast.error(language === 'EN' ? "For rentals of 24 hours or more, please select Rent by Day." : "Với thời gian từ 24h trở lên, vui lòng chọn Thuê theo ngày!");
+      return;
+    }
+
+    setShowConfirmModal(true);
+  };
+
+  const executeBooking = async () => {
     setIsSubmitting(true);
 
     // Tên xe đang chọn
-    const vInfo = vehicles.find(v => v.id === selectedVehicle);
+    const vInfo = selectedVehicleData;
     const vehicleName = (language === 'EN' && vInfo?.nameEn) ? vInfo.nameEn : (vInfo?.name || selectedVehicle);
 
     // Format ngày giờ cho đẹp (Antd DatePicker đã tự trả về string đẹp)
@@ -102,12 +184,14 @@ export default function BookingPage() {
 👤 <b>Khách hàng:</b> ${formData.name}
 📞 <b>SĐT:</b> ${formData.phone}
 ✉️ <b>Email:</b> ${formData.email || "Không có"}
-🛵 <b>Dòng xe:</b> ${vehicleName}
+🛵 <b>Dòng xe:</b> ${vehicleName} (${rentalType === 'hour' ? 'Thuê theo giờ' : 'Thuê theo ngày'})
 🔢 <b>Số lượng:</b> ${formData.quantity} chiếc
 🗓 <b>Nhận xe:</b> ${formatDateTime(formData.pickupDate)}
 🗓 <b>Trả xe:</b> ${formatDateTime(formData.dropoffDate)}
+⏳ <b>Loại hình:</b> ${rentalType === 'hour' ? 'Thuê theo giờ' : 'Thuê theo ngày'}
 📍 <b>Khu vực nhận:</b> ${formData.pickupLocation}${formData.pickupLocation === 'Giao tận nơi' ? `\n🏠 <b>Địa chỉ giao:</b> ${formData.deliveryAddress}` : ''}
 📝 <b>Ghi chú:</b> ${formData.notes || "Không có"}
+💰 <b>Tổng tiền dự kiến:</b> ${calculateTotalEstimate().toLocaleString('vi-VN')}đ
     `;
 
     // Lấy thông tin cấu hình từ file .env
@@ -125,8 +209,8 @@ export default function BookingPage() {
         time_end: formData.dropoffDate,
         quantity: formData.quantity,
         location: formData.pickupLocation === 'Giao tận nơi' ? formData.deliveryAddress : formData.pickupLocation,
-        type_category: vehicleName,
-        des_1: formData.notes
+        type_category: `${vehicleName} (${rentalType === 'hour' ? 'Thuê theo giờ' : 'Thuê theo ngày'})`,
+        des_1: `Loại hình: ${rentalType === 'hour' ? 'Thuê theo giờ' : 'Thuê theo ngày'}. ${formData.notes}`
       };
 
       const apiResponse = await fetch(`${BASE_URL}/orders`, {
@@ -173,14 +257,14 @@ export default function BookingPage() {
   if (showSuccess) {
     return (
       <div className="p-8 max-w-4xl mx-auto min-h-[70vh] flex flex-col items-center justify-center text-center">
-        <div className="w-24 h-24 bg-green-100 text-[#009e4e] rounded-full flex items-center justify-center mb-6">
+        <div className="w-24 h-24 bg-teal-100 text-[#0d9488] rounded-full flex items-center justify-center mb-6">
           <CheckCircle2 size={50} />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-[#0d1b2a] mb-4 font-display">{t('booking.successTitle')}</h2>
         <p className="text-gray-600 text-lg mb-8 max-w-lg">
           {t('booking.successMsg')}
         </p>
-        <Link to="/" className="px-8 py-3 bg-[#009e4e] hover:bg-[#008c45] text-white font-bold rounded-lg transition-colors shadow-lg shadow-green-500/30">
+        <Link to="/" className="px-8 py-3 bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold rounded-lg transition-colors shadow-lg shadow-teal-500/30">
           {language === 'EN' ? 'Back to Home' : 'Về Trang Chủ'}
         </Link>
       </div>
@@ -190,7 +274,7 @@ export default function BookingPage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
       <div className="text-center mb-10 md:mb-14 mt-4 md:mt-8">
-        <h1 className="text-3xl md:text-5xl font-bold text-[#0d1b2a] mb-4 font-display uppercase tracking-wide">{t('booking.title')}</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-[#0d1b2a] mb-4 font-display uppercase tracking-wide">{t('booking.title')}</h1>
         <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
           {t('booking.subtitle')}
         </p>
@@ -199,74 +283,99 @@ export default function BookingPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
         {/* Cột Trái: Chọn Xe */}
         <div className="lg:col-span-5 flex flex-col space-y-4 lg:space-y-6">
-          <h2 className="text-2xl font-bold text-[#0d1b2a] flex items-center">
-            <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">1</span>
+          <h2 className="text-xl font-bold text-[#0d1b2a] flex items-center">
+            <span className="w-8 h-8 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-sm mr-3">1</span>
             {t('booking.chooseVehicle')}
           </h2>
-          <div className="flex overflow-x-auto lg:overflow-visible lg:grid lg:grid-cols-1 gap-4 pt-4 pb-4 lg:pt-4 lg:pb-4 lg:pr-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 lg:mx-0 lg:px-0">
+
+          <div className="flex bg-gray-100 p-1.5 rounded-xl w-full">
+            <button 
+              type="button"
+              onClick={() => setRentalType('day')}
+              className={`flex-1 px-5 py-2.5 rounded-lg font-bold transition-all text-sm ${rentalType === 'day' ? 'bg-white text-[#0d9488] shadow-[0_2px_8px_rgba(0,196,97,0.15)]' : 'text-gray-500 hover:text-[#0d9488]'}`}
+            >
+              {language === 'EN' ? 'Rent by Day' : 'Thuê theo ngày'}
+            </button>
+            <button 
+              type="button"
+              onClick={() => setRentalType('hour')}
+              className={`flex-1 px-5 py-2.5 rounded-lg font-bold transition-all text-sm ${rentalType === 'hour' ? 'bg-white text-[#0d9488] shadow-[0_2px_8px_rgba(0,196,97,0.15)]' : 'text-gray-500 hover:text-[#0d9488]'}`}
+            >
+              {language === 'EN' ? 'Rent by Hour' : 'Thuê theo giờ'}
+            </button>
+          </div>
+
+          {/* Showcase Stage (Selected Vehicle) */}
+          {(() => {
+            const selectedV = selectedVehicleData;
+            return selectedV ? (
+              <div className="relative bg-gradient-to-b from-[#f2fdf5] to-white rounded-3xl p-6 border border-[#0d9488]/20 shadow-sm flex flex-col items-center text-center mt-4">
+                <div className="absolute top-4 right-4 w-10 h-10 bg-[#0d9488] rounded-full flex items-center justify-center shadow-lg shadow-teal-500/30">
+                  <CheckCircle2 size={22} className="text-white" />
+                </div>
+                <div className="w-full h-48 md:h-64 flex items-center justify-center mb-4 mt-2">
+                  <img src={selectedV.image} alt={selectedV.name} className="w-full h-full object-contain drop-shadow-xl transition-transform duration-500 hover:scale-105" />
+                </div>
+                <h3 className="text-2xl font-black text-[#0d1b2a] mb-2">{(language === 'EN' && selectedV.nameEn) ? selectedV.nameEn : selectedV.name}</h3>
+                <div className="inline-flex items-center text-sm font-bold px-4 py-2 rounded-xl bg-[#0d9488] text-white shadow-md shadow-teal-500/30">
+                  {t('booking.fromOnly')} {rentalType === 'hour' ? (language === 'EN' ? selectedV.hourlyPricingEn?.price.split("/")[0] : selectedV.hourlyPricing?.price.split("/")[0]) : (language === 'EN' ? selectedV.pricingEn.day1.split("/")[0] : selectedV.pricing.day1.split("/")[0])}
+                </div>
+              </div>
+            ) : null;
+          })()}
+
+          {/* Thumbnails Gallery */}
+          <div className="flex gap-3 overflow-x-auto pt-2 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 lg:mx-0 lg:px-0">
             {vehicles.map((vehicle) => {
               const isSelected = selectedVehicle === vehicle.id;
               return (
-                <div
+                <button
                   key={vehicle.id}
+                  type="button"
                   onClick={() => setSelectedVehicle(vehicle.id)}
-                  className={`shrink-0 w-[85vw] sm:w-[320px] lg:w-auto snap-center group relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex items-center gap-4 lg:gap-5 ${isSelected
-                    ? "border-[#009e4e] bg-gradient-to-r from-[#f2fdf5] to-white shadow-[0_10px_40px_rgba(0,196,97,0.12)] scale-[1.02]"
-                    : "border-gray-100 bg-white hover:border-[#009e4e]/40 hover:shadow-lg hover:shadow-gray-200/50"
-                    }`}
+                  className={`shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-2xl p-2 flex flex-col items-center justify-center transition-all duration-300 snap-center relative outline-none ${
+                    isSelected 
+                      ? "bg-white border-2 border-[#0d9488] shadow-[0_4px_16px_rgba(0,196,97,0.15)] scale-[1.02]" 
+                      : "bg-gray-50 border-2 border-transparent hover:bg-white hover:border-teal-200 hover:shadow-md opacity-60 hover:opacity-100"
+                  }`}
                 >
-                  {/* Dấu tick khi được chọn */}
-                  {isSelected && (
-                    <div className="absolute -top-3 -right-3 w-8 h-8 bg-[#009e4e] rounded-full flex items-center justify-center shadow-lg shadow-green-500/40 z-10 animate-[bounce_0.3s_ease-out]">
-                      <CheckCircle2 size={18} className="text-white" />
-                    </div>
-                  )}
-
-                  {/* Hình ảnh xe */}
-                  <div className={`w-28 h-28 rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-2 transition-transform duration-300 ${isSelected ? "bg-white shadow-sm scale-105 border border-green-100" : "bg-gray-50 group-hover:scale-105"
-                    }`}>
-                    <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply" />
+                  <div className="w-full h-[60%] flex items-center justify-center mb-1">
+                    <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
                   </div>
-
-                  {/* Thông tin xe */}
-                  <div className="flex-1">
-                    <h3 className={`font-bold text-xl mb-1.5 transition-colors ${isSelected ? "text-[#009e4e]" : "text-[#0d1b2a] group-hover:text-[#009e4e]"}`}>
-                      {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn : vehicle.name}
-                    </h3>
-                    <div className={`inline-flex items-center text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${isSelected
-                      ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
-                      : "bg-green-50 text-[#009e4e]"
-                      }`}>
-                      {t('booking.fromOnly')} {language === 'EN' ? vehicle.pricingEn.day1.split("/")[0] : vehicle.pricing.day1.split("/")[0]}
-                    </div>
-                  </div>
-                </div>
+                  <span className={`text-[10px] md:text-xs font-bold truncate w-full text-center px-1 ${isSelected ? 'text-[#0d9488]' : 'text-gray-500'}`}>
+                    {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn.replace('Vinfast ', '').replace('Xe đạp trợ lực ', '') : vehicle.name.replace('Vinfast ', '').replace('Xe đạp trợ lực ', '')}
+                  </span>
+                </button>
               );
             })}
           </div>
 
           {/* Hiển thị bảng giá chi tiết của xe đang chọn */}
-          <div className="bg-gradient-to-br from-[#f2fdf5] to-white p-5 rounded-2xl border border-[#009e4e]/20 shadow-sm mt-2">
-            <h3 className="font-bold text-lg text-[#009e4e] mb-3 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-[#f2fdf5] to-white p-5 rounded-2xl border border-[#0d9488]/20 shadow-sm mt-2">
+            <h3 className="font-bold text-lg text-[#0d9488] mb-3 flex items-center gap-2">
               <Info size={20} />
-              {language === 'EN' ? `Rental Pricing: ${vehicles.find(v => v.id === selectedVehicle)?.nameEn || vehicles.find(v => v.id === selectedVehicle)?.name}` : `Bảng giá thuê: ${vehicles.find(v => v.id === selectedVehicle)?.name}`}
+              {language === 'EN' ? `Rental Pricing: ${selectedVehicleData?.nameEn || selectedVehicleData?.name}` : `Bảng giá thuê: ${selectedVehicleData?.name}`}
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: language === 'EN' ? '24 Hours' : '24 Giờ', price: language === 'EN' ? vehicles.find(v => v.id === selectedVehicle)?.pricingEn.day1 : vehicles.find(v => v.id === selectedVehicle)?.pricing.day1 },
+                { 
+                  label: rentalType === 'hour' ? (language === 'EN' ? 'Hourly Rate' : 'Giá Theo Giờ') : (language === 'EN' ? '24 Hours' : '24 Giờ'), 
+                  price: rentalType === 'hour' ? (language === 'EN' ? selectedVehicleData?.hourlyPricingEn?.price : selectedVehicleData?.hourlyPricing?.price) : (language === 'EN' ? selectedVehicleData?.pricingEn.day1 : selectedVehicleData?.pricing.day1)
+                },
               ].filter(item => item.price).map((item, i, arr) => (
-                <div key={i} className={`${arr.length === 1 ? 'col-span-2' : ''} flex flex-col bg-white p-4 rounded-xl border border-green-100/50 shadow-[0_4px_20px_rgba(0,196,97,0.08)] items-center justify-center transition-transform hover:-translate-y-1`}>
+                <div key={i} className={`${arr.length === 1 ? 'col-span-2' : ''} flex flex-col bg-white p-4 rounded-xl border border-teal-100/50 shadow-[0_4px_20px_rgba(0,196,97,0.08)] items-center justify-center transition-transform hover:-translate-y-1`}>
                   <span className="text-sm text-gray-500 font-medium mb-1 uppercase tracking-wider">{item.label}</span>
-                  <span className="font-black text-2xl text-[#009e4e]">{item.price?.split('/')[0]}</span>
+                  <span className="font-black text-2xl text-[#0d9488]">{item.price?.split('/')[0]}</span>
+                  {rentalType === 'hour' && <span className="text-xs text-gray-400 mt-1">{language === 'EN' ? '/ hour' : '/ giờ'}</span>}
                 </div>
               ))}
             </div>
 
             {/* Thông số kỹ thuật xe */}
-            <div className="mt-4 pt-4 border-t border-[#009e4e]/10">
+            <div className="mt-4 pt-4 border-t border-[#0d9488]/10">
               <h4 className="font-bold text-sm text-[#0d1b2a] mb-2 uppercase tracking-wide">{language === 'EN' ? 'Vehicle Specifications' : 'Thông tin xe'}</h4>
               <ul className="space-y-2">
-                {Object.entries(language === 'EN' ? (vehicles.find(v => v.id === selectedVehicle)?.specsEn || {}) : (vehicles.find(v => v.id === selectedVehicle)?.specs || {})).map(([key, val], i) => (
+                {Object.entries(language === 'EN' ? (selectedVehicleData?.specsEn || {}) : (selectedVehicleData?.specs || {})).map(([key, val], i) => (
                   <li key={i} className="flex items-start text-sm">
                     <span className="font-medium text-gray-500 min-w-[130px] shrink-0">{key}:</span>
                     <span className="text-gray-800 font-bold">{val}</span>
@@ -280,20 +389,32 @@ export default function BookingPage() {
             <Info className="text-yellow-600 shrink-0 mt-0.5" size={20} />
             <div className="text-sm text-yellow-800 leading-relaxed space-y-1.5">
               <p><strong>{t('booking.noteTitle')}</strong> {t('booking.noteDesc')}</p>
-              <p><strong>{t('booking.overtimeTitle')}</strong> {t('booking.overtimePolicy')}</p>
+              <p>
+                <strong>{t('booking.overtimeTitle')}</strong>{' '}
+                {(() => {
+                  const isEbike = selectedVehicleData?.name.toLowerCase().includes('đạp');
+                  const price = isEbike ? '10.000đ' : '15.000đ';
+                  const priceEn = isEbike ? '$0.4' : '$0.6';
+                  const halfDayPrice = isEbike ? '80.000đ' : '100.000đ';
+                  const halfDayPriceEn = isEbike ? '$3.2' : '$4';
+                  return t('booking.overtimePolicy')
+                    .replace('{price}', language === 'EN' ? priceEn : price)
+                    .replace('{halfDayPrice}', language === 'EN' ? halfDayPriceEn : halfDayPrice);
+                })()}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Cột Phải: Biểu Mẫu Thông Tin */}
         <div className="lg:col-span-7">
-          <div className="bg-white p-6 md:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 sticky top-24">
-            <h2 className="text-2xl font-bold text-[#0d1b2a] mb-6 flex items-center pb-4 border-b border-gray-100">
-              <span className="w-8 h-8 rounded-full bg-[#009e4e] text-white flex items-center justify-center text-sm mr-3">2</span>
+          <div className="sticky top-24 flex flex-col space-y-4 lg:space-y-6">
+            <h2 className="text-xl font-bold text-[#0d1b2a] flex items-center">
+              <span className="w-8 h-8 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-sm mr-3">2</span>
               {t('booking.formTitle')}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handlePreSubmit} className="space-y-6">
 
               {/* Thông tin liên hệ */}
               <div className="space-y-4">
@@ -301,16 +422,16 @@ export default function BookingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><User size={16} className="text-gray-400" />{t('booking.fullName')}</label>
-                    <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.fullNamePlaceholder')} />
+                    <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.fullNamePlaceholder')} />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Phone size={16} className="text-gray-400" />{t('booking.phone')}</label>
-                    <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.phonePlaceholder')} />
+                    <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.phonePlaceholder')} />
                   </div>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Mail size={16} className="text-gray-400" />{t('booking.emailOptional')}</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.emailPlaceholder')} />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.emailPlaceholder')} />
                 </div>
               </div>
 
@@ -335,7 +456,7 @@ export default function BookingPage() {
                       onOpen={(selectedDates, _dateStr, instance: any) => {
                         handleFlatpickrTimeRestricton(selectedDates.length ? selectedDates : [new Date()], instance);
                       }}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white"
                       placeholder={t('booking.pickupTimePlaceholder')}
                     />
                   </div>
@@ -387,7 +508,7 @@ export default function BookingPage() {
                           instance._customMinTime = expectedMinTime;
                         }
                       }}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white"
                       placeholder={t('booking.dropoffTimePlaceholder')}
                     />
                   </div>
@@ -395,34 +516,34 @@ export default function BookingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.pickupLocationLabel')}</label>
-                    <select required name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white appearance-none cursor-pointer">
+                    <select required name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white appearance-none cursor-pointer">
                       <option value="Tại cửa hàng">{t('booking.atStore')}</option>
                       <option value="Giao tận nơi">{t('booking.delivery')}</option>
                     </select>
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><Hash size={16} className="text-gray-400" />{t('booking.quantity')}</label>
-                    <input required type="number" min="1" max="50" name="quantity" value={formData.quantity} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder="1" />
+                    <input required type="number" min="1" max="50" name="quantity" value={formData.quantity} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white" placeholder="1" />
                   </div>
                 </div>
 
                 {/* Địa chỉ giao xe (Chỉ hiện khi chọn Giao tận nơi) */}
                 <div className={`space-y-1.5 overflow-hidden transition-all duration-300 ${formData.pickupLocation === 'Giao tận nơi' ? 'max-h-24 mt-4 opacity-100' : 'max-h-0 mt-0 opacity-0'}`}>
                   <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><MapPin size={16} className="text-gray-400" />{t('booking.deliveryAddress')}</label>
-                  <input required={formData.pickupLocation === 'Giao tận nơi'} type="text" name="deliveryAddress" value={formData.deliveryAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.deliveryAddressPlaceholder')} />
+                  <input required={formData.pickupLocation === 'Giao tận nơi'} type="text" name="deliveryAddress" value={formData.deliveryAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white" placeholder={t('booking.deliveryAddressPlaceholder')} />
                 </div>
               </div>
 
               {/* Lời nhắn */}
               <div className="space-y-1.5 pt-4 border-t border-gray-100">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2"><FileText size={16} className="text-gray-400" />{t('booking.specialNotes')}</label>
-                <textarea name="notes" value={formData.notes} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009e4e]/20 focus:border-[#009e4e] transition-all bg-gray-50 focus:bg-white resize-none" placeholder={t('booking.specialNotesPlaceholder')}></textarea>
+                <textarea name="notes" value={formData.notes} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition-all bg-gray-50 focus:bg-white resize-none" placeholder={t('booking.specialNotesPlaceholder')}></textarea>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all flex items-center justify-center gap-2 ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#009e4e] hover:bg-[#008c45] shadow-lg shadow-green-500/30 hover:shadow-green-500/40"
+                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all flex items-center justify-center gap-2 ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#0d9488] hover:bg-[#0f766e] shadow-lg shadow-teal-500/30 hover:shadow-teal-500/40"
                   }`}
               >
                 {isSubmitting ? (
@@ -434,13 +555,95 @@ export default function BookingPage() {
                     {t('booking.submitting')}
                   </>
                 ) : (
-                  t('booking.submitBtn')
+                  language === 'EN' ? 'Confirm Booking' : 'Xác Nhận Đặt Xe'
                 )}
               </button>
             </form>
           </div>
         </div>
       </div>
+
+      {/* Modal Xác Nhận */}
+      {showConfirmModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center p-3 pb-16 md:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in-up">
+            <div className="p-4 md:p-6 bg-white border-b border-gray-100 flex justify-between items-center relative">
+              <h3 className="font-bold text-lg text-gray-800">{language === 'EN' ? 'Confirm Booking Details' : 'Xác Nhận Thông Tin Đặt Xe'}</h3>
+              <button onClick={() => setShowConfirmModal(false)} className="p-2 hover:bg-gray-100 text-gray-500 rounded-full transition-colors absolute right-4"><X size={20} /></button>
+            </div>
+            <div className="p-5 md:p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+              <div className="flex items-center gap-4">
+                <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center p-2 border border-gray-100 shrink-0">
+                   <img src={selectedVehicleData?.image} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" alt="Vehicle" />
+                </div>
+                <div>
+                  <div className="font-black text-gray-800 text-xl mb-1">{(language === 'EN' && selectedVehicleData?.nameEn) ? selectedVehicleData?.nameEn : selectedVehicleData?.name}</div>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="inline-flex items-center text-xs font-bold px-2 py-1 rounded-md bg-teal-50 text-[#0d9488]">
+                      {rentalType === 'hour' ? (language === 'EN' ? 'Rent by Hour' : 'Thuê theo giờ') : (language === 'EN' ? 'Rent by Day' : 'Thuê theo ngày')} x {formData.quantity} {language === 'EN' ? 'vehicle(s)' : 'xe'}
+                    </div>
+                    <div className="inline-flex items-center text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">
+                      {rentalType === 'hour' 
+                        ? (language === 'EN' ? selectedVehicleData?.hourlyPricingEn?.price : selectedVehicleData?.hourlyPricing?.price)?.replace('/ ', language === 'EN' ? '/vehicle/' : '/xe/')
+                        : (language === 'EN' ? selectedVehicleData?.pricingEn?.day1 : selectedVehicleData?.pricing?.day1)?.replace('/ ', language === 'EN' ? '/vehicle/' : '/xe/')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 space-y-3">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{language === 'EN' ? 'Customer Info' : 'Khách hàng'}</span>
+                  <span className="font-bold text-gray-800">{formData.name} • {formData.phone}</span>
+                </div>
+                <div className="h-px bg-gray-200/60 my-2"></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{language === 'EN' ? 'Pickup Date' : 'Nhận xe'}</span>
+                    <span className="font-bold text-gray-800 text-sm">{formData.pickupDate}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{language === 'EN' ? 'Dropoff Date' : 'Trả xe'}</span>
+                    <span className="font-bold text-gray-800 text-sm">{formData.dropoffDate}</span>
+                  </div>
+                </div>
+                <div className="h-px bg-gray-200/60 my-2"></div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{language === 'EN' ? 'Location' : 'Địa điểm'}</span>
+                  <span className="font-bold text-gray-800 text-sm">{formData.pickupLocation === 'Giao tận nơi' ? formData.deliveryAddress : formData.pickupLocation}</span>
+                </div>
+                {formData.notes && (
+                  <>
+                    <div className="h-px bg-gray-200/60 my-2"></div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{language === 'EN' ? 'Notes' : 'Ghi chú'}</span>
+                      <span className="font-bold text-gray-800 text-sm line-clamp-4 break-words">{formData.notes}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="bg-gradient-to-r from-teal-50 to-emerald-50 p-5 rounded-2xl border border-teal-100/50 flex flex-col items-center text-center">
+                <span className="text-sm font-bold text-teal-800 mb-1">{language === 'EN' ? 'Estimated Total' : 'Tổng tiền dự kiến'}</span>
+                <span className="font-black text-3xl text-[#0d9488]">{calculateTotalEstimate().toLocaleString('vi-VN')}đ</span>
+                <p className="text-[10px] text-teal-600/80 mt-2 italic max-w-[90%]">
+                  {language === 'EN' ? '* Prices may vary slightly during holidays. Exact price will be confirmed upon contact.' : '* Giá có thể thay đổi nhẹ dịp Lễ/Tết. Nhân viên sẽ liên hệ xác nhận giá chính xác nhất.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 md:p-5 border-t border-gray-100 bg-white flex gap-3">
+              <button onClick={() => setShowConfirmModal(false)} className="flex-1 py-4 font-bold text-gray-600 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                {language === 'EN' ? 'Cancel' : 'Hủy bỏ'}
+              </button>
+              <button onClick={() => { setShowConfirmModal(false); executeBooking(); }} className="flex-1 py-4 font-bold text-white bg-[#0d9488] rounded-xl hover:bg-[#0f766e] transition-all shadow-lg shadow-teal-500/30 hover:shadow-teal-500/40 hover:-translate-y-0.5">
+                {language === 'EN' ? 'Confirm & Book' : 'Xác Nhận Đặt'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

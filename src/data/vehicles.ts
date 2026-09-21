@@ -16,6 +16,12 @@ export interface Vehicle {
   pricingEn: {
     day1: string;
   };
+  hourlyPricing?: {
+    price: string;
+  };
+  hourlyPricingEn?: {
+    price: string;
+  };
   specs: {
     [key: string]: string;
   };
@@ -36,6 +42,12 @@ export const vehicles: Vehicle[] = [
     },
     pricingEn: {
       day1: "$6/ 24h",
+    },
+    hourlyPricing: {
+      price: "30.000đ/ 1h"
+    },
+    hourlyPricingEn: {
+      price: "$1.2/ 1h"
     },
     specs: {
       "Loại xe": "Xe máy điện",
@@ -68,6 +80,12 @@ export const vehicles: Vehicle[] = [
     pricingEn: {
       day1: "$6/ 24h",
     },
+    hourlyPricing: {
+      price: "30.000đ/ 1h"
+    },
+    hourlyPricingEn: {
+      price: "$1.2/ 1h"
+    },
     specs: {
       "Loại xe": "Xe máy điện",
       "Dạng pin": "Đổi pin tại tủ + Sạc pin",
@@ -98,6 +116,12 @@ export const vehicles: Vehicle[] = [
     pricingEn: {
       day1: "$6/ 24h",
     },
+    hourlyPricing: {
+      price: "30.000đ/ 1h"
+    },
+    hourlyPricingEn: {
+      price: "$1.2/ 1h"
+    },
     specs: {
       "Loại xe": "Xe máy điện",
       "Dạng pin": "Đổi pin tại tủ + Sạc pin",
@@ -119,16 +143,22 @@ export const vehicles: Vehicle[] = [
   },
   {
     id: "xe-dap-phoenix-nam",
-    name: "XE ĐẠP TRỢ LỰC PHOENIX (NAM)",
-    nameEn: "PHOENIX E-BIKE (MEN)",
+    name: "Xe đạp trợ lực Phoenix (Nam)",
+    nameEn: "Phoenix E-Bike (Men)",
     image: phoenixImageNam,
     pricing: {
-      day1: "100k/1 ngày",
+      day1: "100.000đ/ 24h",
 
     },
     pricingEn: {
-      day1: "$4/1 day",
+      day1: "$4/ 24h",
 
+    },
+    hourlyPricing: {
+      price: "20.000đ/ 1h"
+    },
+    hourlyPricingEn: {
+      price: "$0.8/ 1h"
     },
     specs: {
       "Loại xe": "Xe đạp trợ lực điện",
@@ -151,16 +181,22 @@ export const vehicles: Vehicle[] = [
   },
   {
     id: "xe-dap-phoenix-nu",
-    name: "XE ĐẠP TRỢ LỰC PHOENIX (NỮ)",
-    nameEn: "PHOENIX E-BIKE (WOMEN)",
+    name: "Xe đạp trợ lực Phoenix (Nữ)",
+    nameEn: "Phoenix E-Bike (Women)",
     image: phoenixImageNu,
     pricing: {
-      day1: "100k/1 ngày",
+      day1: "100.000đ/ 24h",
 
     },
     pricingEn: {
-      day1: "$4/1 day",
+      day1: "$4/ 24h",
 
+    },
+    hourlyPricing: {
+      price: "20.000đ/ 1h"
+    },
+    hourlyPricingEn: {
+      price: "$0.8/ 1h"
     },
     specs: {
       "Loại xe": "Xe đạp trợ lực điện",

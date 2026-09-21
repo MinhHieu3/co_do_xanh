@@ -96,7 +96,7 @@ const AdminLayout: React.FC = () => {
       <Layout style={{ width: '100%', marginBottom: isMobile ? 64 : 0 }}>
         <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: 24, paddingLeft: isMobile ? 16 : 0 }}>
           {isMobile ? (
-            <div style={{ fontWeight: 'bold', fontSize: '18px', color: '#009e4e' }}>XE CỐ ĐÔ XANH</div>
+            <div style={{ fontWeight: 'bold', fontSize: '18px', color: '#0d9488' }}>XE CỐ ĐÔ XANH</div>
           ) : (
             <Button
               type="text"
@@ -167,7 +167,7 @@ const AdminLayout: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  color: isActive ? '#009e4e' : '#888',
+                  color: isActive ? '#0d9488' : '#888',
                   cursor: 'pointer',
                   flex: 1
                 }}
