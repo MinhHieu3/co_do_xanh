@@ -80,8 +80,8 @@ const Categories: React.FC = () => {
       key: 'action',
       render: (_: any, record: any) => (
         <Space size="middle">
-          <Button type="primary" icon={<Edit size={16} />} onClick={() => showModal(record)} />
-          <Button type="primary" danger icon={<Trash2 size={16} />} onClick={() => handleDelete(record.id)} />
+          <Button type="primary" icon={<Edit size={16} />} onClick={() => showModal(record)} style={{ width: 32, height: 32, padding: 0 }} />
+          <Button type="primary" danger icon={<Trash2 size={16} />} onClick={() => handleDelete(record.id)} style={{ width: 32, height: 32, padding: 0 }} />
         </Space>
       ),
     },

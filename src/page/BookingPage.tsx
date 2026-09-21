@@ -115,7 +115,7 @@ export default function BookingPage() {
 
     try {
       // 1. Lưu đơn hàng vào Database qua API
-      const BASE_URL = import.meta.env.VITE_API_URL || 'https://co_do_xanh_v2.hieubyipro.workers.dev/api';
+      const BASE_URL = import.meta.env.VITE_API_URL;
       const orderData = {
         name: formData.name,
         phone: formData.phone,

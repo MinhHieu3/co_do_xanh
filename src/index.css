@@ -156,22 +156,17 @@ h1, h2, h3, h4, h5, h6 {
 .ant-btn-primary {
   background: linear-gradient(135deg, #00c461, #009e4e) !important;
   border-color: transparent !important;
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  height: 48px !important;
-  font-size: 15px !important;
-  box-shadow: 0 4px 15px rgba(0,196,97,0.35) !important;
-  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0,196,97,0.3) !important;
   transition: all 0.3s !important;
 }
 .ant-btn-primary:hover {
   background: linear-gradient(135deg, #00d96a, #00b055) !important;
-  box-shadow: 0 6px 20px rgba(0,196,97,0.5) !important;
+  box-shadow: 0 4px 12px rgba(0,196,97,0.4) !important;
   transform: translateY(-1px);
 }
 .ant-select-selector {
-  border-radius: 12px !important;
-  height: 48px !important;
+  border-radius: 8px !important;
   display: flex !important;
   align-items: center !important;
   border-color: #e5e7eb !important;
@@ -182,8 +177,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(0,196,97,0.12) !important;
 }
 .ant-picker {
-  border-radius: 12px !important;
-  height: 48px !important;
+  border-radius: 8px !important;
   border-color: #e5e7eb !important;
 }
 .ant-picker:hover, .ant-picker-focused {
@@ -197,7 +191,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #00c461; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #009e4e; }

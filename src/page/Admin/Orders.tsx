@@ -9,7 +9,8 @@ const Orders: React.FC = () => {
   const [data, setData] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchText, setSearchText] = useState('');
-  const [vehicles, setVehicles] = useState([]);
+  const [allAvailableVehicles, setAllAvailableVehicles] = useState([]);
+  const [assignCategoryFilter, setAssignCategoryFilter] = useState('all');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
@@ -21,7 +22,6 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    loadVehicles();
     loadCategories();
   }, []);
 
@@ -45,22 +45,12 @@ const Orders: React.FC = () => {
     setLoading(false);
   };
 
-  const loadVehicles = async (typeCategory?: string) => {
+  const loadAllAvailableVehicles = async () => {
     try {
-      let mappedCategory = typeCategory;
-      // Database has 'Vinfast Feliz II' while frontend might use 'Vinfast Feliz S'
-      if (mappedCategory === 'Vinfast Feliz S') {
-        mappedCategory = 'Vinfast Feliz II';
-      }
-
-      const url = mappedCategory 
-        ? `/vehicles/search?type_category=${encodeURIComponent(mappedCategory)}`
-        : '/vehicles';
-
-      const res = await fetchApi(url);
+      const res = await fetchApi('/vehicles');
       const json = await res.json();
       if (json.success) {
-        setVehicles(json.data.filter((v: any) => v.status === 0 || v.status === false));
+        setAllAvailableVehicles(json.data.filter((v: any) => v.status === 0 || v.status === false));
       }
     } catch (e) {}
   };
@@ -69,7 +59,8 @@ const Orders: React.FC = () => {
     setAssigningOrderId(record.id);
     setIsAssignModalVisible(true);
     form.resetFields();
-    loadVehicles(record.type_category);
+    setAssignCategoryFilter(record.type_category || 'all');
+    loadAllAvailableVehicles();
   };
 
   const handleAssignOk = async () => {
@@ -81,7 +72,6 @@ const Orders: React.FC = () => {
       });
       const json = await res.json();
       if (json.success) {
-        // Cập nhật trạng thái đơn thành Đang thuê và cập nhật ngày nhận xe thành thời điểm hiện tại
         const now = new Date();
         const formattedNow = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         
@@ -111,7 +101,7 @@ const Orders: React.FC = () => {
       const values = await checkoutForm.validateFields();
       const res = await fetchApi(`/orders/${checkoutOrderId}/checkout`, {
         method: 'POST',
-        body: JSON.stringify({ amount: Number(values.amount) })
+        body: JSON.stringify({ amount: Number(values.amount), note: values.note })
       });
       const json = await res.json();
       if (json.success) {
@@ -176,9 +166,9 @@ const Orders: React.FC = () => {
       render: (_: any, record: any) => (
         <Space size="middle">
           {!record.status ? (
-            <Button type="default" icon={<Car size={16} />} onClick={() => showAssignModal(record)} />
+            <Button type="default" icon={<Car size={16} />} onClick={() => showAssignModal(record)} style={{ width: 32, height: 32, padding: 0 }} />
           ) : (
-            <Button type="primary" icon={<CreditCard size={16} />} onClick={() => showCheckoutModal(record)} />
+            <Button type="primary" icon={<CreditCard size={16} />} onClick={() => showCheckoutModal(record)} style={{ width: 32, height: 32, padding: 0 }} />
           )}
         </Space>
       ),
@@ -199,22 +189,31 @@ const Orders: React.FC = () => {
     return true;
   });
 
+  const filteredVehicles = allAvailableVehicles.filter((v: any) => {
+    if (assignCategoryFilter === 'all') return true;
+    const cat: any = categories.find((c: any) => c.id === v.id_category);
+    if (!cat) return false;
+    // Map Frontend category names to Backend if necessary
+    let mappedCategory = assignCategoryFilter;
+    if (mappedCategory === 'Vinfast Feliz S') mappedCategory = 'Vinfast Feliz II';
+    return cat.type === mappedCategory;
+  });
+
   return (
     <div className="w-full flex flex-col">
       <div className="flex flex-col gap-4 mb-4">
         <h2 className="m-0 text-xl font-bold">Quản lý Đơn Đặt</h2>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          <Radio.Group 
+          <Select
             value={filterStatus} 
-            onChange={e => setFilterStatus(e.target.value)} 
-            buttonStyle="solid"
-            className="flex whitespace-nowrap overflow-x-auto hide-scrollbar w-full sm:w-auto"
+            onChange={val => setFilterStatus(val)} 
+            className="w-full sm:min-w-[160px]"
           >
-            <Radio.Button value="all">Tất cả</Radio.Button>
-            <Radio.Button value="waiting">Chờ giao xe</Radio.Button>
-            <Radio.Button value="renting">Đang thuê</Radio.Button>
-          </Radio.Group>
+            <Select.Option value="all">Tất cả đơn</Select.Option>
+            <Select.Option value="waiting">Chờ giao xe</Select.Option>
+            <Select.Option value="renting">Đang thuê</Select.Option>
+          </Select>
           
           <Input.Search 
             placeholder="Tìm theo Tên hoặc SĐT..." 
@@ -231,23 +230,38 @@ const Orders: React.FC = () => {
         loading={loading} 
         scroll={{ x: 500 }}
         size="middle"
+        pagination={false}
       />
 
       <Modal title="Giao xe cho khách" open={isAssignModalVisible} onOk={handleAssignOk} onCancel={() => setIsAssignModalVisible(false)}>
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ marginBottom: 8, fontWeight: 500 }}>Lọc nhanh theo loại xe:</div>
+          <Radio.Group 
+            value={assignCategoryFilter} 
+            onChange={e => setAssignCategoryFilter(e.target.value)}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}
+          >
+            <Radio.Button value="all">Tất cả</Radio.Button>
+            {[...new Set(categories.map((c: any) => c.type === 'Vinfast Feliz II' ? 'Vinfast Feliz S' : c.type))].map(type => (
+              <Radio.Button key={type as string} value={type}>{type as string}</Radio.Button>
+            ))}
+          </Radio.Group>
+        </div>
         <Form form={form} layout="vertical">
           <Form.Item name="vehicle_ids" label="Chọn xe" rules={[{ required: true, message: 'Vui lòng chọn ít nhất 1 xe' }]}>
             <Select 
               mode="multiple" 
               placeholder="Chọn xe (có thể chọn nhiều)"
               showSearch
-              virtual={false}
+              maxTagCount="responsive"
+              listHeight={250}
               optionFilterProp="children"
               filterOption={(input, option) => {
                 const text = String(option?.children ?? '').toLowerCase();
                 return text.includes(input.toLowerCase());
               }}
             >
-              {vehicles.map((v: any) => {
+              {filteredVehicles.map((v: any) => {
                 const cat: any = categories.find((c: any) => c.id === v.id_category);
                 const categoryName = cat ? `${cat.brand} - ${cat.type}` : '';
                 return (
@@ -292,6 +306,9 @@ const Orders: React.FC = () => {
                size="large"
                placeholder="Nhập số tiền khách phải trả..."
             />
+          </Form.Item>
+          <Form.Item name="note" label="Ghi chú">
+            <Input.TextArea rows={2} placeholder="Nhập ghi chú thanh toán (nếu có)..." />
           </Form.Item>
         </Form>
       </Modal>

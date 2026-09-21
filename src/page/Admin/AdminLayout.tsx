@@ -66,7 +66,6 @@ const AdminLayout: React.FC = () => {
     { key: '/admin/categories', icon: <Tags size={isMobile ? 24 : 18} />, label: 'Danh mục xe', mobileLabel: 'Danh mục' },
     { key: '/admin/vehicles', icon: <Car size={isMobile ? 24 : 18} />, label: 'Danh sách xe', mobileLabel: 'Xe' },
     { key: '/admin/orders', icon: <ShoppingCart size={isMobile ? 24 : 18} />, label: 'Đơn hàng', mobileLabel: 'Đơn hàng' },
-    { key: '/admin/rentals', icon: <History size={isMobile ? 24 : 18} />, label: 'Lịch sử thuê', mobileLabel: 'Lịch sử' },
   ];
 
   return (

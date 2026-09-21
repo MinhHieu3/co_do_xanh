@@ -130,11 +130,12 @@ const Vehicles: React.FC = () => {
       title: 'Thao tác',
       key: 'action',
       render: (_: any, record: any) => (
-        <Space size="middle">
+      <Space size="middle">
           <Button 
             type={record.status ? "default" : "primary"} 
             danger={Boolean(record.status)}
             onClick={() => handleToggleStatus(record, !record.status)}
+            style={{ width: 110 }}
           >
             {record.status ? "Đang thuê" : "Chưa thuê"}
           </Button>
@@ -169,16 +170,15 @@ const Vehicles: React.FC = () => {
         
         <div className="flex flex-col xl:flex-row gap-4 justify-between items-start xl:items-center">
           <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
-            <Radio.Group 
+            <Select 
               value={filterStatus} 
-              onChange={e => setFilterStatus(e.target.value)} 
-              buttonStyle="solid"
-              className="flex whitespace-nowrap overflow-x-auto hide-scrollbar"
+              onChange={val => setFilterStatus(val)}
+              className="w-full sm:min-w-[160px]"
             >
-              <Radio.Button value="all">Tất cả</Radio.Button>
-              <Radio.Button value="free">Chưa thuê</Radio.Button>
-              <Radio.Button value="renting">Đang thuê</Radio.Button>
-            </Radio.Group>
+              <Select.Option value="all">Tất cả trạng thái</Select.Option>
+              <Select.Option value="free">Chưa thuê</Select.Option>
+              <Select.Option value="renting">Đang thuê</Select.Option>
+            </Select>
             
             <Select 
               value={filterCategory} 
@@ -207,6 +207,7 @@ const Vehicles: React.FC = () => {
         loading={loading} 
         scroll={{ x: 500 }} 
         size="middle"
+        pagination={false}
       />
 
       <Modal title={editingId ? 'Sửa xe' : 'Thêm xe'} open={isModalVisible} onOk={handleOk} onCancel={() => setIsModalVisible(false)}>

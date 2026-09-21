@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://xe-co-do-xanh-be.hieubyipro.workers.dev';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://xe-co-do-xanh-be.hieubyipro.workers.dev/api';
 
 export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('admin_token');
