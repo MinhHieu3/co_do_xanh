@@ -123,7 +123,7 @@ export default function HomePage() {
                 <h3 className={`font-bold text-[18px] uppercase tracking-wider transition-colors font-display line-clamp-2 ${
                   vehicle.isPopular ? 'text-[#00c461]' : 'text-[#0d1b2a] group-hover:text-[#00c461]'
                 }`}>
-                  {vehicle.name}
+                  {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn : vehicle.name}
                 </h3>
               </div>
 
