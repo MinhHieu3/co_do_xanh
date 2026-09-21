@@ -10,12 +10,13 @@ import {
   PanelLeftOpen,
   PanelLeftClose
 } from 'lucide-react';
-import Dashboard from './Dashboard';
-import Categories from './Categories';
-import Vehicles from './Vehicles';
-import Orders from './Orders';
-import Rentals from './Rentals';
-import Login from './Login';
+
+const Dashboard = React.lazy(() => import('./Dashboard'));
+const Categories = React.lazy(() => import('./Categories'));
+const Vehicles = React.lazy(() => import('./Vehicles'));
+const Orders = React.lazy(() => import('./Orders'));
+const Rentals = React.lazy(() => import('./Rentals'));
+const Login = React.lazy(() => import('./Login'));
 
 const { Header, Sider, Content } = Layout;
 
@@ -45,7 +46,11 @@ const AdminLayout: React.FC = () => {
   }
 
   if (location.pathname === '/admin/login') {
-    return <Login />;
+    return (
+      <React.Suspense fallback={<div className="flex items-center justify-center h-screen">Loading Login...</div>}>
+        <Login />
+      </React.Suspense>
+    );
   }
 
   const handleMenuClick = (e: { key: string }) => {
@@ -124,13 +129,15 @@ const AdminLayout: React.FC = () => {
             overflow: 'auto'
           }}
         >
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/vehicles" element={<Vehicles />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/rentals" element={<Rentals />} />
-          </Routes>
+          <React.Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/vehicles" element={<Vehicles />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/rentals" element={<Rentals />} />
+            </Routes>
+          </React.Suspense>
         </Content>
       </Layout>
 

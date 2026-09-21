@@ -1,0 +1,1 @@
+var e=`/assets/ninhbinh_slider_1-WL4JaBzA.png`;export{e as t};

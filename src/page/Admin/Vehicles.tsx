@@ -14,18 +14,13 @@ const Vehicles: React.FC = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    loadData();
-    loadCategories();
-  }, []);
-
   const loadData = async () => {
     setLoading(true);
     try {
       const res = await fetchApi('/vehicles');
       const json = await res.json();
       if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
-    } catch (e) {
+    } catch {
       message.error('Lỗi tải dữ liệu');
     }
     setLoading(false);
@@ -36,8 +31,13 @@ const Vehicles: React.FC = () => {
       const res = await fetchApi('/categories');
       const json = await res.json();
       if (json.success) setCategories(json.data);
-    } catch (e) {}
+    } catch {}
   };
+
+  useEffect(() => {
+    loadData();
+    loadCategories();
+  }, []);
 
 
 

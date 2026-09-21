@@ -1,14 +1,16 @@
 import { useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
-import HomePage from "./page/HomePage";
-import BookingPage from "./page/BookingPage";
-import PricingPage from "./page/PricingPage";
-import ContactPage from "./page/ContactPage";
-import NewsPage from "./page/NewsPage";
 import LeavesBackground from "./component/LeavesBackground";
-import AdminLayout from "./page/Admin/AdminLayout";
+
+const HomePage = lazy(() => import("./page/HomePage"));
+const BookingPage = lazy(() => import("./page/BookingPage"));
+const PricingPage = lazy(() => import("./page/PricingPage"));
+const ContactPage = lazy(() => import("./page/ContactPage"));
+const NewsPage = lazy(() => import("./page/NewsPage"));
+const AdminLayout = lazy(() => import("./page/Admin/AdminLayout"));
 import { LanguageProvider } from "./context/LanguageContext";
 import { Toaster } from 'react-hot-toast';
 
@@ -22,9 +24,11 @@ function App() {
 
   if (isAdminRoute) {
     return (
-      <Routes>
-        <Route path="/admin/*" element={<AdminLayout />} />
-      </Routes>
+      <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading Admin...</div>}>
+        <Routes>
+          <Route path="/admin/*" element={<AdminLayout />} />
+        </Routes>
+      </Suspense>
     );
   }
 
@@ -35,13 +39,15 @@ function App() {
         <LeavesBackground />
         <Header />
         <main className="flex-1 w-full pt-[90px] min-h-[100vh] relative z-10">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/news" element={<NewsPage />} />
-          </Routes>
+          <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/booking" element={<BookingPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/news" element={<NewsPage />} />
+            </Routes>
+          </Suspense>
         </main>
         <div className="relative z-10">
           <Footer />

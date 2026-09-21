@@ -1,1 +1,0 @@
-import"./main-DTY3Wh2t.js";localStorage.setItem(`language`,`EN`);

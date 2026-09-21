@@ -7,21 +7,21 @@ const Rentals: React.FC = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   const loadData = async () => {
     setLoading(true);
     try {
       const res = await fetchApi('/statistics/details');
       const json = await res.json();
       if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
-    } catch (e) {
+    } catch {
       message.error('Lỗi tải dữ liệu');
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const handleExport = async () => {
     try {
