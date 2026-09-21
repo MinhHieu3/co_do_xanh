@@ -8,6 +8,7 @@ import phoenixImageNu from "../assets/image/TLN.jpg";
 export interface Vehicle {
   id: string;
   name: string;
+  nameEn?: string;
   image: string;
   pricing: {
     day1: string;
@@ -119,6 +120,7 @@ export const vehicles: Vehicle[] = [
   {
     id: "xe-dap-phoenix-nam",
     name: "XE ĐẠP TRỢ LỰC PHOENIX (NAM)",
+    nameEn: "PHOENIX E-BIKE (MEN)",
     image: phoenixImageNam,
     pricing: {
       day1: "100k/1 ngày",
@@ -150,6 +152,7 @@ export const vehicles: Vehicle[] = [
   {
     id: "xe-dap-phoenix-nu",
     name: "XE ĐẠP TRỢ LỰC PHOENIX (NỮ)",
+    nameEn: "PHOENIX E-BIKE (WOMEN)",
     image: phoenixImageNu,
     pricing: {
       day1: "100k/1 ngày",

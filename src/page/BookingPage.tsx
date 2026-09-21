@@ -88,7 +88,8 @@ export default function BookingPage() {
     setIsSubmitting(true);
 
     // Tên xe đang chọn
-    const vehicleName = vehicles.find(v => v.id === selectedVehicle)?.name || selectedVehicle;
+    const vInfo = vehicles.find(v => v.id === selectedVehicle);
+    const vehicleName = (language === 'EN' && vInfo?.nameEn) ? vInfo.nameEn : (vInfo?.name || selectedVehicle);
 
     // Format ngày giờ cho đẹp (Antd DatePicker đã tự trả về string đẹp)
     const formatDateTime = (dt: string) => dt;
@@ -230,7 +231,7 @@ export default function BookingPage() {
                   {/* Thông tin xe */}
                   <div className="flex-1">
                     <h3 className={`font-bold text-xl mb-1.5 transition-colors ${isSelected ? "text-[#009e4e]" : "text-[#0d1b2a] group-hover:text-[#009e4e]"}`}>
-                      {vehicle.name}
+                      {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn : vehicle.name}
                     </h3>
                     <div className={`inline-flex items-center text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${isSelected
                       ? "bg-[#009e4e] text-white shadow-md shadow-green-500/30"
@@ -248,7 +249,7 @@ export default function BookingPage() {
           <div className="bg-gradient-to-br from-[#f2fdf5] to-white p-5 rounded-2xl border border-[#009e4e]/20 shadow-sm mt-2">
             <h3 className="font-bold text-lg text-[#009e4e] mb-3 flex items-center gap-2">
               <Info size={20} />
-              {language === 'EN' ? `Rental Pricing: ${vehicles.find(v => v.id === selectedVehicle)?.name}` : `Bảng giá thuê: ${vehicles.find(v => v.id === selectedVehicle)?.name}`}
+              {language === 'EN' ? `Rental Pricing: ${vehicles.find(v => v.id === selectedVehicle)?.nameEn || vehicles.find(v => v.id === selectedVehicle)?.name}` : `Bảng giá thuê: ${vehicles.find(v => v.id === selectedVehicle)?.name}`}
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
