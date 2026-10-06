@@ -1,4 +1,5 @@
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import newsBg from "../assets/dulich/ninhbinh_slider_1.png";
 import img1 from "../assets/dulich/ninhbinh_slider_2.png";
 import img2 from "../assets/dulich/blog_hoalu.png";
@@ -20,7 +21,8 @@ const newsData = [
     category: "Cẩm nang du lịch",
     categoryEn: "Travel Guide",
     featured: true,
-    link: "https://bamozo.vn/du-lich-trang-an-ninh-binh-1-ngay"
+    link: "/news/kinh-nghiem-thue-xe-may-dien-ninh-binh",
+    isInternal: true
   },
   // {
   //   id: 2,
@@ -112,6 +114,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 export default function NewsPage() {
   const { language, t } = useLanguage();
+  const navigate = useNavigate();
   const featuredArticle = newsData.find(n => n.featured) || newsData[0];
   const otherArticles = newsData.filter(n => n.id !== featuredArticle.id);
 
@@ -140,7 +143,15 @@ export default function NewsPage() {
         {/* Tin nổi bật (Featured) */}
         <div
           className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-12 group cursor-pointer animate-fade-in-up"
-          onClick={() => featuredArticle.link && window.open(featuredArticle.link, '_blank')}
+          onClick={() => {
+            if (!featuredArticle.link) return;
+            // @ts-ignore
+            if (featuredArticle.isInternal) {
+              navigate(featuredArticle.link);
+            } else {
+              window.open(featuredArticle.link, '_blank');
+            }
+          }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
@@ -174,7 +185,15 @@ export default function NewsPage() {
             <div
               key={article.id}
               className={`bg-white rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden group cursor-pointer card-hover animate-fade-in-up delay-${(idx % 3 + 1) * 100}`}
-              onClick={() => article.link && window.open(article.link, '_blank')}
+              onClick={() => {
+                if (!article.link) return;
+                // @ts-ignore
+                if (article.isInternal) {
+                  navigate(article.link);
+                } else {
+                  window.open(article.link, '_blank');
+                }
+              }}
             >
               <div className="relative h-[220px] overflow-hidden">
                 <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />

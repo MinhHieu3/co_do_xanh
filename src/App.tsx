@@ -11,6 +11,7 @@ const PricingPage = lazy(() => import("./page/PricingPage"));
 const ContactPage = lazy(() => import("./page/ContactPage"));
 const NewsPage = lazy(() => import("./page/NewsPage"));
 const AdminLayout = lazy(() => import("./page/Admin/AdminLayout"));
+const KinhNghiemThueXe = lazy(() => import("./page/KinhNghiemThueXe"));
 import { LanguageProvider } from "./context/LanguageContext";
 import { Toaster } from 'react-hot-toast';
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/kinh-nghiem-thue-xe-may-dien-ninh-binh" element={<KinhNghiemThueXe />} />
             </Routes>
           </Suspense>
         </main>
