@@ -9,6 +9,13 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         en: resolve(import.meta.dirname, 'index-en.html')
+      },
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          framer: ['framer-motion'],
+          lucide: ['lucide-react']
+        }
       }
     }
   },

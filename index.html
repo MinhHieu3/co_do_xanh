@@ -17,6 +17,48 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+
+  <!-- Local Business Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Xe Cố Đô Xanh",
+      "image": "https://xecodoxanh.com/og-image.png",
+      "@id": "https://xecodoxanh.com",
+      "url": "https://xecodoxanh.com",
+      "telephone": "0866399986",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ninh Bình",
+        "addressCountry": "VN"
+      },
+      "description": "Dịch vụ cho thuê xe máy điện chất lượng cao tại Ninh Bình.",
+      "priceRange": "VND"
+    }
+  </script>
+
+  <!-- Product/Price Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Dịch vụ thuê xe máy điện",
+      "image": "https://xecodoxanh.com/og-image.png",
+      "description": "Dịch vụ cho thuê xe máy điện chất lượng cao, di chuyển xanh và tiết kiệm tại Ninh Bình.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Xe Cố Đô Xanh"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "https://xecodoxanh.com",
+        "priceCurrency": "VND",
+        "lowPrice": "80000",
+        "highPrice": "150000"
+      }
+    }
+  </script>
 </head>
 
 <body>

@@ -17,6 +17,48 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+
+  <!-- Local Business Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Xe Cố Đô Xanh",
+      "image": "https://xecodoxanh.com/og-image.png",
+      "@id": "https://xecodoxanh.com",
+      "url": "https://xecodoxanh.com",
+      "telephone": "+84866399986",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ninh Binh",
+        "addressCountry": "VN"
+      },
+      "description": "Premium electric motorbike rental in Ninh Binh.",
+      "priceRange": "$$"
+    }
+  </script>
+
+  <!-- Product/Price Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Electric Motorbike Rental",
+      "image": "https://xecodoxanh.com/og-image.png",
+      "description": "Premium electric motorbike rental in Ninh Binh. Explore the city green and save money.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Xe Cố Đô Xanh"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "https://xecodoxanh.com",
+        "priceCurrency": "USD",
+        "lowPrice": "3.2",
+        "highPrice": "10"
+      }
+    }
+  </script>
 </head>
 
 <body>
