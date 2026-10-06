@@ -1,0 +1,1 @@
+var e=`/assets/Vinfast%20Feliz%20II-CtLLak0p.webp`,t=`/assets/vinfast_evo-Dbu__zKN.jpg`;export{e as n,t};

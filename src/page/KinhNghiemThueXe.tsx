@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useEffect } from "react";
 import imgCover from "../assets/dulich/ninhbinh_slider_1.png";
-import imgEvo from "../assets/image/Xe Máy Điện Vinfast Evo.jpg";
+import imgEvo from "../assets/image/vinfast_evo.jpg";
 import imgFeliz from "../assets/image/Vinfast Feliz II.webp";
 
 export default function KinhNghiemThueXe() {
@@ -22,13 +22,13 @@ export default function KinhNghiemThueXe() {
     document.title = title;
 
     // Cập nhật Meta Description (Rất quan trọng cho Google)
-    let metaDesc = document.querySelector('meta[name="description"]');
+    const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', description);
 
     // Cập nhật Open Graph (Cho chia sẻ mạng xã hội)
-    let ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', title);
-    let ogDesc = document.querySelector('meta[property="og:description"]');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
     if (ogDesc) ogDesc.setAttribute('content', description);
 
     // Tiêm dữ liệu cấu trúc BlogPosting Schema cho Google

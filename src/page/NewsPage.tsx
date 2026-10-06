@@ -145,7 +145,7 @@ export default function NewsPage() {
           className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-12 group cursor-pointer animate-fade-in-up"
           onClick={() => {
             if (!featuredArticle.link) return;
-            // @ts-ignore
+            // @ts-expect-error
             if (featuredArticle.isInternal) {
               navigate(featuredArticle.link);
             } else {
@@ -187,7 +187,7 @@ export default function NewsPage() {
               className={`bg-white rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden group cursor-pointer card-hover animate-fade-in-up delay-${(idx % 3 + 1) * 100}`}
               onClick={() => {
                 if (!article.link) return;
-                // @ts-ignore
+                // @ts-expect-error
                 if (article.isInternal) {
                   navigate(article.link);
                 } else {

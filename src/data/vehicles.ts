@@ -1,5 +1,5 @@
 import felizImage from "../assets/image/Vinfast Feliz II.webp";
-import evoImage from "../assets/image/Xe Máy Điện Vinfast Evo.jpg";
+import evoImage from "../assets/image/vinfast_evo.jpg";
 import evoLiteImage from "../assets/image/Evo lite.png";
 import phoenixImageNam from "../assets/image/TLNAM.jpg";
 import phoenixImageNu from "../assets/image/TLN.jpg";
