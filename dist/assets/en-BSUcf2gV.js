@@ -1,1 +1,0 @@
-import"./main-BNQUa6Jt.js";localStorage.setItem(`language`,`EN`);
