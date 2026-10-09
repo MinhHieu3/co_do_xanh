@@ -24,6 +24,7 @@ export const vi = {
     storeLocation: "Cửa Hàng Xe Cố Đô Xanh",
     address1: "CS1: Cửa Hàng Xe Cố Đô Xanh",
     phone: "Điện thoại",
+    trustedBy: "Đánh giá & Liên kết",
   },
   home: {
     heroTitle1: "THUÊ XE MÁY",

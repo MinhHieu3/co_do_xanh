@@ -1,4 +1,4 @@
-import { MapPin, Phone, Facebook, Youtube, Instagram } from "lucide-react";
+import { MapPin, Phone, Facebook, Youtube, Instagram, Clock } from "lucide-react";
 import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import logo from "../assets/logo/logo3.png";
 import { useLanguage } from "../context/LanguageContext";
@@ -14,13 +14,18 @@ export default function Footer() {
     <>
       <footer className="bg-[#0d1b2a] pt-8 pb-20 md:pb-8 text-gray-300 text-[14px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12" itemScope itemType="https://schema.org/LocalBusiness">
+            <meta itemProp="name" content="Xe Cố Đô Xanh" />
+            <meta itemProp="image" content="https://xecodoxanh.com/og-image.png" />
+            <meta itemProp="url" content="https://xecodoxanh.com" />
+            <meta itemProp="priceRange" content="VND" />
+            
             {/* Cột 1: Thông tin chính */}
             <div className="flex flex-col space-y-4">
               <div className="bg-white inline-block px-4 py-2 rounded-xl self-start shadow-sm mb-2">
                 <img src={logo} alt="Xe Cố Đô Xanh" className="h-[40px] w-auto object-contain" />
               </div>
-              <p className="leading-relaxed text-gray-300">
+              <p className="leading-relaxed text-gray-300" itemProp="description">
                 {t('footer.about')}
               </p>
               <div className="space-y-3 mt-4 font-medium">
@@ -28,17 +33,23 @@ export default function Footer() {
                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                     <Phone size={16} className="text-[#14b8a6]" />
                   </div>
-                  <p>{t('footer.hotline')}: <span className="text-white font-bold">{phoneNumber}</span></p>
+                  <p>{t('footer.hotline')}: <a href={`tel:${phoneNumber}`} itemProp="telephone" className="text-white font-bold">{phoneNumber}</a></p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                     <MapPin size={16} className="text-[#14b8a6]" />
                   </div>
-                  <p>{t('footer.email')}: <span className="text-white font-bold">hieubyi@gmail.com</span></p>
+                  <p>{t('footer.email')}: <a href="mailto:hieubyi@gmail.com" itemProp="email" className="text-white font-bold">hieubyi@gmail.com</a></p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                    <Clock size={16} className="text-[#14b8a6]" />
+                  </div>
+                  <p>{t('footer.workingHours')}: <span itemProp="openingHours" content="Mo-Su 07:00-22:00" className="text-white font-bold">07:00 - 22:00</span></p>
                 </div>
               </div>
               <div className="flex space-x-3 mt-6">
-                <a href="https://www.facebook.com/profile.php?id=61593578486189" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 shadow-sm flex items-center justify-center text-white hover:bg-[#14b8a6] transition-all">
+                <a href="https://www.facebook.com/profile.php?id=61593578486189" target="_blank" rel="noreferrer" itemProp="sameAs" className="w-10 h-10 rounded-full bg-white/10 shadow-sm flex items-center justify-center text-white hover:bg-[#14b8a6] transition-all">
                   <Facebook size={18} className="fill-current" />
                 </a>
                 <a href="#" className="w-10 h-10 rounded-full bg-white/10 shadow-sm flex items-center justify-center text-white hover:bg-[#14b8a6] transition-all">
@@ -59,7 +70,12 @@ export default function Footer() {
                   <MapPin size={18} className="text-[#14b8a6] mr-2" />
                   {t('footer.storeLocation')}
                 </h4>
-                <p className="pl-6 mb-4 leading-relaxed text-gray-300">{t('footer.address1')}</p>
+                <div className="pl-6 mb-4 leading-relaxed text-gray-300" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+                  <span itemProp="streetAddress">{t('footer.address1')}</span>
+                  <meta itemProp="addressLocality" content="Ninh Bình" />
+                  <meta itemProp="addressRegion" content="Ninh Bình" />
+                  <meta itemProp="addressCountry" content="VN" />
+                </div>
                 
                 <div className="w-full h-28 md:h-32 bg-gray-900 rounded-xl overflow-hidden border border-white/10">
                   <iframe
@@ -74,6 +90,46 @@ export default function Footer() {
                 </div>
               </div>
             </div>
+
+            {/* Cột 3: Đánh giá & Liên kết */}
+            <div className="flex flex-col space-y-4">
+              <h3 className="font-bold text-[16px] uppercase tracking-wide text-white mb-2">{t('footer.trustedBy')}</h3>
+              
+              <div className="flex flex-col gap-3">
+                <a href="https://maps.app.goo.gl/A1nuDNPbbdCfN4XN8" target="_blank" rel="noreferrer" itemProp="hasMap" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <img src="https://www.google.com/images/branding/product/ico/googleg_lodp.ico" alt="Google" className="w-5 h-5 object-contain" />
+                  </div>
+                  <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                    <meta itemProp="ratingValue" content="5.0" />
+                    <meta itemProp="reviewCount" content="128" />
+                    <p className="text-white font-bold text-sm">Google Maps</p>
+                    <p className="text-xs text-gray-400">5.0 ⭐ (128+ Reviews)</p>
+                  </div>
+                </a>
+
+                <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
+                  <div className="w-10 h-10 bg-[#34e0a1] rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <img src="https://static.tacdn.com/favicon.ico" alt="TripAdvisor" className="w-5 h-5 object-contain" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm">TripAdvisor</p>
+                    <p className="text-xs text-gray-400">Recommended</p>
+                  </div>
+                </a>
+                
+                <a href="https://www.facebook.com/profile.php?id=61593578486189" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
+                  <div className="w-10 h-10 bg-[#1877F2] rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <Facebook size={18} className="text-white fill-current" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm">Facebook Page</p>
+                    <p className="text-xs text-gray-400">Follow for updates</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
           </div>
           <div className="mt-8 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[13px] font-medium text-gray-400">
             <p>© {new Date().getFullYear()} Xe Cố Đô Xanh. All rights reserved.</p>

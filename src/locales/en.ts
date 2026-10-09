@@ -24,6 +24,7 @@ export const en = {
     storeLocation: "Xe Co Do Xanh Store",
     address1: "Branch 1: Xe Co Do Xanh Store",
     phone: "Phone",
+    trustedBy: "Reviews & Connect",
   },
   home: {
     heroTitle1: "MOTORBIKE RENTAL",
