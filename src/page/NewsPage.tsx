@@ -154,7 +154,7 @@ export default function NewsPage() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative h-[300px] lg:h-[400px] overflow-hidden">
-              <img src={featuredArticle.image} alt={featuredArticle.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <img src={featuredArticle.image} alt={featuredArticle.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
               <div className="absolute top-6 left-6 bg-[#14b8a6] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg shadow-teal-500/30">
                 {t('news.featured')}
               </div>
@@ -194,7 +194,7 @@ export default function NewsPage() {
               }}
             >
               <div className="relative h-[220px] overflow-hidden">
-                <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0d9488] text-xs font-bold px-3 py-1 rounded-lg">
                   {language === 'EN' ? article.categoryEn : article.category}
                 </div>

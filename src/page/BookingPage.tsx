@@ -358,7 +358,7 @@ ${calculateTotalEstimate().overtime > 0 ? `💰 <b>Giá gốc (0-5h):</b> ${calc
                     }`}
                 >
                   <div className="w-full h-[60%] flex items-center justify-center mb-1">
-                    <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
+                    <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" loading="lazy" />
                   </div>
                   <span className={`text-[10px] md:text-xs font-bold truncate w-full text-center px-1 ${isSelected ? 'text-[#0d9488]' : 'text-gray-500'}`}>
                     {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn.replace('Vinfast ', '').replace('Xe đạp trợ lực ', '') : vehicle.name.replace('Vinfast ', '').replace('Xe đạp trợ lực ', '')}

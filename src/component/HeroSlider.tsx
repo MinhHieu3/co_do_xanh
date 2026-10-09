@@ -33,7 +33,13 @@ export default function HeroSlider() {
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
         >
-          <img src={img} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
+          <img 
+            src={img} 
+            alt={`Slide ${index + 1}`} 
+            className="w-full h-full object-cover" 
+            fetchPriority={index === 0 ? "high" : "auto"}
+            loading={index === 0 ? "eager" : "lazy"}
+          />
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
       ))}

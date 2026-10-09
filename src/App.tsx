@@ -12,6 +12,8 @@ const ContactPage = lazy(() => import("./page/ContactPage"));
 const NewsPage = lazy(() => import("./page/NewsPage"));
 const AdminLayout = lazy(() => import("./page/Admin/AdminLayout"));
 const KinhNghiemThueXe = lazy(() => import("./page/KinhNghiemThueXe"));
+const PolicyPage = lazy(() => import("./page/PolicyPage"));
+const PrivacyPage = lazy(() => import("./page/PrivacyPage"));
 import { LanguageProvider } from "./context/LanguageContext";
 import { Toaster } from 'react-hot-toast';
 
@@ -48,6 +50,8 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/kinh-nghiem-thue-xe-may-dien-ninh-binh" element={<KinhNghiemThueXe />} />
+              <Route path="/policy" element={<PolicyPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>
           </Suspense>
         </main>

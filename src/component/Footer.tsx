@@ -2,6 +2,7 @@ import { MapPin, Phone, Facebook, Youtube, Instagram, Clock } from "lucide-react
 import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import logo from "../assets/logo/logo3.png";
 import { useLanguage } from "../context/LanguageContext";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -23,7 +24,7 @@ export default function Footer() {
             {/* Cột 1: Thông tin chính */}
             <div className="flex flex-col space-y-4">
               <div className="bg-white inline-block px-4 py-2 rounded-xl self-start shadow-sm mb-2">
-                <img src={logo} alt="Xe Cố Đô Xanh" className="h-[40px] w-auto object-contain" />
+                <img src={logo} alt="Xe Cố Đô Xanh" className="h-[40px] w-auto object-contain" loading="lazy" />
               </div>
               <p className="leading-relaxed text-gray-300" itemProp="description">
                 {t('footer.about')}
@@ -98,7 +99,7 @@ export default function Footer() {
               <div className="flex flex-col gap-3">
                 <a href="https://maps.app.goo.gl/A1nuDNPbbdCfN4XN8" target="_blank" rel="noreferrer" itemProp="hasMap" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
                   <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <img src="https://www.google.com/images/branding/product/ico/googleg_lodp.ico" alt="Google" className="w-5 h-5 object-contain" />
+                    <img src="https://www.google.com/images/branding/product/ico/googleg_lodp.ico" alt="Google" className="w-5 h-5 object-contain" loading="lazy" />
                   </div>
                   <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                     <meta itemProp="ratingValue" content="5.0" />
@@ -110,7 +111,7 @@ export default function Footer() {
 
                 <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
                   <div className="w-10 h-10 bg-[#34e0a1] rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <img src="https://static.tacdn.com/favicon.ico" alt="TripAdvisor" className="w-5 h-5 object-contain" />
+                    <img src="https://static.tacdn.com/favicon.ico" alt="TripAdvisor" className="w-5 h-5 object-contain" loading="lazy" />
                   </div>
                   <div>
                     <p className="text-white font-bold text-sm">TripAdvisor</p>
@@ -134,8 +135,8 @@ export default function Footer() {
           <div className="mt-8 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[13px] font-medium text-gray-400">
             <p>© {new Date().getFullYear()} Xe Cố Đô Xanh. All rights reserved.</p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors">{t('footer.policy')}</a>
-              <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
+              <Link to="/policy" className="hover:text-white transition-colors">{t('footer.policy')}</Link>
+              <Link to="/privacy" className="hover:text-white transition-colors">{t('footer.privacy')}</Link>
             </div>
           </div>
         </div>

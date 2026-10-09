@@ -10,7 +10,7 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex flex-col items-center bg-white/50 backdrop-blur-sm min-h-screen">
+    <div className="w-full flex flex-col items-center bg-white/70 min-h-screen">
       {/* Hero Slider */}
       <HeroSlider />
 
