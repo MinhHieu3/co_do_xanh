@@ -1,257 +1,112 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
-import contactBg from "../assets/dulich/ninhbinh_slider_1.png";
 import { useLanguage } from "../context/LanguageContext";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 export default function ContactPage() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
+  const L = (vi: string, en: string) => (language === "EN" ? en : vi);
   const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    subject: "",
-    message: ""
-  });
+  const [formData, setFormData] = useState({ name: "", phone: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const set = (k: string, v: string) => setFormData((p) => ({ ...p, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     const text = `
 📩 <b>TIN NHẮN LIÊN HỆ MỚI</b>
 --------------------------------
-⏱ <b>Thời gian:</b> ${new Date().toLocaleString('vi-VN')}
+⏱ <b>Thời gian:</b> ${new Date().toLocaleString("vi-VN")}
 👤 <b>Người gửi:</b> ${formData.name}
 📞 <b>SĐT:</b> ${formData.phone}
 📌 <b>Tiêu đề:</b> ${formData.subject || "Không có"}
 📝 <b>Nội dung:</b>
 ${formData.message}
     `;
-
-    const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-
-    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setShowSuccess(true);
-      }, 1000);
+    const TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const CHAT = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+    if (!TOKEN || !CHAT) {
+      setTimeout(() => { setIsSubmitting(false); setShowSuccess(true); }, 1000);
       return;
     }
-
     try {
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'HTML' }),
+      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT, text, parse_mode: "HTML" }),
       });
       setIsSubmitting(false);
       setShowSuccess(true);
-    } catch (error) {
+    } catch {
       setIsSubmitting(false);
-      toast.error(language === 'EN' ? "An error occurred while sending the message!" : "Có lỗi xảy ra khi gửi tin nhắn!");
+      toast.error(L("Có lỗi xảy ra khi gửi tin nhắn!", "An error occurred while sending the message!"));
     }
   };
 
   return (
-    <div className="w-full flex flex-col items-center bg-gray-50/50 min-h-screen">
-      {/* Hero Section */}
-      <div className="relative w-full h-[350px] md:h-[450px] overflow-hidden flex items-center justify-center group">
-        {/* Animated Background Image */}
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[15s] ease-out scale-100 group-hover:scale-110"
-          style={{ backgroundImage: `url(${contactBg})` }}
-        ></div>
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/60 via-[#14b8a6]/40 to-black/80 mix-blend-multiply"></div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 relative z-10 mt-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 font-display tracking-tight text-center drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
-            {t('contact.title')}
-          </h1>
-          <p className="text-lg md:text-xl font-medium max-w-2xl text-center text-gray-200 drop-shadow-md">
-            {t('contact.subtitle')}
-          </p>
-        </div>
-
-        {/* Decorative elements */}
-        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl z-10 pointer-events-none"></div>
-        <div className="absolute top-10 right-10 w-60 h-60 bg-[#14b8a6]/30 rounded-full blur-3xl z-10 pointer-events-none"></div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24 relative z-10 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-
-          {/* Contact Information Cards (Left) */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            <div className="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex-1 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-500"></div>
-
-              <h2 className="text-2xl font-bold text-[#0d1b2a] mb-8 font-display relative z-10">{t('contact.infoTitle')}</h2>
-
-              <div className="space-y-8 relative z-10">
-                <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-teal-100/50 text-[#14b8a6]">
-                    <MapPin size={22} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.addressTitle')}</h3>
-                    <p className="text-gray-600 leading-relaxed text-[15px]">{t('contact.addressLine1')}<br />{t('contact.addressLine2')}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-red-100/50 text-[#e33527]">
-                    <Phone size={22} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.phoneTitle')}</h3>
-                    <p className="text-gray-600 text-[15px]">{phoneNumber}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-blue-100/50 text-blue-500">
-                    <Mail size={22} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.emailTitle')}</h3>
-                    <p className="text-gray-600 text-[15px]">hieubyi@gmail.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-yellow-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-yellow-100/50 text-yellow-500">
-                    <Clock size={22} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-[16px] mb-1">{t('contact.hoursTitle')}</h3>
-                    <p className="text-gray-600 text-[15px]">{t('contact.hoursDesc')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Form (Right) */}
-          <div className="lg:col-span-7">
-            <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 h-full">
-              {showSuccess ? (
-                <div className="flex flex-col items-center justify-center h-full text-center py-10 animate-fade-in-up">
-                  <div className="w-20 h-20 bg-teal-100 text-[#14b8a6] rounded-full flex items-center justify-center mb-6">
-                    <CheckCircle2 size={40} />
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#0d1b2a] mb-3">{t('contact.successTitle')}</h3>
-                  <p className="text-gray-600">{t('contact.successMsg')}</p>
-                  <button
-                    onClick={() => {
-                      setShowSuccess(false);
-                      setFormData({ name: "", phone: "", subject: "", message: "" });
-                    }}
-                    className="mt-8 px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors"
-                  >
-                    {t('contact.sendAnother')}
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <h2 className="text-2xl font-bold text-[#0d1b2a] mb-2 font-display">{t('contact.formTitle')}</h2>
-                  <p className="text-gray-500 mb-8 text-[15px]">{t('contact.formSubtitle')}</p>
-
-                  <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">{t('contact.fullName')}</label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder={t('contact.fullNamePlaceholder')}
-                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">{t('contact.phone')}</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          placeholder={t('contact.phonePlaceholder')}
-                          className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">{t('contact.subject')}</label>
-                      <input
-                        type="text"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder={t('contact.subjectPlaceholder')}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white text-[15px]"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">{t('contact.message')}</label>
-                      <textarea
-                        rows={4}
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder={t('contact.messagePlaceholder')}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20 outline-none transition-all bg-gray-50/50 focus:bg-white resize-none text-[15px]"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className={`w-full sm:w-auto px-10 py-4 ${isSubmitting ? 'bg-gray-400' : 'bg-[#14b8a6] hover:bg-[#00a852] hover:-translate-y-1 shadow-lg shadow-teal-500/30'} text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-4`}
-                    >
-                      {isSubmitting ? (
-                        <>{t('contact.submitting')}</>
-                      ) : (
-                        <><Send size={18} /> {t('contact.submitBtn')}</>
-                      )}
-                    </button>
-                  </form>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Map Section */}
-        <div className="mt-12 md:mt-16 bg-white p-3 md:p-4 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100">
-          <div className="w-full h-[350px] md:h-[500px] rounded-2xl overflow-hidden bg-gray-100">
-            <iframe
-              src="https://maps.google.com/maps?q=Xe+C%E1%BB%91+%C4%90%C3%B4+Xanh,+Ninh+B%C3%ACnh&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
+    <>
+      <div className="page-head">
+        <div className="wrap">
+          <p className="eyebrow">{L("Liên hệ", "Contact")}</p>
+          <h1>{L("Nhắn cho chúng tôi", "Get in touch")}</h1>
+          <p className="lead">{L("Có câu hỏi về chuyến đi? Chúng tôi trả lời nhanh nhất có thể.", "Questions about your trip? We reply as fast as we can.")}</p>
         </div>
       </div>
-    </div>
+      <section className="book">
+        <div className="wrap">
+          {showSuccess ? (
+            <div className="done on">
+              <p className="eyebrow">{L("Đã gửi", "Sent")}</p>
+              <h2 className="h1">{L("Cảm ơn bạn!", "Thank you!")}</h2>
+              <p className="lead">{L("Chúng tôi đã nhận tin nhắn và sẽ phản hồi sớm.", "We have your message and will reply soon.")}</p>
+            </div>
+          ) : (
+            <div className="book-grid">
+              <form onSubmit={handleSubmit}>
+                <fieldset>
+                  <legend><i>✉</i> {L("Tin nhắn của bạn", "Your message")}</legend>
+                  <div className="fields">
+                    <div className="fields two">
+                      <div className="field">
+                        <label htmlFor="c-name">{L("Họ và tên", "Full name")}</label>
+                        <input id="c-name" required value={formData.name} onChange={(e) => set("name", e.target.value)} />
+                      </div>
+                      <div className="field">
+                        <label htmlFor="c-phone">{L("Số điện thoại", "Phone")}</label>
+                        <input id="c-phone" type="tel" required value={formData.phone} onChange={(e) => set("phone", e.target.value)} />
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label htmlFor="c-subject">{L("Tiêu đề", "Subject")}</label>
+                      <input id="c-subject" value={formData.subject} onChange={(e) => set("subject", e.target.value)} />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="c-msg">{L("Nội dung", "Message")}</label>
+                      <textarea id="c-msg" required value={formData.message} onChange={(e) => set("message", e.target.value)} />
+                    </div>
+                  </div>
+                </fieldset>
+                <div className="submit-row"><button className="btn" type="submit" disabled={isSubmitting}>{isSubmitting ? L("Đang gửi...", "Sending...") : L("Gửi tin nhắn", "Send message")}</button></div>
+              </form>
+              <aside>
+                <div className="ticket">
+                  <div className="ticket-top"><small>{L("Liên hệ trực tiếp", "Reach us directly")}</small><b>Xe Cố Đô Xanh</b></div>
+                  <div className="ticket-body">
+                    <div className="row"><span>Hotline</span><span><a href={`tel:${phoneNumber}`}>{phoneNumber}</a></span></div>
+                    <div className="row"><span>Email</span><span><a href="mailto:hieubyi@gmail.com">hieubyi@gmail.com</a></span></div>
+                    <div className="row"><span>{L("Giờ làm việc", "Hours")}</span><span>07:00 - 22:00</span></div>
+                    <div className="row"><span>{L("Địa chỉ", "Address")}</span><span>Số 61, ngõ 281 Đinh Tiên Hoàng, Ninh Bình</span></div>
+                  </div>
+                  <p className="ticket-note" style={{ paddingTop: 12 }}>
+                    <iframe title="map" src="https://maps.google.com/maps?q=Xe+C%E1%BB%91+%C4%90%C3%B4+Xanh,+Ninh+B%C3%ACnh&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="180" style={{ border: 0 }} loading="lazy" />
+                  </p>
+                </div>
+              </aside>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 }

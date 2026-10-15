@@ -1,160 +1,355 @@
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { MousePointerClick, FileCheck, Map, RotateCcw, Shield, Gift, BatteryCharging, ChevronRight } from "lucide-react";
-import { vehicles } from "../data/vehicles";
-import HeroSlider from "../component/HeroSlider";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
+import { ebikeContent, PRICE } from "../data/ebikeContent";
+import { SHOW_PRICE, contactLabel } from "../config";
+import logoImg from "../assets/logo/logo4.png";
+
+const Tick = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+);
 
 export default function HomePage() {
-  const { language, t } = useLanguage();
-  const navigate = useNavigate();
+  const { language } = useLanguage();
+  const c = ebikeContent[language as "VI" | "EN"];
+  const [left, setLeft] = useState("");
+  // const [playing, setPlaying] = useState(false);
+  // const audioRef = useRef<HTMLAudioElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const bookbarRef = useRef<HTMLDivElement | null>(null);
+  const firstBtnRef = useRef<HTMLAnchorElement | null>(null);
+
+  // Countdown to the 6 am cutoff (Vietnam time, UTC+7)
+  useEffect(() => {
+    const tick = () => {
+      const d = new Date(Date.now() + 7 * 3600 * 1000);
+      const now = d.getUTCHours() * 60 + d.getUTCMinutes();
+      const cut = 6 * 60;
+      const mins = now < cut ? cut - now : cut + 1440 - now;
+      const h = Math.floor(mins / 60), m = mins % 60;
+      const today = now < cut;
+      const vi = language === "VI";
+      const when = vi ? (today ? "sáng nay" : "sáng mai") : today ? "this morning" : "tomorrow morning";
+      setLeft(
+        vi
+          ? `Đặt trong ${h > 0 ? `${h} giờ ` : ""}${m} phút nữa để nhận xe ${when}`
+          : `Book within ${h > 0 ? `${h} h ` : ""}${m} min for delivery ${when}`
+      );
+    };
+    tick();
+    const id = setInterval(tick, 30000);
+    return () => clearInterval(id);
+  }, [language]);
+
+  // Hero video starts after load, lighter on small screens, never on slow/reduced motion
+  useEffect(() => {
+    const hv = videoRef.current;
+    if (!hv) return;
+    const conn = (navigator as any).connection || {};
+    const slow = conn.saveData || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
+    const still = slow || matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (still) return;
+    const start = () => {
+      hv.src = window.innerWidth < 700 ? "/ebike/video/hero-540.mp4" : "/ebike/video/hero-720.mp4";
+      hv.muted = true;
+      const p = hv.play();
+      p.catch(() => { });
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+  }, []);
+
+  // Mobile book bar appears once the first button scrolls away
+  useEffect(() => {
+    const bar = bookbarRef.current, first = firstBtnRef.current;
+    if (!bar || !first || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver((e) => {
+      bar.classList.toggle("on", !e[0].isIntersecting && e[0].boundingClientRect.top < 0);
+    });
+    io.observe(first);
+    return () => io.disconnect();
+  }, []);
+
+  // AI guide audio sample (section hidden)
+  // useEffect(() => () => { audioRef.current?.pause(); }, []);
+  //
+  // const toggleSample = () => {
+  //   if (audioRef.current && !audioRef.current.paused) {
+  //     audioRef.current.pause(); audioRef.current.currentTime = 0; setPlaying(false); return;
+  //   }
+  //   if (!audioRef.current) {
+  //     const a = new Audio("/ebike/audio/sample-hang-mua-en.mp3");
+  //     a.addEventListener("ended", () => setPlaying(false));
+  //     a.addEventListener("error", () => setPlaying(false));
+  //     audioRef.current = a;
+  //   }
+  //   audioRef.current.play().then(() => setPlaying(true)).catch(() => { });
+  // };
+
+  const h = c.hero;
+  const fares = [
+    { l: h.ebike, p: PRICE.ebike, u: PRICE.ebikeUsd },
+    { l: h.moto, p: PRICE.moto, u: PRICE.motoUsd },
+  ];
+  const prices = [PRICE.moto, PRICE.ebike, PRICE.moto, PRICE.moto];
+  const usd = [PRICE.motoUsd, PRICE.ebikeUsd, PRICE.motoUsd, PRICE.motoUsd];
+  const rideIds = ["vinfast-evo-lite", "xe-dap-phoenix-nam", "vinfast-evo", "vinfast-feliz-2"];
+  const rideImgs = [
+    { s: "/ebike/img/ride-evo-lite-640.jpg", s2: "/ebike/img/ride-evo-lite-1100.jpg", w: 1100, h: 911, alt: "VinFast Evo Lite", q: "motorbike" },
+    { s: "/ebike/img/phoenix-pair-640.webp", s2: "/ebike/img/phoenix-pair-1100.webp", w: 1100, h: 688, alt: "Phoenix electric bicycles", q: "ebike" },
+    { s: "/ebike/img/ride-evo-640.jpg", s2: "/ebike/img/ride-evo-1100.jpg", w: 1100, h: 901, alt: "VinFast Evo", q: "evo" },
+    { s: "/ebike/img/ride-feliz2-640.jpg", s2: "/ebike/img/ride-feliz2-1100.jpg", w: 1100, h: 884, alt: "VinFast Feliz II", q: "feliz" },
+  ];
+  const snapSrc = ["tam-coc", "trang-an", "hoa-lu", "bai-dinh"];
 
   return (
-    <div className="w-full flex flex-col items-center bg-white/70 min-h-screen">
-      {/* Hero Slider */}
-      <HeroSlider />
-
-      {/* Vehicle List Section */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <h2 className="text-2xl md:text-3xl font-black text-center mb-16 text-[#0d1b2a] font-display tracking-tight">
-          {t('home.ourVehicles')}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-5xl mx-auto">
-          {vehicles.map((vehicle, idx) => (
-            <motion.div
-              key={vehicle.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              onClick={() => navigate('/booking', { state: { selectedVehicle: vehicle.id } })}
-              className={`relative flex flex-col items-center text-center group cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 ${vehicle.isPopular
-                  ? 'border border-[#0d9488]/40 shadow-[0_15px_50px_rgba(0,196,97,0.12)] -translate-y-2 order-first md:order-none'
-                  : 'shadow-sm border border-gray-100 hover:border-[#0d9488]/30 hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1'
-                }`}
-            >
-              {/* Popular Badge */}
-              {vehicle.isPopular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0d9488] to-[#14b8a6] text-white text-[11px] font-bold px-4 py-1.5 rounded-full shadow-md whitespace-nowrap z-10 flex items-center gap-1.5 uppercase tracking-wider">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                  </span>
-                  {language === 'EN' ? 'Most Popular' : 'Được Ưa Chuộng Nhất'}
-                </div>
-              )}
-
-              {/* Vehicle Image */}
-              <div className="w-full relative pt-[75%] mb-4 transition-all">
-                <img
-                  src={vehicle.image}
-                  alt={vehicle.name}
-                  className={`absolute inset-0 w-full h-full object-contain mix-blend-multiply transition-transform duration-700 ease-out p-4 ${vehicle.isPopular
-                      ? 'scale-110 drop-shadow-xl'
-                      : 'drop-shadow-md group-hover:scale-110 group-hover:drop-shadow-2xl'
-                    }`}
-                />
-              </div>
-
-              {/* Vehicle Name */}
-              <div className="h-[48px] flex items-center justify-center mb-3 mt-2">
-                <h3 className={`font-bold text-[18px] uppercase tracking-wider transition-colors font-display line-clamp-2 ${vehicle.isPopular ? 'text-[#14b8a6]' : 'text-[#0d1b2a] group-hover:text-[#14b8a6]'
-                  }`}>
-                  {(language === 'EN' && vehicle.nameEn) ? vehicle.nameEn : vehicle.name}
-                </h3>
-              </div>
-
-              {/* Pricing details */}
-              <div className="text-[14px] text-gray-600 py-1 w-full text-center leading-relaxed px-2 font-medium flex items-center justify-center">
-                <span className="text-[#0d9488] font-bold text-xl drop-shadow-sm">
-                  {language === 'EN' ? vehicle.pricingEn.day1 : vehicle.pricing.day1}
-                </span>
-              </div>
-
-              {/* Specs: Battery, Accessories & License */}
-              <div className="w-full flex flex-col gap-2 mt-3 mb-2 text-left px-1">
-                <div className="flex items-start gap-2 text-[13px] text-gray-500">
-                  <BatteryCharging size={15} className="text-[#0d9488] shrink-0 mt-0.5" />
-                  <span className="line-clamp-2 leading-tight">
-                    {language === 'EN' ? vehicle.specsEn["Battery"] : vehicle.specs["Dạng pin"]}
-                  </span>
-                </div>
-                <div className="flex items-start gap-2 text-[13px] text-gray-500">
-                  <Gift size={15} className="text-[#0d9488] shrink-0 mt-0.5" />
-                  <span className="line-clamp-2 leading-tight">
-                    {language === 'EN' ? vehicle.specsEn["Accessories"] : vehicle.specs["Phụ kiện"]}
-                  </span>
-                </div>
-                <div className="flex items-start gap-2 text-[13px] text-gray-500">
-                  <Shield size={15} className="text-[#0d9488] shrink-0 mt-0.5" />
-                  <span className="line-clamp-2 leading-tight">
-                    {language === 'EN' ? vehicle.specsEn["License"] : vehicle.specs["Bằng lái"]}
-                  </span>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <div className="w-full mt-4 flex justify-center">
-                <Link
-                  to="/booking"
-                  state={{ selectedVehicle: vehicle.id }}
-                  className={`inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-xl font-bold text-[14px] uppercase tracking-wider transition-all duration-300 shadow-sm ${vehicle.isPopular
-                      ? 'bg-[#14b8a6] text-white shadow-md hover:bg-[#0d9488]'
-                      : 'bg-gray-50 text-[#0d1b2a] group-hover:bg-[#14b8a6] group-hover:text-white group-hover:shadow-md'
-                    }`}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <span>{t('home.bookVehicleBtn')}</span>
-                  <ChevronRight size={16} strokeWidth={2.5} />
-                </Link>
-              </div>
-            </motion.div>
-          ))}
+    <div className="eb-home">
+      <section className="hero">
+        <div className="wrap hero-grid">
+          <div className="hero-a">
+            <p className="eyebrow">{h.eyebrow}</p>
+            <h1>{h.h1a}<span className="nw">{h.h1b}</span>{h.h1c}<em>{h.h1d}</em>{h.h1e}</h1>
+            <p className="lead">{h.lead}</p>
+            <div className="hero-cta">
+              <Link ref={firstBtnRef} className="btn" to="/booking">{h.cta}</Link>
+              <Link className="link-arrow" to="/#day">{h.see}</Link>
+            </div>
+            <p className="deadline">{left || h.deadline}</p>
+          </div>
+          <div className="cards">
+            <figure className="postcard p1 p-video">
+              <video ref={videoRef} className="hero-video" muted loop playsInline preload="none" poster="/ebike/img/hero-poster-new.jpg" width={1280} height={720} aria-label="Riding an electric scooter between the rice fields">
+                <img src="/ebike/img/hero-poster-new.jpg" width={1280} height={720} alt="A quiet road between the rice fields with the limestone mountains behind" />
+              </video>
+              <figcaption>{h.caption1}</figcaption>
+            </figure>
+            <figure className="postcard p2">
+              <img src="/ebike/img/riders-520.webp" srcSet="/ebike/img/riders-520.webp 520w, /ebike/img/riders-900.webp 900w" sizes="(min-width: 900px) 240px, 30vw" width={900} height={675} alt="Two happy riders in helmets on electric motorbikes" loading="lazy" />
+              <figcaption>{h.caption2}</figcaption>
+            </figure>
+            <svg className="stamp" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="st" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" /></defs><circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" strokeWidth="4" /><circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" strokeWidth="1.5" /><circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeWidth="1.5" /><text fontFamily="Be Vietnam Pro, Arial, sans-serif" fontSize="17.5" fontWeight="700" letterSpacing="3.2" fill="currentColor"><textPath href="#st">{h.stamp}</textPath></text><image href={logoImg} x="33" y="33" width="134" height="134" preserveAspectRatio="xMidYMid meet" /></svg>
+          </div>
+          <div className="hero-b">
+            <div className="fares">
+              {fares.map((f) => (
+                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? "Äá»ng" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
+              ))}
+            </div>
+            <ul className="ticks">
+              {h.ticks.map((t: string) => (<li key={t}><Tick /> {t}</li>))}
+              {/* <li><a className="tick-link" href="#guide"><Tick /> {language === "VI" ? "Hướng dẫn viên AI miễn phí" : "Free AI guide on your phone"}</a></li> */}
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Rental Process Section */}
-      <div className="w-full bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <h2 className="text-2xl md:text-3xl font-black text-center mb-16 text-[#0d1b2a] font-display tracking-tight">
-            {t('home.howItWorks')}
-          </h2>
+      <section className="day" id="day">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.day.eyebrow}</p>
+            <h2>{c.day.title}</h2>
+            <p className="lead">{c.day.lead}</p>
+          </div>
+          <ol className="timeline">
+            {c.day.steps.map(([when, title, text]: string[]) => (
+              <li key={title}>
+                <div className="when">{when}</div>
+                <div><h3>{title}</h3><p>{text}</p></div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-10 lg:gap-12 relative pt-6 md:pt-0">
-            {/* Connecting Line for Desktop */}
-            <div className="hidden lg:block absolute top-[4.5rem] left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-transparent via-gray-200 to-transparent z-0"></div>
-
-            {[
-              { num: 1, icon: MousePointerClick, titleKey: 'home.step1', descKey: 'home.step1Desc' },
-              { num: 2, icon: FileCheck, titleKey: 'home.step2', descKey: 'home.step2Desc' },
-              { num: 3, icon: Map, titleKey: 'home.step3', descKey: 'home.step3Desc' },
-              { num: 4, icon: RotateCcw, titleKey: 'home.step4', descKey: 'home.step4Desc' }
-            ].map((step, idx) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: idx * 0.15 }}
-                className="flex flex-col items-center text-center relative z-10 group"
-              >
-                <div className="text-[100px] md:text-[120px] font-black text-gray-50 absolute -top-14 md:-top-20 -z-10 transition-transform duration-500 group-hover:-translate-y-2 select-none leading-none">
-                  {step.num}
+      <section id="rides">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.rides.eyebrow}</p>
+            <h2>{c.rides.title}</h2>
+            <p className="lead">{c.rides.lead}</p>
+          </div>
+          <div className="rides">
+            {rideImgs.map((r, i) => (
+              <article className="ride" key={r.q}>
+                <img src={r.s} srcSet={i < 2 ? `${r.s} 640w, ${r.s2} 1100w` : undefined} sizes="(min-width: 820px) 520px, 92vw" width={r.w} height={r.h} alt={r.alt} loading="lazy" style={i >= 2 ? { objectFit: "cover" } : undefined} />
+                <div className="ride-body">
+                  <span className="kind">{c.rides.kind[i]}</span>
+                  <h3>{c.rides.names[i]}</h3>
+                  <p className="pitch">{c.rides.pitch[i]}</p>
+                  <ul className="specs">
+                    {c.rides.specs[i].map((s: string) => (<li key={s}><Tick /> {s}</li>))}
+                  </ul>
+                  <p className="goodfor"><b>{c.rides.good[0]}</b> {c.rides.good[i + 1]}</p>
                 </div>
-                <div className="w-[80px] h-[80px] md:w-[90px] md:h-[90px] bg-white rounded-full shadow-xl shadow-gray-200/50 flex items-center justify-center mb-6 md:mb-8 border border-gray-100 group-hover:border-[#14b8a6] transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-[#14b8a6]/20">
-                  <step.icon size={32} className="text-[#0d1b2a] group-hover:text-[#14b8a6] md:w-9 md:h-9 transition-colors" />
+                <div className="ride-foot">
+                  <div className="price"><b>{SHOW_PRICE ? `${prices[i]} ${language === "VI" ? "Äá»ng" : "VND"}` : contactLabel(language)}</b>{SHOW_PRICE && <span>{c.rides.perDay}{usd[i]}</span>}</div>
+                  <Link className="btn btn-sm" to="/booking" state={{ selectedVehicle: rideIds[i] }}>{c.rides.book}</Link>
                 </div>
-                <h3 className="text-[#0d1b2a] font-bold text-[16px] md:text-[17px] mb-3 md:mb-4 uppercase tracking-wider font-display group-hover:text-[#14b8a6] transition-colors">
-                  {t(step.titleKey)}
-                </h3>
-                <p className="text-gray-500 text-[14px] md:text-[15px] leading-relaxed max-w-[260px]">
-                  {t(step.descKey)}
-                </p>
-              </motion.div>
+              </article>
             ))}
           </div>
         </div>
+      </section>
+
+      {/* AI guide section (hidden)
+      <section className="guide" id="guide">
+        <div className="wrap guide-grid">
+          <div>
+            <p className="eyebrow">{c.guide.eyebrow}</p>
+            <h2>{c.guide.title}</h2>
+            <p className="lead">{c.guide.lead}</p>
+            <p className="guide-sample">
+              <button type="button" className="btn alt sample-btn" onClick={toggleSample}>{playing ? c.guide.stop : c.guide.listen}</button>{" "}
+              <span className="hint">{c.guide.hint}</span>
+            </p>
+            <ul className="guide-list">
+              {c.guide.list.map(([b, s]: string[]) => (<li key={b}><b>{b}</b><span>{s}</span></li>))}
+            </ul>
+            <p className="guide-langs">{c.guide.langs}</p>
+            <p className="row-btns"><Link className="btn" to="/booking">{c.guide.plan}</Link></p>
+          </div>
+          <div className="guide-phones">
+            <img src="/ebike/img/guide-today-640.webp" srcSet="/ebike/img/guide-today-640.webp 640w, /ebike/img/guide-today-1100.webp 1100w" sizes="(min-width: 900px) 480px, 92vw" width={1100} height={930} alt="The guide on a phone" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      */}
+
+      <section className="versus" id="compare">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.versus.eyebrow}</p>
+            <h2>{c.versus.title}</h2>
+            <p className="lead">{c.versus.lead}</p>
+          </div>
+          <div className="vs">
+            <div className="vs-head"><span /><span>{c.versus.head[0]}</span><span>{c.versus.head[1]}</span></div>
+            {c.versus.rows.map(([b, them, us]: string[]) => (
+              <div className="vs-row" key={b}>
+                <b>{b}</b>
+                <span className="them" data-l={c.versus.lThem}>{them}</span>
+                <span className="us" data-l={c.versus.lUs}>{us}</span>
+              </div>
+            ))}
+          </div>
+          <Link className="btn" to="/booking">{c.versus.cta}</Link>
+        </div>
+      </section>
+
+      <section id="review">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.review.eyebrow}</p>
+            <h2>{c.review.title}</h2>
+          </div>
+          <div className="voice-top">
+            <blockquote className="voice-main">
+              <p className="stars" role="img" aria-label={c.review.stars}>★★★★★</p>
+              <p>{c.review.main}</p>
+              <footer>{c.review.by}</footer>
+            </blockquote>
+            <figure className="postcard voice-photo">
+              <img src="/ebike/img/review-delivery-640.webp" srcSet="/ebike/img/review-delivery-420.webp 420w, /ebike/img/review-delivery-640.webp 640w" sizes="(min-width: 820px) 300px, 70vw" width={640} height={800} alt={c.review.photoAlt} loading="lazy" />
+              <figcaption>{c.review.cap}</figcaption>
+            </figure>
+          </div>
+          <div className="voice-grid">
+            {c.review.grid.map(([b, p]: string[]) => (<blockquote key={b}><b>{b}</b><p>{p}</p></blockquote>))}
+          </div>
+          <blockquote className="voice-second">
+            <p>{c.review.second}</p>
+            <footer>{c.review.second_by}</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <section className="included">
+        <div className="wrap incl-grid">
+          <div>
+            <p className="eyebrow">{c.incl.eyebrow}</p>
+            <h2>{c.incl.title}</h2>
+            <p className="lead" style={{ marginTop: 14 }}>{c.incl.lead}</p>
+            <p>{c.incl.p}</p>
+            <p><Link className="link-arrow" to="/booking">{c.incl.link}</Link></p>
+          </div>
+          <div className="receipt">
+            <h3>{c.incl.receipt}</h3>
+            <dl>
+              {c.incl.rows.map(([dt, dd]: string[]) => (<div className="row" key={dt}><dt>{dt}</dt><dd>{dd}</dd></div>))}
+              <div className="row total"><dt>{c.incl.total}</dt><dd>{language === "VI" ? "0 $" : "0 VND"}</dd></div>
+            </dl>
+            <p className="thanks">{c.incl.thanks}</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="reach">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.reach.eyebrow}</p>
+            <h2>{c.reach.title}</h2>
+            <p className="lead">{c.reach.lead}</p>
+          </div>
+          <div className="reach-grid">
+            <div>
+              <ol className="reach">
+                {c.reach.items.map(([km, name, alt, text, tag]: any[]) => (
+                  <li key={name}>
+                    <div className="km">{km}<small>{c.reach.km}</small></div>
+                    <div>
+                      <h3>{name} <i>{alt}</i></h3>
+                      <p>{text}</p>
+                      <span className={`tag${tag ? " m" : ""}`}>{c.reach.tags[tag]}</span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="reach-note">{c.reach.note}</p>
+            </div>
+            <div className="snaps">
+              {snapSrc.map((s, i) => (
+                <figure className="postcard" key={s}>
+                  <img src={`/ebike/img/place-${s}-400.webp`} srcSet={`/ebike/img/place-${s}-400.webp 400w, /ebike/img/place-${s}-640.webp 640w`} sizes="(min-width: 900px) 220px, 44vw" width={640} height={480} alt={c.reach.snaps[i]} loading="lazy" />
+                  <figcaption>{c.reach.snaps[i]}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ background: "var(--sky)" }} id="questions">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">{c.faq.eyebrow}</p>
+            <h2>{c.faq.title}</h2>
+          </div>
+          <div className="faq-list">
+            {c.faq.items.map((f) => (
+              <details className="faq" key={f.q}>
+                <summary>{f.q}</summary>
+                <div className="a">{f.a.map((p) => (<p key={p}>{p}</p>))}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="closing">
+        <picture>
+          <img src="/ebike/img/road-900.webp" srcSet="/ebike/img/road-900.webp 900w, /ebike/img/road-1600.webp 1600w" sizes="100vw" width={1600} height={900} alt="" loading="lazy" />
+        </picture>
+        <div className="wrap">
+          <span className="vn">{c.closing.vn}</span>
+          <h2>{c.closing.title}</h2>
+          <p>{c.closing.p}</p>
+          <Link className="btn" to="/booking">{c.closing.cta}</Link>
+        </div>
+      </section>
+
+      <div className="bookbar" id="bookbar" ref={bookbarRef}>
+        <span>{c.bookbar.a}<b>{c.bookbar.b}</b></span>
+        <Link className="btn btn-sm" to="/booking">{c.bookbar.cta}</Link>
       </div>
     </div>
   );

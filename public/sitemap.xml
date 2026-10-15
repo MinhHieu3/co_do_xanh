@@ -28,4 +28,24 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/gia-thue-xe-may-dien-ninh-binh</loc>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/lich-trinh-tam-coc-trang-an-1-ngay</loc>
+    <lastmod>2026-10-08</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/thue-xe-may-dien-co-can-bang-lai-khong</loc>
+    <lastmod>2026-10-06</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/dia-diem-du-lich-ninh-binh-khoang-cach</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.7</priority>
+  </url>
 </urlset>

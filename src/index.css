@@ -6,10 +6,10 @@
 
 /* ── CSS Variables ── */
 :root {
-  --color-primary: #14b8a6;
-  --color-primary-dark: #0d9488;
-  --color-primary-light: #e6fff2;
-  --color-secondary: #0d1b2a;
+  --color-primary: #17493a;
+  --color-primary-dark: #0f3528;
+  --color-primary-light: #e2efe6;
+  --color-secondary: #1d2b24;
   --color-accent: #ff5722;
   --font-sans: "Inter", "Segoe UI", sans-serif;
   --font-display: "Outfit", "Inter", sans-serif;
@@ -25,7 +25,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #0d1b2a;
+  color: #1d2b24;
   overflow-x: hidden;
   background: #fff;
 }
@@ -53,7 +53,7 @@ h6 {
 /* ── Gradient Utilities ── */
 @layer utilities {
   .gradient-text {
-    background: linear-gradient(135deg, #14b8a6 0%, #00e676 50%, #69f0ae 100%);
+    background: linear-gradient(135deg, #17493a 0%, #00e676 50%, #69f0ae 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -112,7 +112,7 @@ h6 {
   gap: 6px;
   background: linear-gradient(135deg, rgba(0, 196, 97, 0.12), rgba(0, 196, 97, 0.06));
   border: 1px solid rgba(0, 196, 97, 0.25);
-  color: #0d9488;
+  color: #0f3528;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -239,7 +239,7 @@ h6 {
 
 /* ── Ant Design overrides ── */
 .ant-btn-primary {
-  background: linear-gradient(135deg, #14b8a6, #0d9488) !important;
+  background: linear-gradient(135deg, #17493a, #0f3528) !important;
   border-color: transparent !important;
   font-weight: 600 !important;
   box-shadow: 0 2px 8px rgba(0, 196, 97, 0.3) !important;
@@ -261,7 +261,7 @@ h6 {
 
 .ant-select-selector:hover,
 .ant-select-focused .ant-select-selector {
-  border-color: #14b8a6 !important;
+  border-color: #17493a !important;
   box-shadow: 0 0 0 3px rgba(0, 196, 97, 0.12) !important;
 }
 
@@ -272,7 +272,7 @@ h6 {
 
 .ant-picker:hover,
 .ant-picker-focused {
-  border-color: #14b8a6 !important;
+  border-color: #17493a !important;
   box-shadow: 0 0 0 3px rgba(0, 196, 97, 0.12) !important;
 }
 
@@ -294,12 +294,12 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #14b8a6;
+  background: #17493a;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0d9488;
+  background: #0f3528;
 }
 
 /* ── Flatpickr Custom Mobile Adjustments ── */
@@ -315,7 +315,7 @@ h6 {
 .flatpickr-time::before {
   content: "Chọn giờ:";
   font-weight: 700;
-  color: #0d9488;
+  color: #0f3528;
   font-size: 14px;
   padding-right: 8px;
   white-space: nowrap;
@@ -331,7 +331,7 @@ h6 {
 
 .flatpickr-time .numInputWrapper:hover,
 .flatpickr-time .numInputWrapper.focus {
-  border-color: #0d9488;
+  border-color: #0f3528;
 }
 
 .flatpickr-calendar {

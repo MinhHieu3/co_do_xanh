@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export default function PrivacyPage() {
   const { language } = useLanguage();
@@ -11,18 +9,17 @@ export default function PrivacyPage() {
   }, []);
 
   return (
-    <div className="w-full bg-white min-h-screen pt-4 pb-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="inline-flex items-center text-[#14b8a6] hover:text-[#0d9488] font-medium mb-8 transition-colors">
-          <ArrowLeft size={20} className="mr-2" /> 
-          {language === 'EN' ? 'Back to Home' : 'Về Trang chủ'}
-        </Link>
-        
-        <h1 className="text-3xl md:text-5xl font-black text-[#0d1b2a] mb-10 leading-tight font-display text-center">
-          {language === 'EN' ? 'Privacy Policy' : 'Chính Sách Bảo Mật Thông Tin Cá Nhân'}
-        </h1>
-
-        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+    <>
+      <div className="page-head">
+        <div className="wrap">
+          <p className="eyebrow">{language === 'EN' ? 'Privacy' : 'Bảo mật'}</p>
+          <h1>
+            {language === 'EN' ? 'Privacy Policy' : 'Chính Sách Bảo Mật Thông Tin Cá Nhân'}
+          </h1>
+        </div>
+      </div>
+      <div className="wrap prose">
+        <div>
           {language === 'EN' ? (
             <>
               <h2>1. Information Collection</h2>
@@ -70,6 +67,6 @@ export default function PrivacyPage() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -53,7 +53,7 @@ export const vehicles: Vehicle[] = [
       "Loại xe": "Xe máy điện",
       "Dạng pin": "Đổi pin tại tủ + Sạc pin",
       "Quãng đường": "Lên tới 82km / 1 lần đổi pin",
-      "Vận tốc tối đa": "60 km/h",
+      "Vận tốc tối đa": "70 km/h",
       "Thể tích cốp": "20 Lít",
       "Phụ kiện": "2 Mũ bảo hiểm, Áo mưa, Sạc pin",
       "Bằng lái": "Yêu cầu có giấy phép lái xe"
@@ -62,7 +62,7 @@ export const vehicles: Vehicle[] = [
       "Type": "Electric Motorbike",
       "Battery": "Swap + Charge",
       "Range": "Up to 82km / 1 battery swap",
-      "Max Speed": "60 km/h",
+      "Max Speed": "70 km/h",
       "Trunk Space": "20 Liters",
       "Accessories": "2 Helmets, Raincoat, Charger",
       "License": "Driver's license required"
@@ -90,7 +90,7 @@ export const vehicles: Vehicle[] = [
       "Loại xe": "Xe máy điện",
       "Dạng pin": "Đổi pin tại tủ + Sạc pin",
       "Quãng đường": "Lên tới 82km / 1 lần đổi pin",
-      "Vận tốc tối đa": "78 km/h",
+      "Vận tốc tối đa": "70 km/h",
       "Thể tích cốp": "20 Lít",
       "Phụ kiện": "2 Mũ bảo hiểm, Áo mưa, Sạc pin",
       "Bằng lái": "Yêu cầu có giấy phép lái xe"
@@ -99,7 +99,7 @@ export const vehicles: Vehicle[] = [
       "Type": "Electric Motorbike",
       "Battery": "Swap + Charge",
       "Range": "Up to 82km / 1 battery swap",
-      "Max Speed": "78 km/h",
+      "Max Speed": "70 km/h",
       "Trunk Space": "25 Liters (Spacious)",
       "Accessories": "2 Helmets, Raincoat, Charger",
       "License": "Driver's license required"
@@ -251,3 +251,13 @@ export const vehicles: Vehicle[] = [
   //   }
   // }
 ];
+
+// Units available per model. Both Phoenix e-bikes (men's / women's) share one pool.
+export const STOCK: Record<string, number> = {
+  "vinfast-evo": 5,
+  "vinfast-feliz-2": 10,
+  "vinfast-evo-lite": 10,
+  "xe-dap-phoenix": 5,
+};
+export const stockOf = (id: string): number =>
+  STOCK[id.startsWith("xe-dap-phoenix") ? "xe-dap-phoenix" : id] ?? 0;
