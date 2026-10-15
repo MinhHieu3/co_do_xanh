@@ -60,7 +60,7 @@ const vi: Content = {
     lead: "Hoàn toàn được, và nhiều người vẫn làm vậy. Nhưng xe cho thuê ở đây thường cũ và ít được bảo dưỡng. Đây là sự khác biệt thực sự.",
     head: ["Xe xăng, cửa hàng hoặc khách sạn", BRAND.top + " " + BRAND.sub], lThem: "Cửa hàng / khách sạn", lUs: "Với chúng tôi",
     rows: [
-      ["Giá mỗi ngày", SHOW_PRICE ? "Khoảng 150.000 đồng, chưa kể xăng" : "Chưa kể tiền xăng", SHOW_PRICE ? `Xe máy điện ${PRICE.moto} đồng, xe đạp điện ${PRICE.ebike} đồng mỗi ngày. Từ 150.000đ` : "Liên hệ để biết giá. Từ 150.000đ"],
+      ["Giá mỗi ngày", SHOW_PRICE ? "Khoảng 150.000 đồng, chưa kể xăng" : "Chưa kể tiền xăng", SHOW_PRICE ? `Xe máy điện từ ${PRICE.moto} đồng, xe đạp điện từ ${PRICE.ebike} đồng mỗi ngày.` : "Liên hệ để biết giá."],
       ["Nhận xe", "Xe còn lại ở khách sạn, hoặc tự đi tìm cửa hàng, mặc cả rồi tự lái về", "Giao tận nơi bạn ở buổi sáng, thu xe buổi tối"],
       // ["Biết đi đâu", "Một chiếc chìa khóa và lời tạm biệt. Còn lại tự lo", "Hướng dẫn viên trên điện thoại: lịch trình sẵn, chuyện kể từng nơi, hỗ trợ một chạm"],
       ["Hộ chiếu/Giấy tờ tuỳ thân", "Thường bị giữ lại làm tiền cọc", "Chỉ chụp ảnh lại. Hộ chiếu/Giấy tờ tuỳ thân, không đặt cọc"],

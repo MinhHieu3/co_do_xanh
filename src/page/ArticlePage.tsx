@@ -33,7 +33,7 @@ export default function ArticlePage() {
       description: c.desc,
       image: `https://xecodoxanh.com${a.image}`,
       datePublished: a.date,
-      dateModified: a.date,
+      dateModified: a.modified,
       inLanguage: lang === "VI" ? "vi" : "en",
       mainEntityOfPage: url,
       author: { "@type": "Organization", name: "Xe Cố Đô Xanh" },
@@ -56,7 +56,10 @@ export default function ArticlePage() {
     <article>
       <div className="page-head">
         <div className="wrap" style={{ maxWidth: 760 }}>
-          <p className="eyebrow">{a.category[lang]} · {new Date(a.date).toLocaleDateString(lang === "VI" ? "vi-VN" : "en-GB")}</p>
+          <p className="eyebrow">
+            {a.category[lang]} · <time dateTime={a.date}>{new Date(a.date).toLocaleDateString(lang === "VI" ? "vi-VN" : "en-GB")}</time>
+            {` · ${L("Cập nhật", "Updated")} ${new Date(a.modified).toLocaleDateString(lang === "VI" ? "vi-VN" : "en-GB")}`}
+          </p>
           <h1>{c.title}</h1>
           <p className="lead">{c.desc}</p>
         </div>
@@ -65,12 +68,17 @@ export default function ArticlePage() {
         <figure className="postcard" style={{ transform: "none", marginBottom: 28 }}>
           <img src={a.image} alt={c.title} width={1100} height={687} />
         </figure>
+        <p className="lead">{c.intro}</p>
         {c.sections.map((s) => (
           <section key={s.h} style={{ padding: 0 }}>
             <h2>{s.h}</h2>
             {s.p.map((t) => (<p key={t}>{t}</p>))}
           </section>
         ))}
+        <section style={{ padding: 0 }}>
+          <h2>{L("Kết luận", "The takeaway")}</h2>
+          <p>{c.conclusion}</p>
+        </section>
         <p style={{ marginTop: 32, display: "flex", gap: 18, flexWrap: "wrap", alignItems: "center" }}>
           <Link className="btn" to="/booking">{L("Đặt xe ngay", "Book your ride")}</Link>
           <Link className="link-arrow" to="/news">{L("Tất cả bài viết", "All articles")}</Link>

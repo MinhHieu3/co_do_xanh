@@ -10,7 +10,7 @@ const PricingPage = lazy(() => import("./page/PricingPage"));
 const ContactPage = lazy(() => import("./page/ContactPage"));
 const NewsPage = lazy(() => import("./page/NewsPage"));
 const AdminLayout = lazy(() => import("./page/Admin/AdminLayout"));
-const KinhNghiemThueXe = lazy(() => import("./page/KinhNghiemThueXe"));
+const KinhNghiemThueXe = lazy(() => import("./page/EditorialGuidePage"));
 const ArticlePage = lazy(() => import("./page/ArticlePage"));
 const PolicyPage = lazy(() => import("./page/PolicyPage"));
 const FaqPage = lazy(() => import("./page/FaqPage"));

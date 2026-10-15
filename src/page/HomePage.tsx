@@ -245,6 +245,73 @@ export default function HomePage() {
               <figcaption>{c.review.cap}</figcaption>
             </figure>
           </div>
+          <div className="review-gallery">
+            <figure>
+              <img
+                src="/ebike/img/review-customer-3549-900.webp"
+                srcSet="/ebike/img/review-customer-3549-420.webp 420w, /ebike/img/review-customer-3549-900.webp 900w"
+                sizes="(min-width: 820px) 360px, 46vw"
+                width={900}
+                height={1200}
+                alt={language === "EN" ? "Guests with an electric motorbike in Ninh Binh" : "Du khách nhận xe máy điện tại Ninh Bình"}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{language === "EN" ? "Guests picking up their ride" : "Khách nhận xe trước chuyến đi"}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src="/ebike/img/review-customer-3583-900.webp"
+                srcSet="/ebike/img/review-customer-3583-420.webp 420w, /ebike/img/review-customer-3583-900.webp 900w"
+                sizes="(min-width: 820px) 360px, 46vw"
+                width={900}
+                height={1200}
+                alt={language === "EN" ? "Guests posing with two electric motorbikes before a ride" : "Nhóm khách chụp ảnh cùng hai xe máy điện trước chuyến đi"}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{language === "EN" ? "Ready to explore Ninh Binh" : "Sẵn sàng khám phá Ninh Bình"}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src="/ebike/img/review-customer-3747-900.webp"
+                srcSet="/ebike/img/review-customer-3747-420.webp 420w, /ebike/img/review-customer-3747-900.webp 900w"
+                sizes="(min-width: 820px) 235px, 44vw"
+                width={900}
+                height={1200}
+                alt={language === "EN" ? "Customer receiving an electric motorbike in the evening" : "Khách nhận xe máy điện vào buổi tối"}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{language === "EN" ? "Evening vehicle handover" : "Bàn giao xe buổi tối"}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src="/ebike/img/review-customer-3748-900.webp"
+                srcSet="/ebike/img/review-customer-3748-420.webp 420w, /ebike/img/review-customer-3748-900.webp 900w"
+                sizes="(min-width: 820px) 235px, 44vw"
+                width={900}
+                height={1200}
+                alt={language === "EN" ? "Guests collecting an electric scooter outside the rental shop" : "Khách nhận xe điện trước cửa hàng"}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{language === "EN" ? "Pickup at the shop" : "Nhận xe tại cửa hàng"}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src="/ebike/img/review-customer-3750-900.webp"
+                srcSet="/ebike/img/review-customer-3750-420.webp 420w, /ebike/img/review-customer-3750-900.webp 900w"
+                sizes="(min-width: 820px) 235px, 44vw"
+                width={900}
+                height={1200}
+                alt={language === "EN" ? "A couple posing beside their electric motorbike" : "Cặp đôi chụp ảnh bên xe máy điện"}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{language === "EN" ? "A ride together" : "Cùng nhau khám phá"}</figcaption>
+            </figure>
+          </div>
           <div className="voice-grid">
             {c.review.grid.map(([b, p]: string[]) => (<blockquote key={b}><b>{b}</b><p>{p}</p></blockquote>))}
           </div>
