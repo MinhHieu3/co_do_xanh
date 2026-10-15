@@ -70,20 +70,20 @@ ${formData.message}
                     <div className="fields two">
                       <div className="field">
                         <label htmlFor="c-name">{L("Họ và tên", "Full name")}</label>
-                        <input id="c-name" required value={formData.name} onChange={(e) => set("name", e.target.value)} />
+                        <input id="c-name" required placeholder={L("Nhập họ và tên của bạn", "Enter your full name")} value={formData.name} onChange={(e) => set("name", e.target.value)} />
                       </div>
                       <div className="field">
                         <label htmlFor="c-phone">{L("Số điện thoại", "Phone")}</label>
-                        <input id="c-phone" type="tel" required value={formData.phone} onChange={(e) => set("phone", e.target.value)} />
+                        <input id="c-phone" type="tel" required placeholder={L("Nhập số điện thoại", "Enter your phone number")} value={formData.phone} onChange={(e) => set("phone", e.target.value)} />
                       </div>
                     </div>
                     <div className="field">
                       <label htmlFor="c-subject">{L("Tiêu đề", "Subject")}</label>
-                      <input id="c-subject" value={formData.subject} onChange={(e) => set("subject", e.target.value)} />
+                      <input id="c-subject" placeholder={L("Bạn cần hỗ trợ điều gì?", "What do you need help with?")} value={formData.subject} onChange={(e) => set("subject", e.target.value)} />
                     </div>
                     <div className="field">
                       <label htmlFor="c-msg">{L("Nội dung", "Message")}</label>
-                      <textarea id="c-msg" required value={formData.message} onChange={(e) => set("message", e.target.value)} />
+                      <textarea id="c-msg" required placeholder={L("Viết nội dung bạn muốn nhắn cho chúng tôi...", "Write your message here...")} value={formData.message} onChange={(e) => set("message", e.target.value)} />
                     </div>
                   </div>
                 </fieldset>

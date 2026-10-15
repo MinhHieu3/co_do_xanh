@@ -47,7 +47,7 @@ function RouteMetadata() {
       "/index-en.html": ["Thuê xe máy điện tại Ninh Bình, giao xe tận nơi. Khám phá Cố đô xanh thuận tiện và tiết kiệm.", "Rent an electric motorbike in Ninh Binh with delivery to your hotel. Explore with Xe Co Do Xanh."],
       "/booking": ["Chọn xe, ngày thuê và gửi yêu cầu đặt xe máy điện tại Ninh Bình nhanh chóng.", "Choose your electric motorbike and dates, then send a booking request in minutes."],
       "/pricing": ["Xem giá thuê xe máy điện và xe đạp trợ lực tại Ninh Bình.", "Compare electric motorbike and e-bike rental prices in Ninh Binh."],
-      "/contact": ["Liên hệ Xe Cố Đô Xanh để được tư vấn và giao xe tại Ninh Bình.", "Contact Xe Co Do Xanh for electric motorbike rentals and delivery in Ninh Binh."],
+      "/contact": ["Liên hệ Xe Cố Đô Xanh để thuê xe máy điện tại Ninh Bình. Gọi hotline, gửi tin nhắn hoặc ghé 61 ngõ 281 Đinh Tiên Hoàng; hỗ trợ hằng ngày từ 07:00 đến 22:00.", "Contact Xe Co Do Xanh to rent an electric motorbike in Ninh Binh. Call, message or visit 61 Alley 281 Dinh Tien Hoang. Open daily from 07:00 to 22:00."],
       "/news": ["Cẩm nang du lịch, thông tin thuê xe và kinh nghiệm khám phá Ninh Bình.", "Travel guides, rental advice and local tips for exploring Ninh Binh."],
       "/faq": ["Giải đáp thủ tục, giao nhận, pin và các câu hỏi khi thuê xe tại Ninh Bình.", "Answers about booking, delivery, batteries and renting in Ninh Binh."],
       "/policy": ["Điều khoản và quy định khi thuê xe tại Xe Cố Đô Xanh.", "Terms and conditions for rentals with Xe Co Do Xanh."],

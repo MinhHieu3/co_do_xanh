@@ -1,1 +1,0 @@
-import"./main-BAURBO3t.js";localStorage.setItem(`language`,`EN`);

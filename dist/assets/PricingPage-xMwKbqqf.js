@@ -1,0 +1,1 @@
+import{i as e}from"./main-C-ujJ76e.js";import{lt as t}from"./vendor-DfIEorEF.js";var n=t();function r(){let{t}=e();return(0,n.jsx)(`div`,{className:`p-8 max-w-7xl mx-auto min-h-[50vh]`,children:(0,n.jsx)(`h1`,{className:`text-4xl font-bold text-center mt-10`,children:t(`pricing.title`)})})}export{r as default};

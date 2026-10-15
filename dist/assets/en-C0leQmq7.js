@@ -1,0 +1,1 @@
+import"./main-C-ujJ76e.js";localStorage.setItem(`language`,`EN`);
