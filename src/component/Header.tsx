@@ -1,11 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { ebikeContent, BRAND } from "../data/ebikeContent";
-import logo from "../assets/logo/logo3.png";
 
 export function BrandMark() {
   return (
-    <img src={logo} alt={`${BRAND.top} ${BRAND.sub}`} style={{ height: 56, width: "auto", objectFit: "contain" }} />
+    <img src="/logo.webp" alt={`${BRAND.top} ${BRAND.sub}`} style={{ height: 56, width: "auto", objectFit: "contain" }} />
   );
 }
 

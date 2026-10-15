@@ -28,6 +28,7 @@ export default function BookingPage() {
   );
   const [startDate, setStartDate] = useState(todayInput());
   const [days, setDays] = useState(1);
+  const [nowTs] = useState(() => Date.now());
   const [windowStart, setWindowStart] = useState("7");
   const [form0, setForm0] = useState({
     name: "", phone: "", email: "", pickupDate: "", dropoffDate: "",
@@ -62,9 +63,11 @@ export default function BookingPage() {
   const money = (n: number) => (SHOW_PRICE ? `${n.toLocaleString("vi-VN")}đ` : contactLabel(language));
 
   const validate = (): string => {
-    if (!formData.name.trim() || !formData.phone.trim()) return L("Vui lòng nhập họ tên và số điện thoại.", "Please enter your name and phone number.");
+    if (!formData.name.trim()) return L("Vui lòng nhập họ và tên.", "Please enter your full name.");
+    if (!formData.phone.trim()) return L("Số điện thoại là bắt buộc — chúng tôi cần liên hệ xác nhận giờ giao xe.", "Phone number is required — we need it to confirm delivery time.");
+    if (formData.phone.replace(/\D/g, "").length < 7) return L("Số điện thoại không hợp lệ — vui lòng kiểm tra lại.", "Phone number looks invalid — please check it.");
     if (qty > maxQty) return L(`Chỉ còn ${maxQty} xe loại này.`, `Only ${maxQty} of this ride available.`);
-    if (formData.pickupLocation === "Giao tận nơi" && !formData.deliveryAddress.trim()) return L("Vui lòng nhập địa chỉ khách sạn/homestay.", "Please enter your hotel or homestay.");
+    if (formData.pickupLocation === "Giao tận nơi" && !formData.deliveryAddress.trim()) return L("Vui lòng nhập tên khách sạn hoặc homestay để chúng tôi biết nơi giao xe.", "Please enter your hotel or homestay name so we know where to deliver.");
     if (!startDate) return L("Vui lòng chọn ngày nhận xe!", "Please choose your first day!");
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const [y, m, d] = startDate.split("-").map(Number);
@@ -77,24 +80,6 @@ export default function BookingPage() {
     const vInfo = selectedVehicleData;
     const vehicleName = language === "EN" && vInfo?.nameEn ? vInfo.nameEn : vInfo?.name || selectedVehicle;
     const typeLabel = "Thuê theo ngày";
-    const message = `
-🛎 <b>YÊU CẦU ĐẶT XE MỚI</b>
---------------------------------
-⏱ <b>Ngày đặt:</b> ${new Date().toLocaleString("vi-VN")}
-👤 <b>Khách hàng:</b> ${formData.name}
-📞 <b>SĐT:</b> ${formData.phone}
-✉️ <b>Email:</b> ${formData.email || "Không có"}
-🛵 <b>Dòng xe:</b> ${vehicleName} (${typeLabel})
-🔢 <b>Số lượng:</b> ${formData.quantity} chiếc
-🗓 <b>Nhận xe:</b> ${formData.pickupDate}
-🗓 <b>Trả xe:</b> ${formData.dropoffDate}
-⏳ <b>Loại hình:</b> ${typeLabel}
-📍 <b>Khu vực nhận:</b> ${formData.pickupLocation}${formData.pickupLocation === "Giao tận nơi" ? `\n🏠 <b>Địa chỉ giao:</b> ${formData.deliveryAddress}` : ""}
-📝 <b>Ghi chú:</b> ${formData.notes || "Không có"}
-${est.overtime > 0 ? `💰 <b>Giá gốc (0-5h):</b> ${est.base.toLocaleString("vi-VN")}đ
-⏳ <b>Phụ thu quá giờ (${est.overtimeHours}h):</b> ${est.overtime.toLocaleString("vi-VN")}đ` : ""}
-${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleString("vi-VN")}đ` : ""}
-    `;
     const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
     try {
@@ -117,6 +102,39 @@ ${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleStrin
       });
       const apiResult = await apiResponse.json();
       if (!apiResult.success) throw new Error("Lỗi khi lưu đơn hàng vào hệ thống");
+
+      // Xây dựng tin nhắn Telegram theo định dạng mới
+      const orderCode: string = apiResult.id || apiResult.order_id || "";
+      const [sy, sm, sd] = startDate.split("-").map(Number);
+      const bookDate = new Date(sy, sm - 1, sd);
+      const dayNames = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+      const dayOfWeek = dayNames[bookDate.getDay()];
+      const dateStr = `${String(sd).padStart(2, "0")}/${String(sm).padStart(2, "0")}`;
+      const wStart = Number(windowStart);
+      const timeWindow = `${wStart}:00 đến ${wStart + 2}:00`;
+      const location = formData.pickupLocation === "Giao tận nơi" ? formData.deliveryAddress : "Tại cửa hàng";
+      const returnNote = days === 1 ? "nhận lại tối cùng ngày" : `trả ngày thứ ${days}, khoảng 18:00`;
+      // Tạo link Google Maps từ địa chỉ giao xe
+      const mapQuery = formData.pickupLocation === "Giao tận nơi" && formData.deliveryAddress.trim()
+        ? `${formData.deliveryAddress.trim()}, Ninh Binh, Vietnam`
+        : null;
+      const mapLink = mapQuery
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
+        : null;
+      const message = [
+        `🆕 <b>ĐƠN MỚI</b>`,
+        ``,
+        `📅 ${dayOfWeek} ${dateStr}, giao từ ${timeWindow}`,
+        `🏨 ${location}`,
+        mapLink ? `📍 <a href="${mapLink}">Xem trên Google Maps</a>` : null,
+        `👤 ${formData.name}`,
+        `📱 ${formData.phone}`,
+        `🛵 ${qty} ${vehicleName}`,
+        `⏳ ${days} ngày, ${returnNote}`,
+        SHOW_PRICE ? `💵 Thu của khách: ${est.total.toLocaleString("vi-VN")}đ` : null,
+        formData.notes ? `📝 ${formData.notes}` : null,
+        orderCode ? `Mã đơn: ${orderCode}` : null,
+      ].filter(Boolean).join("\n");
 
       if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
         const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -175,7 +193,7 @@ ${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleStrin
               <h2 style={{ fontSize: "1.5rem", marginBottom: 10 }}>{L("Bước tiếp theo", "What happens now")}</h2>
               <ol>
                 <li>{L("Cửa hàng nhận được đơn của bạn ngay lập tức.", "The rental shop gets your booking right away.")}</li>
-                <li>{L("Nhân viên liên hệ xác nhận giờ giao xe. Hãy chuẩn bị giấy tờ tùy thân và tiền mặt.", "The shop confirms the delivery time with you. Have your ID and the cash ready.")}</li>
+                <li>{L("Nhân viên liên hệ xác nhận giờ giao xe. Hãy chuẩn bị giấy tờ tùy thân và chú ý điện thoại.", "The shop confirms the delivery time with you. Have your ID and the cash ready.")}</li>
                 <li>{L("Cuối thời gian thuê, nhân viên nhận lại xe.", "At the end of your rental the driver picks the ride up again.")}</li>
               </ol>
               <p style={{ marginTop: 22 }}><Link className="link-arrow" to="/#reach">{L("Gợi ý nơi để đi", "Ideas for where to ride")}</Link></p>
@@ -186,7 +204,7 @@ ${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleStrin
     );
   }
 
-  const vn = new Date(Date.now() + 7 * 3600 * 1000);
+  const vn = new Date(nowTs + 7 * 3600 * 1000);
   const nowMin = vn.getUTCHours() * 60 + vn.getUTCMinutes();
   const leftMin = nowMin < 360 ? 360 - nowMin : 360 + 1440 - nowMin;
   const whenTxt = nowMin < 360 ? L("sáng nay", "this morning") : L("sáng mai", "tomorrow morning");
@@ -224,6 +242,9 @@ ${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleStrin
                       <img src={v.image} width={84} height={64} alt="" style={{ objectFit: "contain", background: "#fff" }} />
                       <div>
                         <b>{vName(v)}</b>
+                        {v.requiresLicense && (
+                          <small style={{ color: "var(--red-text)", fontWeight: 600 }}>{L("⚠ Cần giấy phép lái xe", "⚠ Driving licence required")}</small>
+                        )}
                         <small><strong>{priceOf(v)}</strong></small>
                         <small style={{ color: stockOf(v.id) <= 3 ? "var(--red-text)" : "var(--jungle)", fontWeight: 600 }}>{L(`Còn ${stockOf(v.id)} xe`, `${stockOf(v.id)} available`)}</small>
                       </div>
@@ -278,29 +299,80 @@ ${SHOW_PRICE ? `💰 <b>Tổng tiền dự kiến:</b> ${est.total.toLocaleStrin
                   </div>
                   {formData.pickupLocation === "Giao tận nơi" && (
                     <div className="field">
-                      <label htmlFor="f-hotel">{L("Khách sạn hoặc homestay", "Hotel or homestay")}</label>
-                      <input type="text" id="f-hotel" value={formData.deliveryAddress} maxLength={160} onChange={(e) => set("deliveryAddress", e.target.value)} placeholder={L("Tên hoặc địa chỉ nơi bạn ở", "Name or address of where you are staying")} />
-                      <p className="hint">{L("Miễn phí giao xe trong khu vực Ninh Bình.", "Free delivery in Ninh Binh.")}</p>
+                      <label htmlFor="f-hotel">{L("Tên khách sạn / homestay", "Hotel or homestay name")} <span style={{ color: "var(--red-text)", fontSize: "0.85em" }}>*</span></label>
+                      <input
+                        type="text"
+                        id="f-hotel"
+                        value={formData.deliveryAddress}
+                        maxLength={160}
+                        required
+                        onChange={(e) => set("deliveryAddress", e.target.value)}
+                        placeholder={L("VD: Trang An Boutique Hotel, Ninh Bình", "e.g. Trang An Boutique Hotel, Ninh Binh")}
+                      />
+                      <p className="hint">{L("Nhập đúng tên khách sạn để chúng tôi tìm trên bản đồ và giao xe đúng chỗ. Miễn phí giao trong khu vực Ninh Bình.", "Enter the exact hotel name so we can find it on the map and deliver to the right place. Free delivery within Ninh Binh.")}</p>
                     </div>
                   )}
                   <div className="fields two">
                     <div className="field">
-                      <label htmlFor="f-name">{L("Họ và tên", "Full name")}</label>
-                      <input type="text" id="f-name" autoComplete="name" maxLength={100} value={formData.name} onChange={(e) => set("name", e.target.value)} required />
+                      <label htmlFor="f-name">{L("Họ và tên", "Full name")} <span style={{ color: "var(--red-text)", fontSize: "0.85em" }}>*</span></label>
+                      <input
+                        type="text"
+                        id="f-name"
+                        autoComplete="name"
+                        maxLength={100}
+                        value={formData.name}
+                        onChange={(e) => set("name", e.target.value)}
+                        placeholder={L("VD: Nguyễn Văn A", "e.g. John Smith")}
+                        required
+                      />
                     </div>
                     <div className="field">
-                      <label htmlFor="f-email">{L("Thư điện tử", "Email")} <small>{L("(không bắt buộc)", "(optional)")}</small></label>
-                      <input type="email" id="f-email" autoComplete="email" maxLength={120} value={formData.email} onChange={(e) => set("email", e.target.value)} />
+                      <label htmlFor="f-email">{L("Email", "Email")} <small>{L("(không bắt buộc)", "(optional)")}</small></label>
+                      <input
+                        type="email"
+                        id="f-email"
+                        autoComplete="email"
+                        maxLength={120}
+                        value={formData.email}
+                        onChange={(e) => set("email", e.target.value)}
+                        placeholder="example@gmail.com"
+                      />
                     </div>
                   </div>
                   <div className="field">
-                    <label htmlFor="f-phone">{L("Số điện thoại / Zalo / WhatsApp", "Phone / Zalo / WhatsApp number")}</label>
-                    <input type="tel" id="f-phone" autoComplete="tel" maxLength={24} inputMode="tel" value={formData.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+84 ..." required />
-                    <p className="hint">{L("Cửa hàng sẽ xác nhận giờ giao xe với bạn qua số này.", "The shop confirms the delivery time with you on this number.")}</p>
+                    <label htmlFor="f-phone">
+                      {L("Số điện thoại / Zalo / WhatsApp", "Phone / Zalo / WhatsApp")}
+                      {" "}<span style={{ color: "var(--red-text)", fontSize: "0.85em" }}>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      id="f-phone"
+                      autoComplete="tel"
+                      maxLength={24}
+                      inputMode="numeric"
+                      value={formData.phone}
+                      onChange={(e) => {
+                        // Chỉ cho phép: chữ số, +, khoảng trắng, gạch ngang, ngoặc
+                        const cleaned = e.target.value.replace(/[^\d+\s()-]/g, "");
+                        set("phone", cleaned);
+                      }}
+                      placeholder={L("+84 901234567  hoặc  +1 2345678900", "+84 901234567  or  +1 2345678900")}
+                      required
+                    />
+                    <p className="hint">{L("Bắt buộc — nhân viên sẽ liên hệ qua số này để xác nhận giờ giao xe và hướng dẫn thêm.", "Required — our team will contact you on this number to confirm delivery time and give further instructions.")}</p>
                   </div>
                   <div className="field">
                     <label htmlFor="f-notes">{L("Ghi chú thêm", "Anything we should know?")} <small>{L("(không bắt buộc)", "(optional)")}</small></label>
-                    <textarea id="f-notes" maxLength={500} value={formData.notes} onChange={(e) => set("notes", e.target.value)} />
+                    <textarea
+                      id="f-notes"
+                      maxLength={500}
+                      value={formData.notes}
+                      onChange={(e) => set("notes", e.target.value)}
+                      placeholder={L(
+                        "VD: Phòng số 302, check-in trưa. Hoặc số hành lý đặc biệt...",
+                        "e.g. Room 302, checking in at noon. Or any special luggage needs..."
+                      )}
+                    />
                   </div>
                 </div>
                 <div className="hp" aria-hidden="true"><label>Leave this empty <input type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>

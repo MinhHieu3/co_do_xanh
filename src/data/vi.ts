@@ -60,10 +60,10 @@ const vi: Content = {
     lead: "Hoàn toàn được, và nhiều người vẫn làm vậy. Nhưng xe cho thuê ở đây thường cũ và ít được bảo dưỡng. Đây là sự khác biệt thực sự.",
     head: ["Xe xăng, cửa hàng hoặc khách sạn", BRAND.top + " " + BRAND.sub], lThem: "Cửa hàng / khách sạn", lUs: "Với chúng tôi",
     rows: [
-      ["Giá mỗi ngày", SHOW_PRICE ? "Khoảng 150.000 đồng, chưa kể xăng" : "Chưa kể tiền xăng", SHOW_PRICE ? `Xe máy điện ${PRICE.moto} đồng, xe đạp điện ${PRICE.ebike} đồng mỗi ngày. Không phát sinh thêm` : "Liên hệ để biết giá. Không phát sinh thêm"],
+      ["Giá mỗi ngày", SHOW_PRICE ? "Khoảng 150.000 đồng, chưa kể xăng" : "Chưa kể tiền xăng", SHOW_PRICE ? `Xe máy điện ${PRICE.moto} đồng, xe đạp điện ${PRICE.ebike} đồng mỗi ngày. Từ 150.000đ` : "Liên hệ để biết giá. Từ 150.000đ"],
       ["Nhận xe", "Xe còn lại ở khách sạn, hoặc tự đi tìm cửa hàng, mặc cả rồi tự lái về", "Giao tận nơi bạn ở buổi sáng, thu xe buổi tối"],
-      ["Biết đi đâu", "Một chiếc chìa khóa và lời tạm biệt. Còn lại tự lo", "Hướng dẫn viên trên điện thoại: lịch trình sẵn, chuyện kể từng nơi, hỗ trợ một chạm"],
-      ["Hộ chiếu", "Thường bị giữ lại làm tiền cọc", "Chỉ chụp ảnh lại. Hộ chiếu ở bên bạn, không đặt cọc"],
+      // ["Biết đi đâu", "Một chiếc chìa khóa và lời tạm biệt. Còn lại tự lo", "Hướng dẫn viên trên điện thoại: lịch trình sẵn, chuyện kể từng nơi, hỗ trợ một chạm"],
+      ["Hộ chiếu/Giấy tờ tuỳ thân", "Thường bị giữ lại làm tiền cọc", "Chỉ chụp ảnh lại. Hộ chiếu/Giấy tờ tuỳ thân, không đặt cọc"],
       ["Bằng lái xe", "Bắt buộc theo luật với xe trên 50cc", "Không cần bằng lái với hầu hết các dòng xe"],
       ["Tình trạng xe", "Thường đã nhiều năm tuổi, bảo dưỡng kém: phanh yếu, lốp mòn", "Mới như xuất xưởng"],
       ["Nhiên liệu", "Đồng hồ xăng hay hỏng, phải đoán mò còn bao nhiêu", "Không cần xăng. Khoảng 80 km mỗi lần sạc, một ngày thường chỉ đi 30–60 km"],
@@ -90,7 +90,7 @@ const vi: Content = {
     lead: "Không phí giao xe, không bình xăng rỗng, không điều khoản ẩn. Giá thuê theo ngày đã bao gồm tất cả.",
     p: "Bạn trả tiền mặt (đồng Việt Nam) cho nhân viên giao xe khi nhận xe. Không thu tiền trước qua mạng, nên nếu kế hoạch thay đổi bạn không cần hoàn tiền.",
     link: "Đặt xe ngay", receipt: BRAND.top + " " + BRAND.sub + " · một ngày",
-    rows: [["Giao xe đến nơi bạn ở", "0 đồng"], ["Thu xe buổi tối", "0 đồng"], ["Hai mũ bảo hiểm (xe máy)", "đã bao gồm"], ["Hai áo mưa (xe máy)", "đã bao gồm"], ["Giá đỡ điện thoại (xe máy)", "đã bao gồm"], ["Khóa xe (xe đạp điện)", "đã bao gồm"], ["Bộ sạc (xe đạp điện)", "đã bao gồm"], ["Đặt cọc", "không có"], ["Hướng dẫn viên AI", "đã bao gồm"], ["Xăng", "không cần"]],
+    rows: [["Giao xe đến nơi bạn ở", "0 đồng"], ["Thu xe buổi tối", "0 đồng"], ["Hai mũ bảo hiểm (xe máy)", "đã bao gồm"], ["Hai áo mưa (xe máy)", "đã bao gồm"], ["Giá đỡ điện thoại (xe máy)", "đã bao gồm"], ["Khóa xe (xe đạp điện)", "đã bao gồm"], ["Bộ sạc (xe đạp điện)", "đã bao gồm"], ["Đặt cọc", "không cần"], ["Xăng", "không cần"]],
     total: "Các khoản phát sinh", thanks: "Cảm ơn! Chúc bạn có chuyến đi thật vui.",
   },
   reach: {

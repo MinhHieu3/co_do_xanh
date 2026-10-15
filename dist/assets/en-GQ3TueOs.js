@@ -1,1 +1,0 @@
-import"./main-CvTm42CI.js";localStorage.setItem(`language`,`EN`);

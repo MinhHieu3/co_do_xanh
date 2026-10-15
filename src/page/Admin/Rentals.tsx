@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table, Button, message } from 'antd';
 import { Download } from 'lucide-react';
 import { fetchApi } from './api';
 
 const Rentals: React.FC = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const loadData = async () => {
-    setLoading(true);
+  const loadData = useCallback(async () => {
     try {
       const res = await fetchApi('/statistics/details');
       const json = await res.json();
       if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
     } catch {
       message.error('Lỗi tải dữ liệu');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    void Promise.resolve().then(loadData);
+  }, [loadData]);
 
   const handleExport = async () => {
     try {
@@ -42,9 +42,9 @@ const Rentals: React.FC = () => {
   const columns = [
     { title: 'ID Thuê', dataIndex: 'id', key: 'id' },
     { title: 'ID Đơn Hàng', dataIndex: 'id_order', key: 'id_order' },
-    { 
-      title: 'Các xe đã thuê (ID)', 
-      dataIndex: 'vehicle_ids', 
+    {
+      title: 'Các xe đã thuê (ID)',
+      dataIndex: 'vehicle_ids',
       key: 'vehicle_ids',
       render: (ids: any) => {
         try {

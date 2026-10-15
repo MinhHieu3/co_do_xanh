@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, message, Switch, Select } from 'antd';
 import { Plus } from 'lucide-react';
 import { fetchApi } from './api';
@@ -9,35 +9,37 @@ const Vehicles: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterCategory, setFilterCategory] = useState<number | 'all'>('all');
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form] = Form.useForm();
 
-  const loadData = async () => {
-    setLoading(true);
+  const loadData = useCallback(async () => {
     try {
       const res = await fetchApi('/vehicles');
       const json = await res.json();
       if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
     } catch {
       message.error('Lỗi tải dữ liệu');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, []);
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       const res = await fetchApi('/categories');
       const json = await res.json();
       if (json.success) setCategories(json.data);
-    } catch {}
-  };
+    } catch { }
+  }, []);
 
   useEffect(() => {
-    loadData();
-    loadCategories();
-  }, []);
+    void Promise.resolve().then(() => {
+      void loadData();
+      void loadCategories();
+    });
+  }, [loadCategories, loadData]);
 
 
 
@@ -60,7 +62,7 @@ const Vehicles: React.FC = () => {
       const values = await form.validateFields();
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `/vehicles/${editingId}` : '/vehicles';
-      
+
       const res = await fetchApi(url, {
         method,
         body: JSON.stringify({ ...values, status: values.status ? 1 : 0 }),
@@ -98,9 +100,9 @@ const Vehicles: React.FC = () => {
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
-    { 
-      title: 'Biển số', 
-      dataIndex: 'license_plate', 
+    {
+      title: 'Biển số',
+      dataIndex: 'license_plate',
       key: 'license_plate',
       render: (text: string, record: any) => (
         <a onClick={() => showModal(record)} style={{ fontWeight: 600, color: '#0d9488', cursor: 'pointer' }}>
@@ -108,9 +110,9 @@ const Vehicles: React.FC = () => {
         </a>
       )
     },
-    { 
-      title: 'Danh mục', 
-      dataIndex: 'id_category', 
+    {
+      title: 'Danh mục',
+      dataIndex: 'id_category',
       key: 'id_category',
       render: (val: number) => {
         const cat: any = categories.find((c: any) => c.id === val);
@@ -130,9 +132,9 @@ const Vehicles: React.FC = () => {
       title: 'Thao tác',
       key: 'action',
       render: (_: any, record: any) => (
-      <Space size="middle">
-          <Button 
-            type={record.status ? "default" : "primary"} 
+        <Space size="middle">
+          <Button
+            type={record.status ? "default" : "primary"}
             danger={Boolean(record.status)}
             onClick={() => handleToggleStatus(record, !record.status)}
             style={{ width: 110 }}
@@ -167,11 +169,11 @@ const Vehicles: React.FC = () => {
             Thêm mới
           </Button>
         </div>
-        
+
         <div className="flex flex-col xl:flex-row gap-4 justify-between items-start xl:items-center">
           <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
-            <Select 
-              value={filterStatus} 
+            <Select
+              value={filterStatus}
               onChange={val => setFilterStatus(val)}
               className="w-full sm:min-w-[160px]"
             >
@@ -179,9 +181,9 @@ const Vehicles: React.FC = () => {
               <Select.Option value="free">Chưa thuê</Select.Option>
               <Select.Option value="renting">Đang thuê</Select.Option>
             </Select>
-            
-            <Select 
-              value={filterCategory} 
+
+            <Select
+              value={filterCategory}
               onChange={val => setFilterCategory(val)}
               className="w-full sm:min-w-[200px]"
             >
@@ -191,21 +193,21 @@ const Vehicles: React.FC = () => {
               ))}
             </Select>
           </div>
-          
-          <Input.Search 
-            placeholder="Tìm theo biển số..." 
+
+          <Input.Search
+            placeholder="Tìm theo biển số..."
             allowClear
             onChange={e => setSearchText(e.target.value)}
-            className="w-full xl:max-w-[300px]" 
+            className="w-full xl:max-w-[300px]"
           />
         </div>
       </div>
-      <Table 
-        columns={columns} 
-        dataSource={filteredData} 
-        rowKey="id" 
-        loading={loading} 
-        scroll={{ x: 500 }} 
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        rowKey="id"
+        loading={loading}
+        scroll={{ x: 500 }}
         size="middle"
         pagination={false}
       />

@@ -2,8 +2,8 @@ import { Phone } from "lucide-react";
 import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import { useLanguage } from "../context/LanguageContext";
 import { Link } from "react-router-dom";
-import { ebikeContent, BRAND } from "../data/ebikeContent";
-import { BrandMark } from "./Header";
+import { ebikeContent } from "../data/ebikeContent";
+// import { BrandMark } from "./Header";
 
 export default function Footer() {
   const { language } = useLanguage();
@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="wrap">
           <div className="foot-grid">
             <div>
-              <Link className="brand" to="/" aria-label={`${BRAND.top} ${BRAND.sub}`}><BrandMark /></Link>
+              {/* <Link className="brand" to="/" aria-label={`${BRAND.top} ${BRAND.sub}`}><BrandMark /></Link> */}
               <p style={{ margin: "16px 0 0", maxWidth: "36ch" }} itemProp="description">{f.about}</p>
               <p style={{ margin: "12px 0 0" }}>
                 <a href={`tel:${phoneNumber}`} itemProp="telephone">{phoneNumber}</a>
@@ -63,7 +63,7 @@ export default function Footer() {
 
       {/* Floating contact buttons */}
       <div className="eb-fab">
-        <a href={`tel:${phoneNumber.split(/[|\-]/)[0].trim()}`} className="eb-fab-btn" style={{ background: "#c63d2f" }} aria-label="Phone"><Phone size={20} /></a>
+        <a href={`tel:${phoneNumber.split(/[|-]/)[0].trim()}`} className="eb-fab-btn" style={{ background: "#c63d2f" }} aria-label="Phone"><Phone size={20} /></a>
         <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" className="eb-fab-btn" style={{ background: "#25D366" }} aria-label="WhatsApp"><WhatsappIcon size={22} className="fill-current" /></a>
         <a href={messengerUrl} target="_blank" rel="noreferrer" className="eb-fab-btn" style={{ background: "#0088ff" }} aria-label="Messenger"><MessengerIcon size={22} className="fill-current" /></a>
         <a href={`https://zalo.me/${zaloNumber}`} target="_blank" rel="noreferrer" className="eb-fab-btn" style={{ background: "#0054cc" }} aria-label="Zalo"><ZaloIcon size={22} className="fill-current" /></a>

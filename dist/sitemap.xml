@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xecodoxanh.com/</loc>
-    <lastmod>2023-11-01T00:00:00+00:00</lastmod>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="vi" href="https://xecodoxanh.com/" />
@@ -10,22 +10,50 @@
   </url>
   <url>
     <loc>https://xecodoxanh.com/booking</loc>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xecodoxanh.com/pricing</loc>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xecodoxanh.com/news</loc>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xecodoxanh.com/contact</loc>
+    <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/gia-thue-xe-may-dien-ninh-binh</loc>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/lich-trinh-tam-coc-trang-an-1-ngay</loc>
+    <lastmod>2026-10-08</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/thue-xe-may-dien-co-can-bang-lai-khong</loc>
+    <lastmod>2026-10-06</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xecodoxanh.com/news/dia-diem-du-lich-ninh-binh-khoang-cach</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url><loc>https://xecodoxanh.com/faq</loc><lastmod>2026-10-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://xecodoxanh.com/policy</loc><lastmod>2026-10-15</lastmod><priority>0.4</priority></url>
+  <url><loc>https://xecodoxanh.com/privacy</loc><lastmod>2026-10-15</lastmod><priority>0.3</priority></url>
+  <url><loc>https://xecodoxanh.com/news/kinh-nghiem-thue-xe-may-dien-ninh-binh</loc><lastmod>2026-10-15</lastmod><priority>0.7</priority></url>
 </urlset>

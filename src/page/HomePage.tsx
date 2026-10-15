@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { ebikeContent, PRICE } from "../data/ebikeContent";
 import { SHOW_PRICE, contactLabel } from "../config";
-import logoImg from "../assets/logo/logo4.png";
 
 const Tick = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
@@ -13,8 +12,6 @@ export default function HomePage() {
   const { language } = useLanguage();
   const c = ebikeContent[language as "VI" | "EN"];
   const [left, setLeft] = useState("");
-  // const [playing, setPlaying] = useState(false);
-  // const audioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bookbarRef = useRef<HTMLDivElement | null>(null);
   const firstBtnRef = useRef<HTMLAnchorElement | null>(null);
@@ -41,7 +38,7 @@ export default function HomePage() {
     return () => clearInterval(id);
   }, [language]);
 
-  // Hero video starts after load, lighter on small screens, never on slow/reduced motion
+  // Load the hero video only after it is visible and the browser is idle.
   useEffect(() => {
     const hv = videoRef.current;
     if (!hv) return;
@@ -55,8 +52,20 @@ export default function HomePage() {
       const p = hv.play();
       p.catch(() => { });
     };
-    if (document.readyState === "complete") start();
-    else window.addEventListener("load", start, { once: true });
+    const schedule = () => {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(start, { timeout: 2000 });
+      } else {
+        setTimeout(start, 250);
+      }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      schedule();
+    }, { rootMargin: "100px" });
+    observer.observe(hv);
+    return () => observer.disconnect();
   }, []);
 
   // Mobile book bar appears once the first button scrolls away
@@ -69,22 +78,6 @@ export default function HomePage() {
     io.observe(first);
     return () => io.disconnect();
   }, []);
-
-  // AI guide audio sample (section hidden)
-  // useEffect(() => () => { audioRef.current?.pause(); }, []);
-  //
-  // const toggleSample = () => {
-  //   if (audioRef.current && !audioRef.current.paused) {
-  //     audioRef.current.pause(); audioRef.current.currentTime = 0; setPlaying(false); return;
-  //   }
-  //   if (!audioRef.current) {
-  //     const a = new Audio("/ebike/audio/sample-hang-mua-en.mp3");
-  //     a.addEventListener("ended", () => setPlaying(false));
-  //     a.addEventListener("error", () => setPlaying(false));
-  //     audioRef.current = a;
-  //   }
-  //   audioRef.current.play().then(() => setPlaying(true)).catch(() => { });
-  // };
 
   const h = c.hero;
   const fares = [
@@ -127,17 +120,16 @@ export default function HomePage() {
               <img src="/ebike/img/riders-520.webp" srcSet="/ebike/img/riders-520.webp 520w, /ebike/img/riders-900.webp 900w" sizes="(min-width: 900px) 240px, 30vw" width={900} height={675} alt="Two happy riders in helmets on electric motorbikes" loading="lazy" />
               <figcaption>{h.caption2}</figcaption>
             </figure>
-            <svg className="stamp" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="st" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" /></defs><circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" strokeWidth="4" /><circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" strokeWidth="1.5" /><circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeWidth="1.5" /><text fontFamily="Be Vietnam Pro, Arial, sans-serif" fontSize="17.5" fontWeight="700" letterSpacing="3.2" fill="currentColor"><textPath href="#st">{h.stamp}</textPath></text><image href={logoImg} x="33" y="33" width="134" height="134" preserveAspectRatio="xMidYMid meet" /></svg>
+            <svg className="stamp" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="st" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" /></defs><circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" strokeWidth="4" /><circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" strokeWidth="1.5" /><circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeWidth="1.5" /><text fontFamily="Be Vietnam Pro, Arial, sans-serif" fontSize="17.5" fontWeight="700" letterSpacing="3.2" fill="currentColor"><textPath href="#st">{h.stamp}</textPath></text><image href="/favicon.png" x="33" y="33" width="134" height="134" preserveAspectRatio="xMidYMid meet" /></svg>
           </div>
           <div className="hero-b">
             <div className="fares">
               {fares.map((f) => (
-                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? "Äá»ng" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
+                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? " /Ngày" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
               ))}
             </div>
             <ul className="ticks">
               {h.ticks.map((t: string) => (<li key={t}><Tick /> {t}</li>))}
-              {/* <li><a className="tick-link" href="#guide"><Tick /> {language === "VI" ? "Hướng dẫn viên AI miễn phí" : "Free AI guide on your phone"}</a></li> */}
             </ul>
           </div>
         </div>
@@ -182,7 +174,7 @@ export default function HomePage() {
                   <p className="goodfor"><b>{c.rides.good[0]}</b> {c.rides.good[i + 1]}</p>
                 </div>
                 <div className="ride-foot">
-                  <div className="price"><b>{SHOW_PRICE ? `${prices[i]} ${language === "VI" ? "Äá»ng" : "VND"}` : contactLabel(language)}</b>{SHOW_PRICE && <span>{c.rides.perDay}{usd[i]}</span>}</div>
+                  <div className="price"><b>{SHOW_PRICE ? `${prices[i]} ${language === "VI" ? "/Ngày" : "VND"}` : contactLabel(language)}</b>{SHOW_PRICE && <span>{c.rides.perDay}{usd[i]}</span>}</div>
                   <Link className="btn btn-sm" to="/booking" state={{ selectedVehicle: rideIds[i] }}>{c.rides.book}</Link>
                 </div>
               </article>

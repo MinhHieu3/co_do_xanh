@@ -1,4 +1,4 @@
-export const BRAND = { top: "Xe Cố Đô", sub: "Ninh Bình" };
+export const BRAND = { top: "Xe Cố Đô", sub: "Xanh" };
 export const PRICE = { moto: "150,000", ebike: "120,000", motoUsd: "6", ebikeUsd: "5" };
 
 export type Faq = { q: string; a: string[] };

@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, message } from 'antd';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import { fetchApi } from './api';
 
 const Categories: React.FC = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    setLoading(true);
+  const loadData = useCallback(async () => {
     try {
       const res = await fetchApi('/categories');
       const json = await res.json();
       if (json.success) setData(json.data.sort((a: any, b: any) => b.id - a.id));
     } catch (e) {
       message.error('Lỗi tải dữ liệu');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadData);
+  }, [loadData]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -52,7 +52,7 @@ const Categories: React.FC = () => {
       const values = await form.validateFields();
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `/categories/${editingId}` : '/categories';
-      
+
       const res = await fetchApi(url, {
         method,
         body: JSON.stringify(values),

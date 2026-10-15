@@ -2,7 +2,7 @@ import { Calendar, User, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useEffect } from "react";
-import imgCover from "../assets/dulich/ninhbinh_slider_1.png";
+import imgCover from "../assets/dulich/ninhbinh_slider_1.webp";
 import imgEvo from "../assets/image/vinfast_evo.jpg";
 import imgFeliz from "../assets/image/Vinfast Feliz II.webp";
 
@@ -11,10 +11,10 @@ export default function KinhNghiemThueXe() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const title = language === 'EN' 
-      ? 'Guide to Renting Electric Motorbikes in Ninh Binh | Xe Cố Đô Xanh' 
+    const title = language === 'EN'
+      ? 'Guide to Renting Electric Motorbikes in Ninh Binh | Xe Cố Đô Xanh'
       : 'Kinh Nghiệm Thuê Xe Máy Điện Ninh Bình | Xe Cố Đô Xanh';
-    
+
     const description = language === 'EN'
       ? 'Detailed guide to renting electric motorbikes in Ninh Binh. Explore Trang An, Mua Cave with our premium fleet. Save money and protect the environment.'
       : 'Kinh nghiệm thuê xe máy điện tại Ninh Bình chi tiết nhất. Khám phá Tràng An, Hang Múa với dàn xe Vinfast đời mới. Tiết kiệm chi phí, bảo vệ môi trường.';
@@ -41,11 +41,11 @@ export default function KinhNghiemThueXe() {
       },
       "headline": title,
       "description": description,
-      "image": "https://xecodoxanh.com/og-image.png",  
+      "image": "https://xecodoxanh.com/og-image.png",
       "author": {
         "@type": "Organization",
         "name": "Xe Cố Đô Xanh"
-      },  
+      },
       "publisher": {
         "@type": "Organization",
         "name": "Xe Cố Đô Xanh",
@@ -98,7 +98,7 @@ export default function KinhNghiemThueXe() {
               </p>
 
               <h2 className="text-2xl font-bold text-[#1d2b24] mt-12 mb-6">1. Why Choose Electric Motorbikes in Ninh Binh?</h2>
-              
+
               <h3 className="text-xl font-bold text-[#0f3528] mt-8 mb-4">Save on High Gas Costs</h3>
               <p>
                 Instead of searching for gas stations and worrying about fluctuating gas prices, electric motorbikes save you a significant amount. With just a full charge or one battery swap, you can cruise up to 80km – more than enough to visit famous tourist spots in Ninh Binh in a day.
@@ -176,7 +176,7 @@ export default function KinhNghiemThueXe() {
             </p>
 
             <h2 className="text-2xl font-bold text-[#1d2b24] mt-12 mb-6">1. Tại sao nên chọn thuê xe máy điện khi du lịch Ninh Bình?</h2>
-            
+
             <h3 className="text-xl font-bold text-[#0f3528] mt-8 mb-4">Tiết kiệm chi phí đổ xăng đắt đỏ</h3>
             <p>
               Thay vì phải loay hoay tìm cây xăng và đau đầu vì giá xăng lên xuống thất thường, xe máy điện giúp bạn tiết kiệm được một khoản chi phí đáng kể. Chỉ với 1 lần sạc đầy hoặc 1 lần đổi pin, bạn đã có thể vi vu quãng đường lên tới 80km – quá dư dả để đi qua các điểm du lịch nổi tiếng ở Ninh Bình trong ngày.
@@ -211,7 +211,7 @@ export default function KinhNghiemThueXe() {
             <ul className="space-y-4 mb-12 list-none pl-0">
               <li className="flex items-start gap-3"><CheckCircle2 className="text-[#17493a] shrink-0 mt-1" /> <span><strong>100% Xe Vinfast đời mới:</strong> Cửa hàng sở hữu dàn xe Vinfast Evo 200, Vinfast Feliz II thiết kế thời trang, cốp rộng.</span></li>
               <li className="flex items-start gap-3"><CheckCircle2 className="text-[#17493a] shrink-0 mt-1" /> <span><strong>Không cần bằng lái (với dòng xe Evo Lite):</strong> Bạn là học sinh, sinh viên hoặc du khách quốc tế? Dòng xe Evo Lite chính là giải pháp hoàn hảo.</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="text-[#17493a] shrink-0 mt-1" /> <span><strong>Giá thuê cực kỳ hợp lý:</strong> Chỉ từ 150.000đ/ 24h hoặc 100.000đ/ 5h (đã bao gồm sạc pin).</span></li>
+              <li className="flex items-start gap-3"><CheckCircle2 className="text-[#17493a] shrink-0 mt-1" /> <span><strong>Giá thuê cực kỳ hợp lý:</strong> Chỉ từ 150.000đ/ngày hoặc 100.000đ/ 5h (đã bao gồm sạc pin).</span></li>
               <li className="flex items-start gap-3"><CheckCircle2 className="text-[#17493a] shrink-0 mt-1" /> <span><strong>Trang bị đầy đủ phụ kiện:</strong> Mỗi xe đều được trang bị sẵn 2 mũ bảo hiểm chất lượng, áo mưa và bộ sạc pin.</span></li>
             </ul>
 

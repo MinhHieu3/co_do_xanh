@@ -1,0 +1,1 @@
+var e=!0,t=e=>e===`EN`?`Contact us`:`Liên hệ ngay`;export{t as n,e as t};

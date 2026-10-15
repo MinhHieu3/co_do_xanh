@@ -1,8 +1,8 @@
-import felizImage from "../assets/image/Vinfast Feliz II.webp";
-import evoImage from "../assets/image/vinfast_evo.jpg";
-import evoLiteImage from "../assets/image/Evo lite.png";
-import phoenixImageNam from "../assets/image/TLNAM.jpg";
-import phoenixImageNu from "../assets/image/TLN.jpg";
+const evoImage = "/ebike/img/ride-evo-640.jpg";
+const felizImage = "/ebike/img/ride-feliz2-640.jpg";
+const evoLiteImage = "/ebike/img/ride-evo-lite-640.jpg";
+const phoenixImageNam = "/ebike/img/phoenix-pair-640.webp";
+const phoenixImageNu = "/ebike/img/phoenix-pair-640.webp";
 
 
 export interface Vehicle {
@@ -29,6 +29,8 @@ export interface Vehicle {
     [key: string]: string;
   };
   isPopular?: boolean;
+  /** true = khách phải có giấy phép lái xe; hiện cảnh báo ở trang đặt xe */
+  requiresLicense?: boolean;
 }
 
 export const vehicles: Vehicle[] = [
@@ -36,12 +38,13 @@ export const vehicles: Vehicle[] = [
     id: "vinfast-evo",
     name: "Vinfast Evo",
     image: evoImage,
+    requiresLicense: true,
     pricing: {
-      day1: "150.000đ/ 24h",
+      day1: "150.000đ/ngày",
 
     },
     pricingEn: {
-      day1: "$6/ 24h",
+      day1: "$6/day",
     },
     hourlyPricing: {
       price: "100.000đ/5h"
@@ -72,13 +75,14 @@ export const vehicles: Vehicle[] = [
     id: "vinfast-feliz-2",
     name: "Vinfast Feliz II",
     image: felizImage,
+    requiresLicense: true,
     isPopular: true,
     pricing: {
-      day1: "150.000đ/ 24h"
+      day1: "150.000đ/ngày"
 
     },
     pricingEn: {
-      day1: "$6/ 24h",
+      day1: "$6/day",
     },
     hourlyPricing: {
       price: "100.000đ/5h"
@@ -110,11 +114,11 @@ export const vehicles: Vehicle[] = [
     name: "Vinfast Evo Lite",
     image: evoLiteImage,
     pricing: {
-      day1: "150.000đ/ 24h",
+      day1: "150.000đ/ngày",
 
     },
     pricingEn: {
-      day1: "$6/ 24h",
+      day1: "$6/day",
     },
     hourlyPricing: {
       price: "100.000đ/ 5h"
@@ -147,11 +151,11 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Men)",
     image: phoenixImageNam,
     pricing: {
-      day1: "120.000đ/ 24h",
+      day1: "120.000đ/ngày",
 
     },
     pricingEn: {
-      day1: "$5/ 24h",
+      day1: "$5/day",
 
     },
     hourlyPricing: {
@@ -185,11 +189,11 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Women)",
     image: phoenixImageNu,
     pricing: {
-      day1: "120.000đ/ 24h",
+      day1: "120.000đ/ngày",
 
     },
     pricingEn: {
-      day1: "$5/ 24h",
+      day1: "$5/day",
 
     },
     hourlyPricing: {
@@ -217,39 +221,6 @@ export const vehicles: Vehicle[] = [
       "License": "No driver's license required"
     }
   },
-  // {
-  //   id: "wave-alpha-110",
-  //   name: "Wave Alpha 110",
-  //   image: waveAlphaImage,
-  //   pricing: {
-  //     day1: "100k/1 ngày",
-  //     day2: "180k/2 ngày",
-  //     day3: "250k/3 ngày",
-  //     day4: "300k/4 ngày"
-  //   },
-  //   pricingEn: {
-  //     day1: "$4/1 day",
-  //     day2: "$7/2 days",
-  //     day3: "$10/3 days",
-  //     day4: "$12/4 days"
-  //   },
-  //   specs: {
-  //     "Loại xe": "Xe máy xăng",
-  //     "Phân khối": "109.1 cc",
-  //     "Tiêu hao nhiên liệu": "1.72 Lít / 100km",
-  //     "Dung tích bình xăng": "3.7 Lít",
-  //     "Trọng lượng": "97 kg",
-  //     "Phụ kiện": "2 Mũ bảo hiểm, Áo mưa"
-  //   },
-  //   specsEn: {
-  //     "Type": "Gasoline Motorbike",
-  //     "Engine": "109.1 cc",
-  //     "Fuel Efficiency": "1.72 L / 100km",
-  //     "Fuel Tank": "3.7 Liters",
-  //     "Weight": "97 kg",
-  //     "Accessories": "2 Helmets, Raincoat"
-  //   }
-  // }
 ];
 
 // Units available per model. Both Phoenix e-bikes (men's / women's) share one pool.

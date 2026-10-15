@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { vi } from '../locales/vi';
 import { en } from '../locales/en';
 
@@ -12,6 +12,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState(() => {
+    if (window.location.pathname === '/index-en.html') return 'EN';
     const saved = localStorage.getItem('language');
     if (saved === 'VI' || saved === 'EN') return saved;
 
@@ -22,11 +23,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
     return 'EN'; // Auto switch to English if not Vietnamese
   });
-
-  useEffect(() => {
-    // Update document title for SEO and UX based on selected language
-    document.title = language === 'EN' ? 'Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh' : 'Xe Cố Đô Xanh | Thuê Xe Máy Điện';
-  }, [language]);
 
   const setLanguage = (lang: string) => {
     setLanguageState(lang);
@@ -54,6 +50,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
