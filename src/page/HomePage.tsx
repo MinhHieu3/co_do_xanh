@@ -125,7 +125,7 @@ export default function HomePage() {
           <div className="hero-b">
             <div className="fares">
               {fares.map((f) => (
-                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? " /Ngày" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
+                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? "/Ngày" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
               ))}
             </div>
             <ul className="ticks">
