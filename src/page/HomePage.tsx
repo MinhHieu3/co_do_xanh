@@ -81,8 +81,8 @@ export default function HomePage() {
 
   const h = c.hero;
   const fares = [
-    { l: h.ebike, p: PRICE.ebike, u: PRICE.ebikeUsd },
     { l: h.moto, p: PRICE.moto, u: PRICE.motoUsd },
+    { l: h.ebike, p: PRICE.ebike, u: PRICE.ebikeUsd },
   ];
   const prices = [PRICE.moto, PRICE.ebike, PRICE.moto, PRICE.moto];
   const usd = [PRICE.motoUsd, PRICE.ebikeUsd, PRICE.motoUsd, PRICE.motoUsd];
@@ -161,7 +161,8 @@ export default function HomePage() {
             <p className="lead">{c.rides.lead}</p>
           </div>
           <div className="rides">
-            {rideImgs.map((r, i) => (
+            {/* Thứ tự hiển thị: xe máy điện trước, xe đạp trợ lực (index 1) cuối cùng */}
+            {[0, 2, 3, 1].map((i) => rideImgs[i]).map((r, pos) => { const i = [0, 2, 3, 1][pos]; return (
               <article className="ride" key={r.q}>
                 <img src={r.s} srcSet={i < 2 ? `${r.s} 640w, ${r.s2} 1100w` : undefined} sizes="(min-width: 820px) 520px, 92vw" width={r.w} height={r.h} alt={r.alt} loading="lazy" style={i >= 2 ? { objectFit: "cover" } : undefined} />
                 <div className="ride-body">
@@ -178,7 +179,7 @@ export default function HomePage() {
                   <Link className="btn btn-sm" to="/booking" state={{ selectedVehicle: rideIds[i] }}>{c.rides.book}</Link>
                 </div>
               </article>
-            ))}
+            ); })}
           </div>
         </div>
       </section>
