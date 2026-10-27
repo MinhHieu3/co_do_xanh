@@ -6,10 +6,10 @@ export const vi = {
     contact: "LIÊN HỆ",
   },
   footer: {
-    about: "Xe Cố Đô Xanh là dịch vụ cho thuê xe máy tự lái chuyên nghiệp tại Việt Nam.",
+    about: "Xe Cố Đô Xanh – dịch vụ thuê xe máy điện & xe đạp điện tại Ninh Bình, giao tận nơi bạn ở.",
     hotline: "Tổng đài (24/24H)",
     englishSpeaking: "English speaking",
-    email: "ThÆ° Äiá»n tá»­",
+    email: "Email",
     workingHours: "Thứ Hai - Chủ Nhật",
     aboutUs: "Về Xe Cố Đô Xanh",
     intro: "Giới thiệu về Xe Cố Đô Xanh",
@@ -27,16 +27,16 @@ export const vi = {
     trustedBy: "Đánh giá & Liên kết",
   },
   home: {
-    heroTitle1: "THUÊ XE MÁY",
+    heroTitle1: "THUÊ XE MÁY ĐIỆN",
     heroTitle2: "NINH BÌNH",
-    heroSubtitle: "Dịch vụ cho thuê xe máy uy tín hàng đầu tại Ninh Bình",
+    heroSubtitle: "Thuê xe máy điện & xe đạp điện – giao tận nơi bạn ở tại Ninh Bình",
     bookNow: "ĐẶT XE NGAY",
     bookSuccess: "Đặt xe thành công!",
     bookSuccessMsg: "Cảm ơn bạn đã tin tưởng Xe Cố Đô Xanh. Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.",
     whyChooseUs: "Tại sao chọn Xe Cố Đô Xanh?",
     whyChooseUsDesc: "Chúng tôi cam kết mang đến trải nghiệm tuyệt vời nhất",
     newBikes: "Xe Đời Mới 100%",
-    newBikesDesc: "Tất cả xe đều là xe máy điện, xe đạp trợ lực đời mới, được bảo dưỡng định kỳ đảm bảo an toàn tuyệt đối.",
+    newBikesDesc: "Tất cả xe đều là xe máy điện và xe đạp điện đời mới, được bảo dưỡng định kỳ đảm bảo an toàn tuyệt đối.",
     support247: "Hỗ Trợ 24/7",
     support247Desc: "Đội ngũ nhân viên chuyên nghiệp sẵn sàng hỗ trợ bạn bất cứ lúc nào trên mọi nẻo đường.",
     delivery: "Giao Xe Tận Nơi",
@@ -53,8 +53,8 @@ export const vi = {
     step3Desc: "Dưới 20% lần đầu shop sẽ hỗ trợ đổi pin mới tại cửa hàng, hoặc chia sẻ app để đổi tại tủ đổi pin. Từ lần thứ 2 trở đi, phí đổi pin là 9.000đ/lần.",
     step4: "Trả xe đã thuê",
     step4Desc: "Có thể trả xe tại cửa hàng hoặc yêu cầu nhân viên đến tận nơi lấy. Nhân viên kiểm tra tình trạng xe, nếu phát sinh hư hỏng hoặc mất mát, khách hàng cần đền bù theo giá trị thực tế.",
-    ourVehicles: "Tất cả xe máy",
-    ourVehiclesDesc: "Đa dạng các loại xe phù hợp với mọi nhu cầu di chuyển của bạn",
+    ourVehicles: "Xe máy điện & xe đạp điện",
+    ourVehiclesDesc: "Xe máy điện VinFast và xe đạp điện – tất cả đều mới, phù hợp mọi hành trình tại Ninh Bình",
     bookVehicleBtn: "Đặt Xe Ngay",
     seeAll: "Xem tất cả xe"
   },
@@ -119,7 +119,7 @@ export const vi = {
     addressLine1: "Xe Cố Đô Xanh",
     addressLine2: " Số 61, Ngõ 281, Đường Đinh Tiên Hoàng, Phường Hoa Lư, TP. Ninh Bình",
     phoneTitle: "Điện thoại / Zalo",
-    emailTitle: "ThÆ° Äiá»n tá»­",
+    emailTitle: "Email",
     hoursTitle: "Giờ mở cửa",
     hoursDesc: "24/7 - Phục vụ cả ngày lễ & Chủ Nhật",
     successTitle: "Gửi Thành Công!",
@@ -143,7 +143,7 @@ export const vi = {
   },
   news: {
     title: "Tin tức & Cẩm nang",
-    subtitle: "Khám phá vẻ đẹp Ninh Bình qua lăng kính của Xe Cố Đô Xanh, cùng những mẹo du lịch và thuê xe hữu ích nhất.",
+    subtitle: "Thuê xe máy điện Ninh Bình – khám phá vẻ đẹp cố đô cùng những mẹo du lịch và kinh nghiệm giao thông hữu ích nhất.",
     featured: "Bài Viết Nổi Bật",
     readMore: "Đọc Tiếp",
     readMoreShort: "Đọc thêm",
@@ -159,8 +159,8 @@ export const vi = {
       category: "Cẩm nang du lịch"
     },
     article2: {
-      title: "5 Cung đường phượt xe máy đẹp nhất Ninh Bình",
-      excerpt: "Thuê một chiếc xe máy và vi vu trên những cung đường uốn lượn quanh những dãy núi đá vôi tuyệt đẹp tại Ninh Bình.",
+      title: "5 Cung đường phượt xe máy điện đẹp nhất Ninh Bình",
+      excerpt: "Thuê xe máy điện và vi vu trên những cung đường uốn lượn quanh những dãy núi đá vôi tuyệt đẹp tại Ninh Bình.",
       category: "Kinh nghiệm phượt"
     },
     article3: {

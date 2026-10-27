@@ -220,7 +220,7 @@ export default function BookingPage() {
       <div className="page-head" id="book-head">
         <div className="wrap">
           <p className="eyebrow">{L("Chỉ hai phút, chưa cần trả tiền", "Two minutes, nothing to pay now")}</p>
-          <h1>{L("Đặt xe của bạn", "Book your ride")}</h1>
+          <h1>{L("Đặt thuê xe máy điện Ninh Bình", "Book an electric motorbike in Ninh Binh")}</h1>
         </div>
       </div>
 

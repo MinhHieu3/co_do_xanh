@@ -10,12 +10,12 @@ export default function NewsPage() {
     <>
       <div className="page-head">
         <div className="wrap">
-          <p className="eyebrow">{lang === "EN" ? "News" : "Tin tức"}</p>
-          <h1>{lang === "EN" ? "Ninh Binh travel guides" : "Cẩm nang du lịch Ninh Bình"}</h1>
+          <p className="eyebrow">{lang === "EN" ? "Rental guides" : "Cẩm nang thuê xe"}</p>
+          <h1>{lang === "EN" ? "Electric motorbike rental in Ninh Binh – travel guides & tips" : "Thuê xe máy điện Ninh Bình – cẩm nang & kinh nghiệm"}</h1>
           <p className="lead">
             {lang === "EN"
-              ? "Prices, rules and itineraries to plan your ride around Ninh Binh."
-              : "Giá thuê, thủ tục và lịch trình giúp bạn lên kế hoạch khám phá Ninh Bình."}
+              ? "Routes, prices and itineraries for renting an electric motorbike and exploring Ninh Binh."
+              : "Lịch trình, giá thuê và kinh nghiệm khi thuê xe máy điện khám phá Ninh Bình."}
           </p>
         </div>
       </div>

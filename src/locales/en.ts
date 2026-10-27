@@ -6,7 +6,7 @@ export const en = {
     contact: "CONTACT",
   },
   footer: {
-    about: "Xe Co Do Xanh is a professional motorbike rental service in Vietnam.",
+    about: "Xe Co Do Xanh – electric motorbike & e-bike rental in Ninh Binh, Vietnam, delivered to your door.",
     hotline: "Hotline (24/24H)",
     englishSpeaking: "English speaking",
     email: "Email",
@@ -27,16 +27,16 @@ export const en = {
     trustedBy: "Reviews & Connect",
   },
   home: {
-    heroTitle1: "MOTORBIKE RENTAL",
+    heroTitle1: "ELECTRIC MOTORBIKE RENTAL",
     heroTitle2: "NINH BINH",
-    heroSubtitle: "Top reputable motorbike rental service in Ninh Binh",
+    heroSubtitle: "Electric motorbike & e-bike rental in Ninh Binh – delivered to your door",
     bookNow: "BOOK NOW",
     bookSuccess: "Booking Successful!",
     bookSuccessMsg: "Thank you for choosing Xe Co Do Xanh. We will contact you shortly.",
     whyChooseUs: "Why Choose Xe Co Do Xanh?",
     whyChooseUsDesc: "We are committed to providing the best experience",
-    newBikes: "100% New Bikes",
-    newBikesDesc: "All bikes are new electric and manual motorbikes, maintained regularly for absolute safety.",
+    newBikes: "100% New Electric Bikes",
+    newBikesDesc: "All bikes are brand-new electric motorbikes and e-bikes, maintained regularly for absolute safety.",
     support247: "24/7 Support",
     support247Desc: "Our professional staff is ready to assist you anytime on all routes.",
     delivery: "Door-to-door Delivery",
@@ -53,8 +53,8 @@ export const en = {
     step3Desc: "When the battery drops below 20%, we offer the first battery replacement at the store, or share an app for you to swap it at our cabinets. From the 2nd time, the fee is 9,000 VND per swap.",
     step4: "Return the Bike",
     step4Desc: "You can return the vehicle at the store or request a pickup. Our staff will inspect the vehicle; any damages or losses must be compensated at their actual value.",
-    ourVehicles: "All Motorbikes",
-    ourVehiclesDesc: "A variety of vehicles to suit all your travel needs",
+    ourVehicles: "Electric Motorbikes & E-bikes",
+    ourVehiclesDesc: "VinFast electric motorbikes and e-bikes – all brand-new, for every route in Ninh Binh",
     bookVehicleBtn: "Book Now",
     seeAll: "See all vehicles"
   },
@@ -116,8 +116,8 @@ export const en = {
     subtitle: "Xe Co Do Xanh is always ready to listen and support you 24/7. Send us a message or call directly!",
     infoTitle: "Contact Information",
     addressTitle: "Store Address",
-    addressLine1: "Ninh Binh Provincial Sports Arena",
-    addressLine2: "Dinh Tien Hoang, Dong Thanh, Ninh Binh",
+    addressLine1: "61, Alley 281 Dinh Tien Hoang Street",
+    addressLine2: "Hoa Lu Ward, Ninh Binh City, Vietnam",
     phoneTitle: "Phone / Zalo",
     emailTitle: "Email",
     hoursTitle: "Opening Hours",
@@ -143,7 +143,7 @@ export const en = {
   },
   news: {
     title: "News & Travel Guide",
-    subtitle: "Explore the beauty of Ninh Binh through the lens of Xe Co Do Xanh, along with the most useful travel and rental tips.",
+    subtitle: "Electric motorbike rental in Ninh Binh – explore the ancient capital with travel tips, route guides and rental advice from Xe Co Do Xanh.",
     featured: "Featured Article",
     readMore: "Read More",
     readMoreShort: "Read more",
@@ -159,8 +159,8 @@ export const en = {
       category: "Travel Guide"
     },
     article2: {
-      title: "Top 5 Most Beautiful Motorbike Routes in Ninh Binh",
-      excerpt: "Rent a motorbike and cruise along the winding roads around the stunning limestone mountains in Ninh Binh.",
+      title: "Top 5 Electric Motorbike Routes in Ninh Binh",
+      excerpt: "Rent an electric motorbike and cruise along the winding roads around the stunning limestone mountains in Ninh Binh.",
       category: "Travel Experience"
     },
     article3: {

@@ -5,7 +5,7 @@ const vi: Content = {
   nav: { day: "Quy trình đặt xe", rides: "Các loại xe", reach: "Địa điểm", book: "Đặt xe", faq: "Câu hỏi", cta: "Đặt xe ngay" },
   hero: {
     eyebrow: "Ninh Bình · Việt Nam",
-    h1a: "Khám phá ", h1b: "Ninh Bình", h1c: " trên hai bánh ", h1d: "êm ái", h1e: "",
+    h1a: "Thuê xe máy điện ", h1b: "Ninh Bình", h1c: " – giao xe ", h1d: "tận nơi", h1e: " bạn ở",
     lead: "Xe máy điện hoặc xe đạp điện êm ái, mới như mới, giao tận nơi bạn ở buổi sáng và nhận lại vào buổi tối. Không cần bằng lái, không tốn xăng, thanh toán khi nhận xe.",
     cta: "Đặt xe ngay", see: "Xem một ngày diễn ra thế nào",
     deadline: "Đặt trước 6 giờ sáng, xe sẽ có mặt ngay trong sáng hôm đó",
@@ -15,7 +15,7 @@ const vi: Content = {
     stamp: "NINH BÌNH · GIAO XE TẬN NƠI ·",
   },
   day: {
-    eyebrow: "Cách hoạt động", title: "Từ lúc đặt đến lúc trả xe, từng bước một",
+    eyebrow: "Cách hoạt động", title: "Cách thuê xe máy điện Ninh Bình – từng bước một",
     lead: "Không cần tìm cửa hàng, không xếp hàng, không mặc cả. Đây là những gì diễn ra sau khi bạn đặt xe, mỗi ngày thuê.",
     steps: [
       ["Đặt xe", "Bạn đặt xe trực tuyến", "Chọn xe, ngày thuê và nơi ở. Chỉ mất hai phút, chưa phải trả tiền."],
@@ -25,7 +25,7 @@ const vi: Content = {
     ],
   },
   rides: {
-    eyebrow: "Các dòng xe", title: "Chọn xe của bạn, tất cả đều chạy điện",
+    eyebrow: "Thuê Xe Máy Điện & Xe Đạp Điện", title: "Chọn xe của bạn, tất cả đều chạy điện",
     lead: "Toàn bộ xe đều mới như mới. Bạn sẽ không phải nhận chiếc xe cũ kỹ phanh yếu.",
     kind: ["Xe máy điện", "Xe đạp điện", "Xe máy điện · cần GPLX", "Xe máy điện · cần GPLX"], names: ["VinFast Evo Lite", "Phoenix trợ lực", "VinFast Evo", "VinFast Feliz II"],
     pitch: ["Vặn ga là chạy. Không số, không côn, không ồn. Chở được hai người, một xe đủ cho cả cặp đôi.",
@@ -56,7 +56,7 @@ const vi: Content = {
     plan: "Đặt xe ngay",
   },
   versus: {
-    eyebrow: "Trước khi bạn tìm hiểu thêm", title: "Sao không thuê xe ngay tại khách sạn hoặc ngoài phố?",
+    eyebrow: "Tại sao chọn chúng tôi", title: "Tại sao thuê xe máy điện tại Xe Cố Đô Xanh, không phải nơi khác?",
     lead: "Hoàn toàn được, và nhiều người vẫn làm vậy. Nhưng xe cho thuê ở đây thường cũ và ít được bảo dưỡng. Đây là sự khác biệt thực sự.",
     head: ["Xe xăng, cửa hàng hoặc khách sạn", BRAND.top + " " + BRAND.sub], lThem: "Cửa hàng / khách sạn", lUs: "Với chúng tôi",
     rows: [
@@ -86,7 +86,7 @@ const vi: Content = {
     second_by: "Philippe, sáu ngày cùng xe đạp điện, tháng 10/2026",
   },
   incl: {
-    eyebrow: "Không phát sinh", title: "Giá hiển thị trên trang là giá bạn thanh toán",
+    eyebrow: "Không phát sinh", title: "Giá thuê xe máy điện Ninh Bình – không phí nhẩn nha",
     lead: "Không phí giao xe, không bình xăng rỗng, không điều khoản ẩn. Giá thuê theo ngày đã bao gồm tất cả.",
     p: "Bạn trả tiền mặt (đồng Việt Nam) cho nhân viên giao xe khi nhận xe. Không thu tiền trước qua mạng, nên nếu kế hoạch thay đổi bạn không cần hoàn tiền.",
     link: "Đặt xe ngay", receipt: BRAND.top + " " + BRAND.sub + " · một ngày",
@@ -94,7 +94,7 @@ const vi: Content = {
     total: "Các khoản phát sinh", thanks: "Cảm ơn! Chúc bạn có chuyến đi thật vui.",
   },
   reach: {
-    eyebrow: "Địa điểm", title: "Mọi điểm đáng ghé đều chỉ cách một quãng ngắn",
+    eyebrow: "Điểm đến Ninh Bình", title: "Những điểm đến nổi tiếng Ninh Bình – dễ tới bằng xe máy điện",
     lead: "Khoảng cách tính theo đường bộ từ bến thuyền giữa Tam Cốc. Một lần sạc là đủ đi hết, còn dư nhiều.",
     items: [
       ["3", "Chùa Bích Động", "Bich Dong Pagoda", "Ba ngôi chùa nhỏ nằm cheo leo trên vách đá. Con đường đến đó len lỏi giữa đầm sen và núi đá vôi — chặng đường ngắn đẹp nhất vùng.", 0],
@@ -109,7 +109,7 @@ const vi: Content = {
     snaps: ["Tam Cốc trên thuyền", "Tràng An", "Hoa Lư, cố đô", "Bái Đính"],
   },
   faq: {
-    eyebrow: "Trả lời thắc mắc", title: "Những điều khách hay thắc mắc", more: "Xem toàn bộ câu hỏi",
+    eyebrow: "Hỏi đáp", title: "Câu hỏi thường gặp khi thuê xe máy điện tại Ninh Bình", more: "Xem toàn bộ câu hỏi",
     items: [
       { q: "Tôi có cần bằng lái không?", a: ["Không cần, với xe Evo Lite và xe đạp điện. Evo Lite giới hạn 49 km/h — tại Việt Nam, xe máy điện dưới mức này được phép chạy từ 16 tuổi mà không cần bằng lái.", "Lưu ý: hãy kiểm tra xem bảo hiểm du lịch của bạn có bao gồm việc đi xe không nhé."] },
       { q: "Tôi có phải để lại hộ chiếu không?", a: ["Không, và cũng không cần đặt cọc. Nhân viên chỉ chụp ảnh hộ chiếu (hoặc bằng lái) để làm thủ tục, rồi bạn ký hợp đồng thuê ngắn. Hộ chiếu gốc vẫn ở trong túi bạn."] },

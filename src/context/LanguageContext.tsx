@@ -10,8 +10,10 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState(() => {
+export const LanguageProvider = ({ children, initialLanguage }: { children: ReactNode; initialLanguage?: "VI" | "EN" }) => {
+  const [language, setLanguageState] = useState<string>(() => {
+    if (initialLanguage) return initialLanguage;
+    if (typeof window === 'undefined') return 'VI';
     if (window.location.pathname === '/index-en.html') return 'EN';
     const saved = localStorage.getItem('language');
     if (saved === 'VI' || saved === 'EN') return saved;

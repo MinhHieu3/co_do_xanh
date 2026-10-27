@@ -5,7 +5,7 @@ const en: Content = {
   nav: { day: "How booking works", rides: "Our rides", reach: "Places", book: "Book", faq: "FAQ", cta: "Book now" },
   hero: {
     eyebrow: "Ninh Binh · Vietnam",
-    h1a: "Explore ", h1b: "Ninh Binh", h1c: " on two ", h1d: "silent", h1e: " wheels",
+    h1a: "Explore ", h1b: "Ninh Binh", h1c: " by ", h1d: "electric motorbike", h1e: " or e-bike",
     lead: "A quiet electric motorbike or e-bike, as good as new, delivered to where you stay in the morning and collected in the evening. No licence needed, no petrol, pay on delivery.",
     cta: "Book now", see: "See how a day goes",
     deadline: "Book before 6 am and your ride arrives that same morning",
@@ -15,7 +15,7 @@ const en: Content = {
     stamp: "NINH BINH · DELIVERED TO YOUR DOOR ·",
   },
   day: {
-    eyebrow: "How it works", title: "From booking to return, step by step",
+    eyebrow: "How it works", title: "How to rent an electric motorbike in Ninh Binh, step by step",
     lead: "No shop to find, no queue, no haggling. This is what happens after you book, every rental day.",
     steps: [
       ["Book", "You book online", "Choose your ride, rental dates and where you stay. It takes two minutes and you pay nothing yet."],
@@ -25,7 +25,7 @@ const en: Content = {
     ],
   },
   rides: {
-    eyebrow: "Our rides", title: "Choose your ride, all electric",
+    eyebrow: "Electric Motorbike & E-bike Rentals", title: "Choose your ride, all electric",
     lead: "The whole fleet is as good as new. You will not get a worn-out bike with weak brakes.",
     kind: ["Electric motorbike", "E-bike", "Electric motorbike · licence required", "Electric motorbike · licence required"], names: ["VinFast Evo Lite", "Phoenix Assist", "VinFast Evo", "VinFast Feliz II"],
     pitch: ["Twist and go. No gears, no clutch, no noise. It seats two, so one bike is enough for a couple.",
@@ -56,7 +56,7 @@ const en: Content = {
     plan: "Book now",
   },
   versus: {
-    eyebrow: "Before you look further", title: "Why not just rent at your hotel or on the street?",
+    eyebrow: "Why choose us", title: "Why rent an electric motorbike with Xe Co Do Xanh, not the hotel?",
     lead: "You can, and many people do. But rental bikes here are often old and poorly maintained. Here is the real difference.",
     head: ["Petrol scooter, shop or hotel", BRAND.top + " " + BRAND.sub], lThem: "Shop / hotel", lUs: "With us",
     rows: [
@@ -86,7 +86,7 @@ const en: Content = {
     second_by: "Philippe, six days with an e-bike, October 2026",
   },
   incl: {
-    eyebrow: "No extras", title: "The price on the page is the price you pay",
+    eyebrow: "No extras", title: "Ninh Binh electric motorbike rental price – no hidden fees",
     lead: "No delivery fee, no empty tank, no hidden terms. The daily rate includes everything.",
     p: "You pay in cash (Vietnamese dong) to the delivery staff when you receive the ride. Nothing is charged online in advance, so if your plans change there is nothing to refund.",
     link: "Book now", receipt: BRAND.top + " " + BRAND.sub + " · one day",
@@ -94,7 +94,7 @@ const en: Content = {
     total: "Extra charges", thanks: "Thank you! Have a wonderful trip.",
   },
   reach: {
-    eyebrow: "Places", title: "Every place worth visiting is just a short ride away",
+    eyebrow: "Ninh Binh attractions", title: "Ninh Binh's top sights – all reachable by electric motorbike",
     lead: "Road distances from the boat pier in the middle of Tam Coc. One charge covers them all, with plenty to spare.",
     items: [
       ["3", "Bich Dong Pagoda", "Chùa Bích Động", "Three small pagodas perched on a cliff. The road there winds between lotus ponds and limestone peaks — the most beautiful short ride in the area.", 0],
@@ -109,7 +109,7 @@ const en: Content = {
     snaps: ["Tam Coc by boat", "Trang An", "Hoa Lu, the ancient capital", "Bai Dinh"],
   },
   faq: {
-    eyebrow: "Answers", title: "What guests often ask", more: "See all questions",
+    eyebrow: "FAQ", title: "Common questions about renting an electric motorbike in Ninh Binh", more: "See all questions",
     items: [
       { q: "Do I need a driving licence?", a: ["Not for the Evo Lite or the e-bike. The Evo Lite is limited to 49 km/h — in Vietnam, electric motorbikes under this limit may be ridden from age 16 without a licence.", "Note: check whether your travel insurance covers riding."] },
       { q: "Do I have to leave my passport?", a: ["No, and no deposit either. Our staff just take a photo of your passport (or licence) for the paperwork, then you sign a short rental agreement. The original passport stays in your pocket."] },

@@ -12,9 +12,9 @@ export default function PolicyPage() {
     <>
       <div className="page-head">
         <div className="wrap">
-          <p className="eyebrow">{language === 'EN' ? 'Booking terms' : 'Chính sách'}</p>
+          <p className="eyebrow">{language === 'EN' ? 'Rental terms' : 'Chính sách'}</p>
           <h1>
-            {language === 'EN' ? 'Rental Policy & Procedures' : 'Chính Sách Thủ Tục Thuê Xe Máy'}
+            {language === 'EN' ? 'Electric Motorbike Rental Policy – Ninh Binh' : 'Chính Sách Thuê Xe Máy Điện Ninh Bình'}
           </h1>
         </div>
       </div>
