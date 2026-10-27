@@ -20,6 +20,11 @@ import { Toaster } from 'react-hot-toast';
 import { useLanguage } from "./context/LanguageContext";
 import { articles } from "./data/articles";
 import { ebikeContent } from "./data/ebikeContent";
+import { vehicles } from "./data/vehicles";
+import { BUSINESS } from "./data/business";
+
+/** "150.000đ/ngày" -> 150000 */
+const toVnd = (s: string) => Number(s.replace(/[^\d]/g, "")) || undefined;
 
 function RouteMetadata() {
   const location = useLocation();
@@ -31,10 +36,10 @@ function RouteMetadata() {
     const slug = path.split("/").filter(Boolean).at(-1);
     const article = path.startsWith("/news/") ? articles.find((item) => item.slug === slug) : undefined;
     const titles: Record<string, [string, string]> = {
-      "/": ["Xe Cố Đô Xanh | Thuê Xe Máy Điện Ninh Bình", "Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh"],
-      "/index-en.html": ["Xe Cố Đô Xanh | Thuê Xe Máy Điện Ninh Bình", "Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh"],
-      "/booking": ["Đặt xe máy điện Ninh Bình | Xe Cố Đô Xanh", "Book an Electric Motorbike in Ninh Binh | Xe Cố Đô Xanh"],
-      "/pricing": ["Bảng giá thuê xe | Xe Cố Đô Xanh", "Rental Prices | Xe Cố Đô Xanh"],
+      "/": ["Thuê Xe Máy Điện Ninh Bình, Hoa Lư | Xe Cố Đô Xanh", "Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh"],
+      "/index-en.html": ["Thuê Xe Máy Điện Ninh Bình, Hoa Lư | Xe Cố Đô Xanh", "Ninh Binh Electric Motorbike Rental | Xe Cố Đô Xanh"],
+      "/booking": ["Đặt Thuê Xe Máy Điện Ninh Bình Online | Xe Cố Đô Xanh", "Book an Electric Motorbike in Ninh Binh | Xe Cố Đô Xanh"],
+      "/pricing": ["Giá Thuê Xe Máy Điện Ninh Bình 1 Ngày | Xe Cố Đô Xanh", "Ninh Binh Motorbike Rental Prices | Xe Cố Đô Xanh"],
       "/contact": ["Liên hệ | Xe Cố Đô Xanh", "Contact | Xe Cố Đô Xanh"],
       "/news": ["Tin tức Ninh Bình | Xe Cố Đô Xanh", "Ninh Binh Travel News | Xe Cố Đô Xanh"],
       "/faq": ["Câu hỏi thường gặp | Xe Cố Đô Xanh", "Frequently Asked Questions | Xe Cố Đô Xanh"],
@@ -43,10 +48,10 @@ function RouteMetadata() {
       "/news/kinh-nghiem-thue-xe-may-dien-ninh-binh": ["Kinh nghiệm thuê xe máy điện Ninh Bình | Xe Cố Đô Xanh", "Electric Motorbike Rental Guide | Xe Cố Đô Xanh"],
     };
     const descriptions: Record<string, [string, string]> = {
-      "/": ["Thuê xe máy điện tại Ninh Bình, giao xe tận nơi. Khám phá Cố đô xanh thuận tiện và tiết kiệm.", "Rent an electric motorbike in Ninh Binh with delivery to your hotel. Explore with Xe Co Do Xanh."],
-      "/index-en.html": ["Thuê xe máy điện tại Ninh Bình, giao xe tận nơi. Khám phá Cố đô xanh thuận tiện và tiết kiệm.", "Rent an electric motorbike in Ninh Binh with delivery to your hotel. Explore with Xe Co Do Xanh."],
-      "/booking": ["Chọn xe, ngày thuê và gửi yêu cầu đặt xe máy điện tại Ninh Bình nhanh chóng.", "Choose your electric motorbike and dates, then send a booking request in minutes."],
-      "/pricing": ["Xem giá thuê xe máy điện và xe đạp trợ lực tại Ninh Bình.", "Compare electric motorbike and e-bike rental prices in Ninh Binh."],
+      "/": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày: VinFast Evo, Evo Lite, Feliz II và xe đạp trợ lực. Giao xe tận khách sạn ở Hoa Lư, Tam Cốc, Tràng An.", "Rent an electric motorbike in Ninh Binh from 120,000 VND/day. VinFast Evo, Evo Lite, Feliz II and e-bikes, delivered to your hotel in Hoa Lu, Tam Coc or Trang An."],
+      "/index-en.html": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày: VinFast Evo, Evo Lite, Feliz II và xe đạp trợ lực. Giao xe tận khách sạn ở Hoa Lư, Tam Cốc, Tràng An.", "Rent an electric motorbike in Ninh Binh from 120,000 VND/day. VinFast Evo, Evo Lite, Feliz II and e-bikes, delivered to your hotel in Hoa Lu, Tam Coc or Trang An."],
+      "/booking": ["Chọn xe, ngày thuê và gửi yêu cầu đặt xe máy điện tại Ninh Bình, Hoa Lư trong vài phút. Không cần đặt cọc.", "Choose your electric motorbike and dates, then send a booking request in minutes."],
+      "/pricing": ["Giá thuê xe máy điện Ninh Bình: 150.000đ/ngày, xe đạp trợ lực 120.000đ/ngày, gói 5 giờ từ 80.000đ. Bao gồm mũ bảo hiểm, áo mưa, sạc.", "Compare electric motorbike and e-bike rental prices in Ninh Binh."],
       "/contact": ["Liên hệ Xe Cố Đô Xanh để thuê xe máy điện tại Ninh Bình. Gọi hotline, gửi tin nhắn hoặc ghé 61 ngõ 281 Đinh Tiên Hoàng; hỗ trợ hằng ngày từ 07:00 đến 22:00.", "Contact Xe Co Do Xanh to rent an electric motorbike in Ninh Binh. Call, message or visit 61 Alley 281 Dinh Tien Hoang. Open daily from 07:00 to 22:00."],
       "/news": ["Cẩm nang du lịch, thông tin thuê xe và kinh nghiệm khám phá Ninh Bình.", "Travel guides, rental advice and local tips for exploring Ninh Binh."],
       "/faq": ["Giải đáp thủ tục, giao nhận, pin và các câu hỏi khi thuê xe tại Ninh Bình.", "Answers about booking, delivery, batteries and renting in Ninh Binh."],
@@ -94,7 +99,39 @@ function RouteMetadata() {
       });
       document.head.appendChild(faqSchema);
     }
-    return () => faqSchema.remove();
+    const extraSchemas: HTMLScriptElement[] = [];
+    if (path === "/" || path === "/index-en.html" || path === "/pricing") {
+      const products = vehicles.map((v) => {
+        const price = toVnd(v.pricing.day1);
+        const name = isEnglish && v.nameEn ? v.nameEn : v.name;
+        const specs = isEnglish ? v.specsEn : v.specs;
+        return {
+          "@type": "Product",
+          "@id": `${BUSINESS.url}/#${v.id}`,
+          name: isEnglish ? `${name} rental in Ninh Binh` : `Thuê ${name} Ninh Bình`,
+          image: `${BUSINESS.url}${v.image}`,
+          description: Object.entries(specs).map(([k, val]) => `${k}: ${val}`).join(". "),
+          brand: { "@type": "Brand", name: v.name.toLowerCase().includes("phoenix") ? "Phoenix" : "VinFast" },
+          ...(price && {
+            offers: {
+              "@type": "Offer",
+              url: `${BUSINESS.url}/booking`,
+              priceCurrency: "VND",
+              price,
+              availability: "https://schema.org/InStock",
+              seller: { "@id": `${BUSINESS.url}/#business` },
+              priceSpecification: { "@type": "UnitPriceSpecification", price, priceCurrency: "VND", unitCode: "DAY" },
+            },
+          }),
+        };
+      });
+      const s = document.createElement("script");
+      s.type = "application/ld+json";
+      s.text = JSON.stringify({ "@context": "https://schema.org", "@graph": products });
+      document.head.appendChild(s);
+      extraSchemas.push(s);
+    }
+    return () => { faqSchema.remove(); extraSchemas.forEach((s) => s.remove()); };
   }, [language, location.pathname]);
 
   return null;

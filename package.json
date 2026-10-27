@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run seo:build",
+    "seo:build": "node --experimental-strip-types scripts/seo-publish.mjs build",
+    "seo:submit": "node --experimental-strip-types scripts/seo-publish.mjs submit",
     "lint": "eslint .",
     "preview": "vite preview"
   },

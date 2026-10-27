@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+.env.*
+.seo-state.json
+.DS_Store

@@ -96,7 +96,7 @@ ${formData.message}
                     <div className="row"><span>Hotline</span><span><a href={`tel:${phoneNumber}`}>{phoneNumber}</a></span></div>
                     <div className="row"><span>Email</span><span><a href="mailto:hieubyi@gmail.com">hieubyi@gmail.com</a></span></div>
                     <div className="row"><span>{L("Giờ làm việc", "Hours")}</span><span>07:00 - 22:00</span></div>
-                    <div className="row"><span>{L("Địa chỉ", "Address")}</span><span>Số 61, ngõ 281 Đinh Tiên Hoàng, Ninh Bình</span></div>
+                    <div className="row"><span>{L("Địa chỉ", "Address")}</span><span>Số 61, Ngõ 281, Đường Đinh Tiên Hoàng, Phường Hoa Lư, TP. Ninh Bình</span></div>
                   </div>
                   <p className="ticket-note" style={{ paddingTop: 12 }}>
                     <iframe title="map" src="https://maps.google.com/maps?q=Xe+C%E1%BB%91+%C4%90%C3%B4+Xanh,+Ninh+B%C3%ACnh&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="180" style={{ border: 0 }} loading="lazy" />

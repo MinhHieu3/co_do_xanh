@@ -32,8 +32,8 @@ export default function Footer() {
                 <a href="mailto:hieubyi@gmail.com" itemProp="email">hieubyi@gmail.com</a>
               </p>
               <div itemProp="address" itemScope itemType="https://schema.org/PostalAddress" style={{ display: "none" }}>
-                <span itemProp="streetAddress">Số 61, ngõ 281 Đinh Tiên Hoàng</span>
-                <meta itemProp="addressLocality" content="Ninh Bình" />
+                <span itemProp="streetAddress">Số 61, Ngõ 281, Đường Đinh Tiên Hoàng</span>
+                <meta itemProp="addressLocality" content="Phường Hoa Lư, TP. Ninh Bình" />
                 <meta itemProp="addressCountry" content="VN" />
               </div>
             </div>

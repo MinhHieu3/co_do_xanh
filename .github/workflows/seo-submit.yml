@@ -1,0 +1,48 @@
+# Sau mỗi lần Vercel deploy production thành công: ping IndexNow + gửi lại sitemap cho Search Console.
+# Cần cấu hình trong GitHub > Settings > Secrets and variables > Actions:
+#   INDEXNOW_KEY               (bắt buộc, phải trùng với biến INDEXNOW_KEY trên Vercel)
+#   GSC_SERVICE_ACCOUNT_JSON   (tuỳ chọn)
+name: SEO submit
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+concurrency:
+  group: seo-submit
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Lưu danh sách URL đã gửi giữa các lần chạy để chỉ ping URL mới/đổi
+      - name: Restore state
+        uses: actions/cache/restore@v4
+        with:
+          path: .seo-state.json
+          key: seo-state-${{ github.run_id }}
+          restore-keys: seo-state-
+
+      - name: Submit
+        run: node --experimental-strip-types scripts/seo-publish.mjs submit
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+
+      - name: Save state
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: .seo-state.json
+          key: seo-state-${{ github.run_id }}

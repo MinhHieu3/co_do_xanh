@@ -1,1 +1,0 @@
-import"./main-pjwhnXlm.js";localStorage.setItem(`language`,`EN`);

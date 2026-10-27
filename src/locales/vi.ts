@@ -117,7 +117,7 @@ export const vi = {
     infoTitle: "Thông tin liên hệ",
     addressTitle: "Địa chỉ cửa hàng",
     addressLine1: "Xe Cố Đô Xanh",
-    addressLine2: " SN 61, Ngõ 281 đường Đinh Tiên Hoàng, Hoa Lư, Ninh Bình",
+    addressLine2: " Số 61, Ngõ 281, Đường Đinh Tiên Hoàng, Phường Hoa Lư, TP. Ninh Bình",
     phoneTitle: "Điện thoại / Zalo",
     emailTitle: "ThÆ° Äiá»n tá»­",
     hoursTitle: "Giờ mở cửa",

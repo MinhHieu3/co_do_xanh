@@ -38,48 +38,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
-  <!-- Local Business Schema -->
+  <!-- Local Business Schema (NAP phải khớp src/data/business.ts và Google Business Profile) -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": "AutoRental",
+      "@id": "https://xecodoxanh.com/#business",
       "name": "Xe Cố Đô Xanh",
-      "image": "https://xecodoxanh.com/og-image.png",
-      "@id": "https://xecodoxanh.com",
+      "alternateName": "Thuê xe máy điện Ninh Bình - Xe Cố Đô Xanh",
       "url": "https://xecodoxanh.com",
+      "image": "https://xecodoxanh.com/og-image.png",
+      "logo": "https://xecodoxanh.com/favicon.png",
       "telephone": "+84866399986",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "No. 61, Alley 281 Dinh Tien Hoang",
-        "addressLocality": "Hoa Lu Ward, Ninh Binh City",
-        "addressRegion": "Ninh Binh",
+        "streetAddress": "Số 61, Ngõ 281, Đường Đinh Tiên Hoàng",
+        "addressLocality": "Phường Hoa Lư, TP. Ninh Bình",
+        "addressRegion": "Ninh Bình",
         "addressCountry": "VN"
       },
-      "description": "Premium electric motorbike rental in Ninh Binh. We provide new electric scooters, free delivery, and 100% fully charged batteries.",
-      "priceRange": "$$"
-    }
-  </script>
-
-  <!-- Product/Price Schema -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Electric Motorbike Rental Ninh Binh",
-      "image": "https://xecodoxanh.com/og-image.png",
-      "description": "Premium electric motorbike rental service with free delivery in Ninh Binh.",
-      "brand": {
-        "@type": "Brand",
-        "name": "Xe Cố Đô Xanh"
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "07:00",
+        "closes": "22:00"
       },
-      "offers": {
-        "@type": "AggregateOffer",
-        "url": "https://xecodoxanh.com/index-en.html",
-        "priceCurrency": "VND",
-        "lowPrice": "120000",
-        "highPrice": "150000",
-        "offerCount": "5"
-      }
+      "areaServed": ["Ninh Bình", "Hoa Lư", "Tràng An", "Tam Cốc", "Hang Múa", "Bái Đính"],
+      "description": "Cho thuê xe máy điện VinFast (Evo, Evo Lite, Feliz II) và xe đạp trợ lực tại Ninh Bình. Giao xe tận khách sạn ở Hoa Lư, Tam Cốc, Tràng An.",
+      "priceRange": "120.000đ - 150.000đ / ngày",
+      "currenciesAccepted": "VND",
+      "knowsLanguage": ["vi", "en"]
     }
   </script>
 
@@ -88,31 +76,16 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://xecodoxanh.com/#org",
       "name": "Xe Cố Đô Xanh",
-      "url": "https://xecodoxanh.com/index-en.html",
-      "logo": "https://xecodoxanh.com/og-image.png",
-      "description": "Premium electric motorbike rental service in Ninh Binh.",
+      "url": "https://xecodoxanh.com",
+      "logo": "https://xecodoxanh.com/favicon.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+84866399986",
         "contactType": "customer service",
         "areaServed": "VN",
         "availableLanguage": ["Vietnamese", "English"]
-      }
-    }
-  </script>
-
-  <!-- Person Schema -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Xe Co Do Xanh Representative",
-      "url": "https://xecodoxanh.com/index-en.html",
-      "jobTitle": "Founder / Manager",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Xe Cố Đô Xanh"
       }
     }
   </script>
