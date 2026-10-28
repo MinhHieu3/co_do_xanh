@@ -42,12 +42,12 @@ export default function BookingPage() {
   const selectedVehicleData = useMemo(() => vehicles.find((v) => v.id === selectedVehicle), [selectedVehicle]);
   const fmt = (d: Date, h: number) =>
     `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()} ${String(h).padStart(2, "0")}:00`;
-  // Delivery in the chosen window of the first day, evening pickup on the last day
+  // 1 ngày = 24h: giao lúc windowStart giờ ngày đầu, thu lại lúc windowStart giờ sau đúng `days` ngày
   let pickupDate = "", dropoffDate = "";
   if (startDate) {
     const [y, m, d] = startDate.split("-").map(Number);
     pickupDate = fmt(new Date(y, m - 1, d), Number(windowStart));
-    dropoffDate = fmt(new Date(y, m - 1, d + days - 1), 18);
+    dropoffDate = fmt(new Date(y, m - 1, d + days), Number(windowStart));
   }
   const formData = { ...form0, pickupDate, dropoffDate };
   const set = (k: string, v: string) => setForm0((p) => ({ ...p, [k]: v }));
@@ -113,7 +113,10 @@ export default function BookingPage() {
       const wStart = Number(windowStart);
       const timeWindow = `${wStart}:00 đến ${wStart + 2}:00`;
       const location = formData.pickupLocation === "Giao tận nơi" ? formData.deliveryAddress : "Tại cửa hàng";
-      const returnNote = days === 1 ? "nhận lại tối cùng ngày" : `trả ngày thứ ${days}, khoảng 18:00`;
+      const endDate = new Date(sy, sm - 1, sd + days);
+      const endDay = String(endDate.getDate()).padStart(2, "0");
+      const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
+      const returnNote = `thu lại lúc ${wStart}:00 ngày ${endDay}/${endMonth}`;
       // Tạo link Google Maps từ địa chỉ giao xe
       const mapQuery = formData.pickupLocation === "Giao tận nơi" && formData.deliveryAddress.trim()
         ? `${formData.deliveryAddress.trim()}, Ninh Binh, Vietnam`
@@ -281,7 +284,7 @@ export default function BookingPage() {
                   </div>
                 </div>
                 <p className="hint" style={{ marginTop: 10 }}>
-                  {L("Nhân viên giao xe cho nhiều khách sạn trong một vòng, nên xe có thể đến bất kỳ lúc nào trong khung giờ bạn chọn. Xe được thu lại vào chiều tối ngày cuối.", "The driver delivers to several hotels on one round, so your ride can arrive at any moment within your window. Pickup is in the evening of your last day.")}
+                  {L("Nhân viên giao xe cho nhiều khách sạn trong một vòng, nên xe có thể đến bất kỳ lúc nào trong khung giờ bạn chọn. 1 ngày = 24 giờ: thuê lúc 7h hôm nay, trả lúc 7h ngày mai.", "The driver delivers to several hotels on one round, so your ride can arrive at any moment within your window. Each day is 24 hours: pick up at 7 am today, return at 7 am tomorrow.")}
                 </p>
                 <p className="deadline">{cutoffLine}</p>
               </fieldset>

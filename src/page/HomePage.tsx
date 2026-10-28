@@ -125,7 +125,7 @@ export default function HomePage() {
           <div className="hero-b">
             <div className="fares">
               {fares.map((f) => (
-                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? "/Ngày" : "VND"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
+                <div className="fare" key={f.l}><span>{f.l}</span> <b>{SHOW_PRICE ? `${f.p} ${language === "VI" ? "/Ngày" : "VND / day"}` : contactLabel(language)}</b> {SHOW_PRICE && <small>{h.perDay}{f.u}</small>}</div>
               ))}
             </div>
             <ul className="ticks">
@@ -175,7 +175,7 @@ export default function HomePage() {
                   <p className="goodfor"><b>{c.rides.good[0]}</b> {c.rides.good[i + 1]}</p>
                 </div>
                 <div className="ride-foot">
-                  <div className="price"><b>{SHOW_PRICE ? `${prices[i]} ${language === "VI" ? "/Ngày" : "VND"}` : contactLabel(language)}</b>{SHOW_PRICE && <span>{c.rides.perDay}{usd[i]}</span>}</div>
+                  <div className="price"><b>{SHOW_PRICE ? `${prices[i]} ${language === "VI" ? "/Ngày" : "VND / day"}` : contactLabel(language)}</b>{SHOW_PRICE && <span>{c.rides.perDay}{usd[i]}</span>}</div>
                   <Link className="btn btn-sm" to="/booking" state={{ selectedVehicle: rideIds[i] }}>{c.rides.book}</Link>
                 </div>
               </article>
