@@ -12,6 +12,97 @@ export type EditorialArticle = {
 
 export const articles: EditorialArticle[] = [
     {
+        slug: "5-dieu-can-biet-truoc-khi-du-lich-ninh-binh",
+        image: "/ebike/img/post.jpg",
+        date: "2026-10-28",
+        modified: "2026-10-28",
+        category: { VI: "Kinh nghiệm", EN: "Travel tips" },
+        VI: {
+            title: "5 điều cần biết trước khi đi du lịch Ninh Bình để có chuyến đi trọn vẹn",
+            desc: "5 kinh nghiệm du lịch Ninh Bình: kiểm tra thời tiết, lên lịch trình, dự trù ngân sách, chọn phương tiện và lưu sẵn địa chỉ thuê xe máy điện.",
+            intro: "Ninh Bình là điểm đến hấp dẫn với cảnh quan núi đá vôi, sông nước và nhiều địa danh nổi tiếng như Tràng An, Tam Cốc, Hang Múa. Tuy nhiên, để chuyến du lịch diễn ra thuận lợi, bạn nên chuẩn bị trước một số điều quan trọng. Dưới đây là 5 kinh nghiệm du lịch Ninh Bình giúp bạn chủ động hơn về thời gian, chi phí và phương tiện di chuyển.",
+            sections: [
+                {
+                    h: "1. Kiểm tra thời tiết trước chuyến đi", p: [
+                        "Thời tiết ảnh hưởng trực tiếp đến trải nghiệm tham quan, đặc biệt là các hoạt động ngoài trời như đi thuyền, leo núi và chụp ảnh. Trước khi khởi hành, bạn nên kiểm tra dự báo thời tiết, chuẩn bị trang phục phù hợp và mang theo áo mưa hoặc đồ chống nắng khi cần thiết."
+                    ]
+                },
+                {
+                    h: "2. Lên lịch trình tham quan hợp lý", p: [
+                        "Ninh Bình có nhiều địa điểm nổi tiếng như Tràng An, Tam Cốc, Hang Múa và cố đô Hoa Lư. Thay vì cố gắng ghé thăm quá nhiều nơi trong một ngày, bạn nên lựa chọn những điểm đến phù hợp với sở thích và thời gian của mình.",
+                        "Một lịch trình thoải mái sẽ giúp bạn có nhiều thời gian tận hưởng cảnh đẹp, trải nghiệm ẩm thực và lưu giữ những khoảnh khắc đáng nhớ."
+                    ]
+                },
+                {
+                    h: "3. Dự trù ngân sách du lịch", p: [
+                        "Để kiểm soát chi phí, bạn nên dự trù trước các khoản như: chi phí di chuyển đến Ninh Bình; vé tham quan các địa điểm; ăn uống và lưu trú; thuê phương tiện đi lại; và các khoản phát sinh.",
+                        "Việc chuẩn bị ngân sách giúp chuyến đi thoải mái hơn mà không phải lo lắng quá nhiều về chi tiêu."
+                    ]
+                },
+                {
+                    h: "4. Lựa chọn phương tiện di chuyển phù hợp", p: [
+                        "Các điểm tham quan tại Ninh Bình nằm ở nhiều khu vực khác nhau. Vì vậy, lựa chọn phương tiện phù hợp sẽ giúp bạn chủ động hơn trong lịch trình. Nếu thích khám phá theo nhịp độ riêng, bạn có thể cân nhắc thuê xe máy điện để linh hoạt di chuyển, dừng chân chụp ảnh và trải nghiệm những cung đường đẹp.",
+                        "Khi thuê xe, hãy kiểm tra tình trạng xe, mức pin, quãng đường dự kiến và trao đổi trước với đơn vị cho thuê về nhu cầu di chuyển."
+                    ]
+                },
+                {
+                    h: "5. Lưu sẵn địa chỉ thuê xe tại Ninh Bình", p: [
+                        "Nếu đang tìm địa chỉ thuê xe máy điện tại Ninh Bình, bạn có thể tham khảo Xe Cố Đô Xanh. Dịch vụ hướng đến trải nghiệm di chuyển linh hoạt, thuận tiện cho du khách muốn tự mình khám phá vẻ đẹp của vùng đất cố đô.",
+                        "Thông tin liên hệ Xe Cố Đô Xanh:",
+                        "• Giá thuê xe máy điện: Từ 150.000 VNĐ/ngày",
+                        "• Địa chỉ: Số 61, ngõ 281 đường Đinh Tiên Hoàng, Hoa Lư, Ninh Bình",
+                        "• Zalo: 0866 399 986 – 0936 112 997",
+                        "• WhatsApp: +84 866 399 986",
+                        "• Website: https://xecodoxanh.com"
+                    ]
+                }
+            ],
+            conclusion: "Một chuyến du lịch Ninh Bình đáng nhớ không nhất thiết phải có lịch trình dày đặc. Chỉ cần chuẩn bị thời tiết, kế hoạch, ngân sách và phương tiện phù hợp, bạn đã có thể tận hưởng hành trình một cách thoải mái hơn. Đến Ninh Bình, khám phá theo cách của bạn cùng Xe Cố Đô Xanh!"
+        },
+        EN: {
+            title: "5 Things to Know Before Visiting Ninh Binh for a Perfect Trip",
+            desc: "5 Ninh Binh travel tips: check the weather, plan your itinerary, set a budget, choose the right transport and save a trusted e-motorbike rental address.",
+            intro: "Ninh Binh is a captivating destination with limestone karsts, winding rivers and famous sites such as Trang An, Tam Coc and Mua Cave. To make your trip go smoothly, it helps to prepare a few things in advance. Here are 5 tips to help you manage your time, budget and transport.",
+            sections: [
+                {
+                    h: "1. Check the weather before you go", p: [
+                        "Weather directly affects your sightseeing, especially outdoor activities like boat trips, climbing and photography. Check the forecast before departure, dress appropriately and bring a raincoat or sun protection when needed."
+                    ]
+                },
+                {
+                    h: "2. Plan a realistic itinerary", p: [
+                        "Ninh Binh has many famous places such as Trang An, Tam Coc, Mua Cave and the ancient capital of Hoa Lu. Instead of trying to visit too many places in one day, choose destinations that match your interests and time.",
+                        "A relaxed schedule gives you more time to enjoy the scenery, try local food and capture memorable moments."
+                    ]
+                },
+                {
+                    h: "3. Set a travel budget", p: [
+                        "To keep costs under control, plan ahead for: transport to Ninh Binh; attraction tickets; food and accommodation; vehicle rental; and unexpected expenses.",
+                        "Budgeting in advance lets you enjoy the trip without worrying too much about spending."
+                    ]
+                },
+                {
+                    h: "4. Choose the right transport", p: [
+                        "Ninh Binh's attractions are spread across different areas, so the right transport keeps your schedule flexible. If you like exploring at your own pace, consider renting an electric motorbike to move freely, stop for photos and enjoy scenic roads.",
+                        "When renting, check the vehicle's condition, battery level and expected distance, and discuss your travel plans with the rental provider in advance."
+                    ]
+                },
+                {
+                    h: "5. Save a rental address in Ninh Binh", p: [
+                        "If you're looking for an electric motorbike rental in Ninh Binh, consider Xe Co Do Xanh — a service focused on flexible, convenient travel for visitors who want to explore the ancient capital on their own.",
+                        "Xe Co Do Xanh contact:",
+                        "• Electric motorbike rental: From VND 150,000/day",
+                        "• Address: No. 61, Lane 281 Dinh Tien Hoang Street, Hoa Lu, Ninh Binh",
+                        "• Zalo: 0866 399 986 – 0936 112 997",
+                        "• WhatsApp: +84 866 399 986",
+                        "• Website: https://xecodoxanh.com"
+                    ]
+                }
+            ],
+            conclusion: "A memorable Ninh Binh trip doesn't need a packed schedule. With the right preparation for weather, plans, budget and transport, you can enjoy the journey comfortably. Come to Ninh Binh and explore your way with Xe Co Do Xanh!"
+        }
+    },
+    {
         slug: "gia-thue-xe-may-dien-ninh-binh",
         image: "/ebike/img/motorbikes-1100.webp",
         date: "2026-10-10",
