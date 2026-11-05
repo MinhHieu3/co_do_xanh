@@ -44,7 +44,7 @@ export default function HomePage() {
     if (!hv) return;
     const conn = (navigator as any).connection || {};
     const slow = conn.saveData || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
-    const still = slow || matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const still = window.innerWidth < 700 || slow || matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (still) return;
     const start = () => {
       hv.src = window.innerWidth < 700 ? "/ebike/video/hero-540.mp4" : "/ebike/video/hero-720.mp4";
@@ -111,8 +111,8 @@ export default function HomePage() {
           </div>
           <div className="cards">
             <figure className="postcard p1 p-video">
-              <video ref={videoRef} className="hero-video" muted loop playsInline preload="none" poster="/ebike/img/hero-poster-new.jpg" width={1280} height={720} aria-label="Riding an electric scooter between the rice fields">
-                <img src="/ebike/img/hero-poster-new.jpg" width={1280} height={720} alt="A quiet road between the rice fields with the limestone mountains behind" />
+              <video ref={videoRef} className="hero-video" muted loop playsInline preload="none" poster="/ebike/img/hero-poster-900.webp" width={900} height={506} aria-label="Riding an electric scooter between the rice fields">
+                <img src="/ebike/img/hero-poster-900.webp" width={900} height={506} alt="A quiet road between the rice fields with the limestone mountains behind" />
               </video>
               <figcaption>{h.caption1}</figcaption>
             </figure>

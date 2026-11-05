@@ -49,8 +49,8 @@ async function http(url, opts = {}, tries = 3) {
 /* ---------- 1. Danh sách URL ---------- */
 // Trang tĩnh: khi sửa nội dung trang nào, cập nhật ngày ở đây để bot ping lại trang đó.
 const STATIC_PAGES = [
-  { path: "/", lastmod: "2026-10-27", priority: "1.0", changefreq: "weekly", alt: true },
-  { path: "/index-en.html", lastmod: "2026-10-27", priority: "0.9", changefreq: "weekly", alt: true },
+  { path: "/", lastmod: "2026-11-05", priority: "1.0", changefreq: "weekly", alt: true },
+  { path: "/index-en.html", lastmod: "2026-11-05", priority: "0.9", changefreq: "weekly", alt: true },
   { path: "/booking", lastmod: "2026-10-15", priority: "0.8", changefreq: "monthly" },
   { path: "/pricing", lastmod: "2026-10-27", priority: "0.8", changefreq: "monthly" },
   { path: "/news", lastmod: "2026-10-15", priority: "0.8", changefreq: "weekly" },

@@ -66,13 +66,16 @@ function inlineSuspense(html) {
   return html.replace(/<script>(?:(?!<\/script>)[\s\S])*?\$R[CSX][\s\S]*?<\/script>/g, "");
 }
 
-function fill(template, appHtml, meta) {
+function fill(template, appHtml, meta, route) {
   let html = template
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`)
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
     .replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/, `$1${esc(meta.title)}$2`)
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*(")/, `$1${meta.canonical}$2`);
+  if (route === "/" || route === "/index-en.html") {
+    html = html.replace("</head>", '  <link rel="preload" as="image" href="/ebike/img/hero-poster-900.webp" fetchpriority="high" />\n</head>');
+  }
   const schemas = meta.schemas.map((s) => `<script type="application/ld+json" data-route-schema>${jsonLd(s)}</script>`).join("\n  ");
   html = html.replace("</head>", `  <meta property="og:url" content="${meta.canonical}" />\n  ${schemas}\n</head>`);
   // Thay splash screen trong #root bằng nội dung thật
@@ -89,7 +92,7 @@ for (const route of publicRoutes()) {
   if (appHtml.length < 2000) throw new Error(`[prerender] ${route}: HTML quá ngắn (${appHtml.length} ký tự), có thể trang bị lỗi`);
   const out = route === "/" ? join(dist, "index.html") : route.endsWith(".html") ? join(dist, route) : join(dist, route, "index.html");
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, fill(templates[lang], appHtml, getRouteMeta(route, lang === "EN")));
+  writeFileSync(out, fill(templates[lang], appHtml, getRouteMeta(route, lang === "EN"), route));
   ok++;
   console.log(`[prerender] ${route}  (${(appHtml.length / 1024).toFixed(1)} KB)`);
 }

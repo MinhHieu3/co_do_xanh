@@ -3,24 +3,26 @@ import { WhatsappIcon, MessengerIcon, ZaloIcon } from "./Icons";
 import { useLanguage } from "../context/LanguageContext";
 import { Link } from "react-router-dom";
 import { ebikeContent } from "../data/ebikeContent";
+import { BUSINESS } from "../data/business";
 // import { BrandMark } from "./Header";
 
 export default function Footer() {
   const { language } = useLanguage();
   const f = ebikeContent[language as "VI" | "EN"].foot;
   const zaloNumber = import.meta.env.VITE_ZALO_NUMBER || "0866399986";
-  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || "0866399986";
+  const phoneNumber = import.meta.env.VITE_PHONE_NUMBER || BUSINESS.phone;
   const messengerUrl = import.meta.env.VITE_MESSENGER_URL || "https://www.facebook.com/profile.php?id=61593578486189";
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "84866399986";
 
   return (
     <>
       <div className="wave-band" role="presentation" />
-      <footer className="site-foot" itemScope itemType="https://schema.org/LocalBusiness">
-        <meta itemProp="name" content="Xe Cố Đô Xanh" />
+      <footer className="site-foot" itemScope itemType="https://schema.org/AutoRental">
+        <meta itemProp="name" content={BUSINESS.name} />
         <meta itemProp="image" content="https://xecodoxanh.com/og-image.png" />
-        <meta itemProp="url" content="https://xecodoxanh.com" />
-        <meta itemProp="priceRange" content="VND" />
+        <meta itemProp="url" content={BUSINESS.url} />
+        <meta itemProp="priceRange" content="120.000đ - 150.000đ / ngày" />
+        <link itemProp="sameAs" href={BUSINESS.mapsUrl} />
         <div className="wrap">
           <div className="foot-grid">
             <div>
@@ -31,11 +33,14 @@ export default function Footer() {
                 <br />
                 <a href="mailto:hieubyi@gmail.com" itemProp="email">hieubyi@gmail.com</a>
               </p>
-              <div itemProp="address" itemScope itemType="https://schema.org/PostalAddress" style={{ display: "none" }}>
-                <span itemProp="streetAddress">Số 61, Ngõ 281, Đường Đinh Tiên Hoàng</span>
-                <meta itemProp="addressLocality" content="Phường Hoa Lư, TP. Ninh Bình" />
-                <meta itemProp="addressCountry" content="VN" />
+              <div itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+                <span itemProp="streetAddress">{BUSINESS.street}</span>
+                <span>, </span>
+                <span itemProp="addressLocality">{BUSINESS.ward}, {BUSINESS.city}</span>
+                <meta itemProp="addressRegion" content={BUSINESS.region} />
+                <meta itemProp="addressCountry" content={BUSINESS.country} />
               </div>
+              <p><a href={BUSINESS.mapsUrl} target="_blank" rel="noreferrer">Xem Xe Cố Đô Xanh trên Google Maps</a></p>
             </div>
             <div>
               <h2>{f.site}</h2>

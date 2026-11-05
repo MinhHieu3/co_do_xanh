@@ -6,6 +6,7 @@
 export const BUSINESS = {
   name: "Xe Cố Đô Xanh",
   url: "https://xecodoxanh.com",
+  mapsUrl: "https://maps.app.goo.gl/FZeDgZhhVbc6B5fu6",
   phone: "0866399986",
   phoneIntl: "+84866399986",
   street: "Số 61, Ngõ 281, Đường Đinh Tiên Hoàng",

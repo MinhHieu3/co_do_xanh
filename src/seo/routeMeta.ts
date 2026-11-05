@@ -7,8 +7,8 @@ import { BUSINESS } from "../data/business";
 const toVnd = (s: string) => Number(s.replace(/[^\d]/g, "")) || undefined;
 
 const TITLES: Record<string, [string, string]> = {
-  "/": ["Thuê Xe Máy Điện Ninh Bình, Hoa Lư | Xe Cố Đô Xanh", "Electric Motorbike Rental Ninh Binh | Xe Cố Đô Xanh"],
-  "/index-en.html": ["Thuê Xe Máy Điện Ninh Bình, Hoa Lư | Xe Cố Đô Xanh", "Electric Motorbike Rental Ninh Binh | Xe Cố Đô Xanh"],
+  "/": ["Thuê Xe Máy Điện Ninh Bình | Xe Cố Đô Xanh", "Electric Motorbike Rental Ninh Binh | Xe Cố Đô Xanh"],
+  "/index-en.html": ["Thuê Xe Máy Điện Ninh Bình | Xe Cố Đô Xanh", "Electric Motorbike Rental Ninh Binh | Xe Cố Đô Xanh"],
   "/booking": ["Đặt Thuê Xe Máy Điện Ninh Bình Online | Xe Cố Đô Xanh", "Book Electric Motorbike Ninh Binh | Xe Cố Đô Xanh"],
   "/pricing": ["Giá Thuê Xe Máy Điện Ninh Bình 1 Ngày | Xe Cố Đô Xanh", "Electric Motorbike Rental Prices Ninh Binh | Xe Cố Đô Xanh"],
   "/contact": ["Liên hệ Thuê Xe Máy Điện Ninh Bình | Xe Cố Đô Xanh", "Contact – Electric Motorbike Rental Ninh Binh | Xe Cố Đô Xanh"],
@@ -20,8 +20,8 @@ const TITLES: Record<string, [string, string]> = {
 };
 
 const DESCRIPTIONS: Record<string, [string, string]> = {
-  "/": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày: VinFast Evo, Evo Lite, Feliz II và xe đạp điện. Giao xe tận khách sạn ở Hoa Lư, Tam Cốc, Tràng An.", "Rent an electric motorbike in Ninh Binh from 120,000 VND/day. VinFast Evo, Evo Lite, Feliz II and e-bikes, delivered to your hotel in Hoa Lu, Tam Coc or Trang An."],
-  "/index-en.html": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày: VinFast Evo, Evo Lite, Feliz II và xe đạp điện. Giao xe tận khách sạn ở Hoa Lư, Tam Cốc, Tràng An.", "Rent an electric motorbike in Ninh Binh from 120,000 VND/day. VinFast Evo, Evo Lite, Feliz II and e-bikes, delivered to your hotel in Hoa Lu, Tam Coc or Trang An."],
+  "/": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày. Xe mới, giao tận nơi ở Hoa Lư, Tam Cốc, Tràng An. Giá rõ ràng, gọi 0866 399 986 để đặt xe. Hỗ trợ đặt nhanh.", "Electric motorbike rental in Ninh Binh from VND 120,000/day. New bikes delivered to hotels in Hoa Lu, Tam Coc and Trang An. Clear prices; call +84 866 399 986."],
+  "/index-en.html": ["Thuê xe máy điện Ninh Bình từ 120.000đ/ngày. Xe mới, giao tận nơi ở Hoa Lư, Tam Cốc, Tràng An. Giá rõ ràng, gọi 0866 399 986 để đặt xe. Hỗ trợ đặt nhanh.", "Electric motorbike rental in Ninh Binh from VND 120,000/day. New bikes delivered to hotels in Hoa Lu, Tam Coc and Trang An. Clear prices; call +84 866 399 986."],
   "/booking": ["Chọn xe, ngày thuê và gửi yêu cầu đặt xe máy điện tại Ninh Bình trong vài phút. Giao xe tận khách sạn, không cần đặt cọc.", "Choose your electric motorbike, rental dates and location. We deliver to your hotel in Ninh Binh. No deposit, pay on delivery."],
   "/pricing": ["Bảng giá thuê xe máy điện Ninh Bình: 150.000đ/ngày, xe đạp điện 120.000đ/ngày. Bảo gồm mũ bảo hiểm, áo mưa, sạc. Không phí giao xe.", "Electric motorbike rental prices in Ninh Binh: from 120,000 VND/day. Includes helmets, raincoats and charger. Free delivery to your hotel."],
   "/contact": ["Liên hệ Xe Cố Đô Xanh để thuê xe máy điện tại Ninh Bình. Gọi hotline, gửi tin nhắn hoặc ghé 61 ngõ 281 Đinh Tiên Hoàng; hỗ trợ hằng ngày từ 07:00 đến 22:00.", "Contact Xe Co Do Xanh to rent an electric motorbike in Ninh Binh. Call, message or visit 61 Alley 281 Dinh Tien Hoang. Open daily 07:00\u201322:00."],
