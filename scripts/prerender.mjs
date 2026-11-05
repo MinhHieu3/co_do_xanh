@@ -74,7 +74,7 @@ function fill(template, appHtml, meta, route) {
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*(")/, `$1${meta.canonical}$2`);
   if (route === "/" || route === "/index-en.html") {
-    html = html.replace("</head>", '  <link rel="preload" as="image" href="/ebike/img/hero-poster-900.webp" fetchpriority="high" />\n</head>');
+    html = html.replace("</head>", '  <link rel="preload" as="image" href="/ebike/img/hero-poster-720.webp" fetchpriority="high" />\n</head>');
   }
   const schemas = meta.schemas.map((s) => `<script type="application/ld+json" data-route-schema>${jsonLd(s)}</script>`).join("\n  ");
   html = html.replace("</head>", `  <meta property="og:url" content="${meta.canonical}" />\n  ${schemas}\n</head>`);

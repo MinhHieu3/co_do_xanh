@@ -111,8 +111,8 @@ export default function HomePage() {
           </div>
           <div className="cards">
             <figure className="postcard p1 p-video">
-              <video ref={videoRef} className="hero-video" muted loop playsInline preload="none" poster="/ebike/img/hero-poster-900.webp" width={900} height={506} aria-label="Riding an electric scooter between the rice fields">
-                <img src="/ebike/img/hero-poster-900.webp" width={900} height={506} alt="A quiet road between the rice fields with the limestone mountains behind" />
+              <video ref={videoRef} className="hero-video" muted loop playsInline preload="none" poster="/ebike/img/hero-poster-720.webp" width={720} height={405} aria-label="Riding an electric scooter between the rice fields">
+                <img src="/ebike/img/hero-poster-720.webp" width={720} height={405} alt="A quiet road between the rice fields with the limestone mountains behind" />
               </video>
               <figcaption>{h.caption1}</figcaption>
             </figure>
