@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD"></script>
+  <!-- Queue analytics immediately; load the third-party tag after the page load. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -13,6 +12,27 @@
 
     gtag('config', 'G-YWQM9DKZTD');
     gtag('config', 'AW-18466855811');
+
+    function loadGoogleTag() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD';
+      document.head.appendChild(script);
+    }
+
+    function scheduleGoogleTag() {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadGoogleTag, { timeout: 4000 });
+      } else {
+        window.setTimeout(loadGoogleTag, 2500);
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      scheduleGoogleTag();
+    } else {
+      window.addEventListener('load', scheduleGoogleTag, { once: true });
+    }
   </script>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -94,8 +114,8 @@
   <script type="module" crossorigin src="/assets/lucide-Cr-pYb4b.js"></script>
   <script type="module" crossorigin src="/assets/vendor-D0R5W5H5.js"></script>
   <script type="module" crossorigin src="/assets/config-DmrRTXOA.js"></script>
-  <script type="module" crossorigin src="/assets/main-CvBlBK3K.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-B7eSU33J.css">
+  <script type="module" crossorigin src="/assets/main-C2SQW7DW.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-Bi24jPrl.css">
   <link rel="preload" as="image" href="/ebike/img/hero-poster-900.webp" fetchpriority="high" />
   <meta property="og:url" content="https://xecodoxanh.com/" />
   <script type="application/ld+json" data-route-schema>{"@context":"https://schema.org","@graph":[{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-evo","name":"Thuê Vinfast Evo Ninh Bình","image":"https://xecodoxanh.com/ebike/img/ride-evo-640.jpg","description":"Loại xe: Xe máy điện. Dạng pin: Đổi pin tại tủ + Sạc pin. Quãng đường: Lên tới 82km / 1 lần đổi pin. Vận tốc tối đa: 70 km/h. Thể tích cốp: 20 Lít. Phụ kiện: 2 Mũ bảo hiểm, Áo mưa, Sạc pin. Bằng lái: Yêu cầu có giấy phép lái xe","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-feliz-2","name":"Thuê Vinfast Feliz II Ninh Bình","image":"https://xecodoxanh.com/ebike/img/ride-feliz2-640.jpg","description":"Loại xe: Xe máy điện. Dạng pin: Đổi pin tại tủ + Sạc pin. Quãng đường: Lên tới 82km / 1 lần đổi pin. Vận tốc tối đa: 70 km/h. Thể tích cốp: 20 Lít. Phụ kiện: 2 Mũ bảo hiểm, Áo mưa, Sạc pin. Bằng lái: Yêu cầu có giấy phép lái xe","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-evo-lite","name":"Thuê Vinfast Evo Lite Ninh Bình","image":"https://xecodoxanh.com/ebike/img/ride-evo-lite-640.jpg","description":"Loại xe: Xe máy điện. Dạng pin: Đổi pin tại tủ + Sạc pin. Quãng đường: Lên tới 82km / 1 lần đổi pin. Vận tốc tối đa: 60 km/h. Thể tích cốp: 20 Lít. Phụ kiện: 2 Mũ bảo hiểm, Áo mưa, Sạc pin. Bằng lái: Không yêu cầu giấy phép lái xe (từ 16 tuổi trở lên)","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#xe-dap-phoenix-nam","name":"Thuê Xe đạp trợ lực Phoenix (Nam) Ninh Bình","image":"https://xecodoxanh.com/ebike/img/phoenix-pair-640.webp","description":"Loại xe: Xe đạp trợ lực điện. Dạng pin: Sạc pin. Quãng đường: 50 - 80km / lần sạc. Vận tốc tối đa: 25 - 40 km/h. Khung xe: Hợp kim siêu nhẹ. Phụ kiện: Khóa xe, Sạc pin. Bằng lái: Không yêu cầu giấy phép lái xe","brand":{"@type":"Brand","name":"Phoenix"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":120000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":120000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#xe-dap-phoenix-nu","name":"Thuê Xe đạp trợ lực Phoenix (Nữ) Ninh Bình","image":"https://xecodoxanh.com/ebike/img/phoenix-pair-640.webp","description":"Loại xe: Xe đạp trợ lực điện. Dạng pin: Sạc pin. Quãng đường: 50 - 80km / lần sạc. Vận tốc tối đa: 25 - 40 km/h. Khung xe: Hợp kim siêu nhẹ. Phụ kiện: Khóa xe, Sạc pin. Bằng lái: Không yêu cầu giấy phép lái xe","brand":{"@type":"Brand","name":"Phoenix"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":120000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":120000,"priceCurrency":"VND","unitCode":"DAY"}}}]}</script>

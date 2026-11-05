@@ -29,6 +29,16 @@
 .eb .btn.alt{background:var(--card);color:var(--jungle);border:2px solid var(--jungle)}
 .eb .btn.alt:hover{background:var(--sky);color:var(--jungle-2)}
 @media (max-width:859px){.eb-home{padding-bottom:70px}}
+@media (max-width:700px){.eb-home .p-video::after{display:none}}
+.eb-home .rides{max-width:1040px;margin-inline:auto}
+.eb-home #rides{padding-block:48px}
+.eb-home #rides .section-head{margin-bottom:20px}
+.eb-home .rides{gap:20px}
+.eb-home .ride img{aspect-ratio:2 / 1}
+.eb-home .ride-body{padding:18px 18px 6px}
+.eb-home .ride .specs{margin-top:12px;gap:5px}
+.eb-home .ride .goodfor{margin-top:12px;padding-top:10px}
+.eb-home .ride-foot{margin-top:10px;padding:12px 18px 16px}
 
 /* Skin for legacy (Tailwind) pages: booking, contact, news */
 .eb main > div:first-child:not(.eb-home){background:transparent !important}

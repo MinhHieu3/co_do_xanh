@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD"></script>
+  <!-- Queue analytics immediately; load the third-party tag after the page load. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -13,6 +12,27 @@
 
     gtag('config', 'G-YWQM9DKZTD');
     gtag('config', 'AW-18466855811');
+
+    function loadGoogleTag() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD';
+      document.head.appendChild(script);
+    }
+
+    function scheduleGoogleTag() {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadGoogleTag, { timeout: 4000 });
+      } else {
+        window.setTimeout(loadGoogleTag, 2500);
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      scheduleGoogleTag();
+    } else {
+      window.addEventListener('load', scheduleGoogleTag, { once: true });
+    }
   </script>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

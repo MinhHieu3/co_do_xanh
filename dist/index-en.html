@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD"></script>
+  <!-- Queue analytics immediately; load the third-party tag after the page load. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -13,6 +12,27 @@
 
     gtag('config', 'G-YWQM9DKZTD');
     gtag('config', 'AW-18466855811');
+
+    function loadGoogleTag() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-YWQM9DKZTD';
+      document.head.appendChild(script);
+    }
+
+    function scheduleGoogleTag() {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadGoogleTag, { timeout: 4000 });
+      } else {
+        window.setTimeout(loadGoogleTag, 2500);
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      scheduleGoogleTag();
+    } else {
+      window.addEventListener('load', scheduleGoogleTag, { once: true });
+    }
   </script>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -90,13 +110,13 @@
     }
   </script>
 
-  <script type="module" crossorigin src="/assets/en-BGm-hgwe.js"></script>
+  <script type="module" crossorigin src="/assets/en-CYck4PWe.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-hePW80VL.js">
   <link rel="modulepreload" crossorigin href="/assets/lucide-Cr-pYb4b.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-D0R5W5H5.js">
   <link rel="modulepreload" crossorigin href="/assets/config-DmrRTXOA.js">
-  <link rel="modulepreload" crossorigin href="/assets/main-CvBlBK3K.js">
-  <link rel="stylesheet" crossorigin href="/assets/main-B7eSU33J.css">
+  <link rel="modulepreload" crossorigin href="/assets/main-C2SQW7DW.js">
+  <link rel="stylesheet" crossorigin href="/assets/main-Bi24jPrl.css">
   <link rel="preload" as="image" href="/ebike/img/hero-poster-900.webp" fetchpriority="high" />
   <meta property="og:url" content="https://xecodoxanh.com/index-en.html" />
   <script type="application/ld+json" data-route-schema>{"@context":"https://schema.org","@graph":[{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-evo","name":"Vinfast Evo rental in Ninh Binh","image":"https://xecodoxanh.com/ebike/img/ride-evo-640.jpg","description":"Type: Electric Motorbike. Battery: Swap + Charge. Range: Up to 82km / 1 battery swap. Max Speed: 70 km/h. Trunk Space: 20 Liters. Accessories: 2 Helmets, Raincoat, Charger. License: Driver's license required","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-feliz-2","name":"Vinfast Feliz II rental in Ninh Binh","image":"https://xecodoxanh.com/ebike/img/ride-feliz2-640.jpg","description":"Type: Electric Motorbike. Battery: Swap + Charge. Range: Up to 82km / 1 battery swap. Max Speed: 70 km/h. Trunk Space: 25 Liters (Spacious). Accessories: 2 Helmets, Raincoat, Charger. License: Driver's license required","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#vinfast-evo-lite","name":"Vinfast Evo Lite rental in Ninh Binh","image":"https://xecodoxanh.com/ebike/img/ride-evo-lite-640.jpg","description":"Type: Electric Motorbike. Battery: Swap + Charge. Range: Up to 82km / 1 battery swap. Max Speed: 60 km/h. Trunk Space: 20 Liters. Accessories: 2 Helmets, Raincoat, Charger. License: No driver's license required","brand":{"@type":"Brand","name":"VinFast"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":150000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":150000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#xe-dap-phoenix-nam","name":"Phoenix E-Bike (Men) rental in Ninh Binh","image":"https://xecodoxanh.com/ebike/img/phoenix-pair-640.webp","description":"Type: Electric Bicycle. Battery: Charge. Range: 50 - 80km / charge. Max Speed: 25 - 40 km/h. Frame: Ultra-lightweight alloy. Accessories: Lock, Charger. License: No driver's license required","brand":{"@type":"Brand","name":"Phoenix"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":120000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":120000,"priceCurrency":"VND","unitCode":"DAY"}}},{"@type":"Product","@id":"https://xecodoxanh.com/#xe-dap-phoenix-nu","name":"Phoenix E-Bike (Women) rental in Ninh Binh","image":"https://xecodoxanh.com/ebike/img/phoenix-pair-640.webp","description":"Type: Electric Bicycle. Battery: Charge. Range: 50 - 80km / charge. Max Speed: 25 - 40 km/h. Frame: Ultra-lightweight alloy. Accessories: Lock, Charger. License: No driver's license required","brand":{"@type":"Brand","name":"Phoenix"},"offers":{"@type":"Offer","url":"https://xecodoxanh.com/booking","priceCurrency":"VND","price":120000,"availability":"https://schema.org/InStock","seller":{"@id":"https://xecodoxanh.com/#business"},"priceSpecification":{"@type":"UnitPriceSpecification","price":120000,"priceCurrency":"VND","unitCode":"DAY"}}}]}</script>
