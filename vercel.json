@@ -1,6 +1,9 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/index-en", "destination": "/index-en.html", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/:page(booking|pricing|contact|news|faq|policy|privacy)", "destination": "/:page/index.html" },
     { "source": "/news/:slug", "destination": "/news/:slug/index.html" },
