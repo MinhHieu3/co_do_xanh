@@ -24,7 +24,7 @@ export default function NewsPage() {
           <div className="rides">
             {articles.map((a) => (
               <article className="ride" key={a.slug}>
-                <Link to={`/news/${a.slug}`} style={{ display: "contents", textDecoration: "none", color: "inherit" }}>
+                <Link to={`/news/${a.slug}`} className="ride-link">
                   <img src={a.image} alt={a[lang].title} loading="lazy" />
                   <div className="ride-body">
                     <span className="kind">{a.category[lang]} · {new Date(a.date).toLocaleDateString(lang === "VI" ? "vi-VN" : "en-GB")}</span>

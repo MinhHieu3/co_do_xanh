@@ -403,7 +403,7 @@ export default function BookingPage() {
               <div style={{ marginTop: 24 }}>
                 {error && <p className="form-error on" role="alert">{error}</p>}
                 <div className="submit-row"><button className="btn" type="submit" disabled={isSubmitting}>{submitLabel}</button></div>
-                <p className="agree">{L("Bằng cách đặt xe, bạn đồng ý với ", "By reserving you agree to the ")}<Link to="/policy" target="_blank">{L("điều khoản thuê xe", "booking terms")}</Link>.</p>
+                <p className="agree">{L("Bằng cách đặt xe, bạn đồng ý với ", "By reserving you agree to the ")}<Link to="/policy" target="_blank" rel="noreferrer">{L("điều khoản thuê xe", "booking terms")}</Link>.</p>
               </div>
               <ul className="reassure">
                 <li><Tick /> {L("Hủy miễn phí, chưa phải trả tiền", "Free to cancel, nothing is paid upfront")}</li>
