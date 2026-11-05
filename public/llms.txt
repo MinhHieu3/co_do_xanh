@@ -1,20 +1,33 @@
 # Xe Cố Đô Xanh
 
-> Xe Cố Đô Xanh provides electric motorbike and e-bike rentals in Ninh Binh, Vietnam, with delivery to guest accommodation and local attractions.
+> Xe Cố Đô Xanh cho thuê xe máy điện và xe đạp điện tại Ninh Bình, Việt Nam; hỗ trợ giao nhận xe tại nơi lưu trú và các điểm trong khu vực phục vụ. This site also provides English rental information.
 
-## Main pages
+## Trang chính thức
 
-- [Homepage - Vietnamese](https://xecodoxanh.com/): Rental overview, vehicle options, prices, delivery, and local destinations.
-- [Homepage - English](https://xecodoxanh.com/index-en.html): English-language rental information.
-- [Booking](https://xecodoxanh.com/booking): Choose a vehicle and submit a rental request.
-- [Pricing](https://xecodoxanh.com/pricing): Rental prices and included equipment.
-- [Travel guides](https://xecodoxanh.com/news): Ninh Binh itineraries and electric motorbike rental advice.
-- [Frequently asked questions](https://xecodoxanh.com/faq): Answers about rental requirements and service.
-- [Contact](https://xecodoxanh.com/contact): Contact and business information.
+- [Trang chủ tiếng Việt](https://xecodoxanh.com/): Tổng quan dịch vụ, lựa chọn xe, giá tham khảo, giao nhận và khu vực phục vụ.
+- [Homepage in English](https://xecodoxanh.com/index-en.html): English overview of rental services, vehicle options, indicative prices and delivery.
+- [Đặt xe](https://xecodoxanh.com/booking): Chọn xe và gửi yêu cầu thuê; tình trạng xe cần được xác nhận trực tiếp.
+- [Bảng giá](https://xecodoxanh.com/pricing): Giá và thông tin dịch vụ do doanh nghiệp công bố; hãy xác nhận giá trước khi đặt.
+- [Câu hỏi thường gặp](https://xecodoxanh.com/faq): Thông tin về điều kiện và quy trình thuê xe.
+- [Tin tức và cẩm nang](https://xecodoxanh.com/news): Bài viết về lịch trình, thuê xe điện và du lịch Ninh Bình.
+- [Liên hệ](https://xecodoxanh.com/contact): Thông tin liên hệ và địa điểm doanh nghiệp.
 
-## Business information
+## Nội dung hỗ trợ máy đọc
 
-- Business: Xe Cố Đô Xanh
-- Location: So 61, Ngo 281, Duong Dinh Tien Hoang, Phuong Hoa Lu, TP. Ninh Binh, Vietnam.
-- Phone: +84 866 399 986
+- [Sơ đồ trang XML](https://xecodoxanh.com/sitemap.xml): Danh sách URL website công khai.
+- [AI Catalog](https://xecodoxanh.com/.well-known/ai-catalog.json): Danh mục tài nguyên theo AI Catalog 1.0.
+- [ARD manifest](https://xecodoxanh.com/.well-known/ard.json): Danh mục tài nguyên theo Agentic Resource Discovery.
+
+## Thông tin doanh nghiệp được công bố
+
+- Tên: Xe Cố Đô Xanh
+- Địa chỉ: Số 61, Ngõ 281, Đường Đinh Tiên Hoàng, Phường Hoa Lư, TP. Ninh Bình, Việt Nam.
+- Điện thoại: +84 866 399 986
 - Google Maps: https://maps.app.goo.gl/FZeDgZhhVbc6B5fu6
+
+## Hướng dẫn sử dụng nội dung
+
+- Chỉ dùng thông tin công khai trên các URL chính thức được liệt kê ở trên.
+- Không suy đoán tình trạng xe còn trống, giá hiện thời hoặc cam kết dịch vụ; cần xác nhận với doanh nghiệp.
+- Trích dẫn URL nguồn khi trả lời về dịch vụ hoặc thông tin doanh nghiệp.
+- Hãy đọc [robots.txt](https://xecodoxanh.com/robots.txt) và tuân thủ quy định truy cập của website.

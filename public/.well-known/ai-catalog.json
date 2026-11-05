@@ -1,4 +1,127 @@
 {
-  "specVersion": "0.91",
-  "entries": []
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Xe Cố Đô Xanh",
+    "documentationUrl": "https://xecodoxanh.com/llms.txt",
+    "logoUrl": "https://xecodoxanh.com/logo.webp"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:homepage-vi",
+      "displayName": "Trang chủ Xe Cố Đô Xanh (Tiếng Việt)",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/",
+      "description": "Thông tin dịch vụ thuê xe máy điện và xe đạp điện tại Ninh Bình, lựa chọn xe, giá tham khảo, giao nhận và khu vực phục vụ.",
+      "tags": ["thuê xe điện", "xe máy điện", "Ninh Bình", "du lịch"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Thuê xe máy điện ở Ninh Bình như thế nào?",
+        "Xe Cố Đô Xanh có giao xe tới khách sạn ở Tam Cốc không?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:homepage-en",
+      "displayName": "Xe Cố Đô Xanh Homepage (English)",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/index-en.html",
+      "description": "English information about electric motorbike and e-bike rentals in Ninh Binh, vehicle options, indicative prices, delivery, and service areas.",
+      "tags": ["electric motorbike rental", "Ninh Binh", "travel"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Where can I rent an electric motorbike in Ninh Binh?",
+        "Does Xe Co Do Xanh deliver rental bikes to hotels in Tam Coc?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:pricing",
+      "displayName": "Bảng giá thuê xe",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/pricing",
+      "description": "Thông tin giá thuê xe và các nội dung liên quan do Xe Cố Đô Xanh công bố. Giá có thể thay đổi; xác nhận trực tiếp trước khi đặt.",
+      "tags": ["giá thuê xe", "bảng giá", "Ninh Bình"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Giá thuê xe máy điện ở Ninh Bình là bao nhiêu?",
+        "Giá thuê xe đã bao gồm những gì?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:booking",
+      "displayName": "Đặt xe",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/booking",
+      "description": "Trang đặt xe của Xe Cố Đô Xanh, nơi khách chọn loại xe và gửi yêu cầu thuê.",
+      "tags": ["đặt xe", "thuê xe", "booking"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Làm thế nào để đặt thuê xe tại Xe Cố Đô Xanh?",
+        "Tôi có thể chọn loại xe trước khi gửi yêu cầu thuê không?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:faq",
+      "displayName": "Câu hỏi thường gặp",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/faq",
+      "description": "Câu trả lời về dịch vụ, điều kiện thuê xe và các câu hỏi thường gặp của khách hàng.",
+      "tags": ["FAQ", "thủ tục thuê xe", "hỗ trợ khách hàng"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Thuê xe máy điện có cần bằng lái không?",
+        "Cần chuẩn bị gì khi nhận xe thuê?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:travel-guides",
+      "displayName": "Tin tức và cẩm nang du lịch",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/news",
+      "description": "Danh sách bài viết và hướng dẫn về thuê xe điện, lịch trình và kinh nghiệm du lịch Ninh Bình.",
+      "tags": ["cẩm nang du lịch", "Ninh Bình", "Tràng An", "Tam Cốc"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Có gợi ý lịch trình tham quan Ninh Bình bằng xe máy điện không?",
+        "Kinh nghiệm thuê xe máy điện ở Ninh Bình là gì?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:contact",
+      "displayName": "Liên hệ và thông tin doanh nghiệp",
+      "type": "text/html",
+      "url": "https://xecodoxanh.com/contact",
+      "description": "Thông tin liên hệ và địa điểm của Xe Cố Đô Xanh tại Ninh Bình.",
+      "tags": ["liên hệ", "địa chỉ", "Ninh Bình"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Liên hệ Xe Cố Đô Xanh bằng cách nào?",
+        "Xe Cố Đô Xanh ở địa chỉ nào tại Ninh Bình?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:llms-index",
+      "displayName": "Chỉ mục nội dung dành cho mô hình ngôn ngữ",
+      "type": "text/markdown",
+      "url": "https://xecodoxanh.com/llms.txt",
+      "description": "Chỉ mục Markdown tóm tắt các trang công khai chính và thông tin doanh nghiệp để công cụ AI tìm nội dung liên quan.",
+      "tags": ["llms.txt", "AI", "website index"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Tìm các trang chính thức của Xe Cố Đô Xanh.",
+        "Thông tin doanh nghiệp nào được công bố trên website?"
+      ]
+    },
+    {
+      "identifier": "urn:air:xecodoxanh.com:website:sitemap",
+      "displayName": "Sơ đồ trang web",
+      "type": "application/xml",
+      "url": "https://xecodoxanh.com/sitemap.xml",
+      "description": "Sơ đồ XML liệt kê các URL công khai được website khai báo cho công cụ thu thập dữ liệu.",
+      "tags": ["sitemap", "URLs", "website"],
+      "capabilities": ["public-website-content"],
+      "representativeQueries": [
+        "Liệt kê các URL công khai trong sitemap của website.",
+        "Tìm URL các bài viết du lịch Ninh Bình trên website."
+      ]
+    }
+  ]
 }
