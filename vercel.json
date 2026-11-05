@@ -1,4 +1,6 @@
 {
+  "cleanUrls": false,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/:page(booking|pricing|contact|news|faq|policy|privacy)", "destination": "/:page/index.html" },
     { "source": "/news/:slug", "destination": "/news/:slug/index.html" },
