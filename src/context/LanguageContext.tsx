@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useSyncExternalStore, type ReactNode } from 'react';
 import { vi } from '../locales/vi';
 import { en } from '../locales/en';
 
@@ -9,26 +9,34 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const languageListeners = new Set<() => void>();
+
+function subscribeLanguage(listener: () => void) {
+  languageListeners.add(listener);
+  window.addEventListener('storage', listener);
+  return () => {
+    languageListeners.delete(listener);
+    window.removeEventListener('storage', listener);
+  };
+}
+
+function getBrowserLanguage() {
+  const saved = localStorage.getItem('language');
+  if (saved === 'VI' || saved === 'EN') return saved;
+  if (window.location.pathname === '/index-en.html') return 'EN';
+  return (navigator.language || '').toLowerCase().startsWith('vi') ? 'VI' : 'EN';
+}
 
 export const LanguageProvider = ({ children, initialLanguage }: { children: ReactNode; initialLanguage?: "VI" | "EN" }) => {
-  const [language, setLanguageState] = useState<string>(() => {
-    if (initialLanguage) return initialLanguage;
-    if (typeof window === 'undefined') return 'VI';
-    if (window.location.pathname === '/index-en.html') return 'EN';
-    const saved = localStorage.getItem('language');
-    if (saved === 'VI' || saved === 'EN') return saved;
-
-    // Auto-detect browser language
-    const browserLang = navigator.language || (navigator as any).userLanguage || '';
-    if (browserLang.toLowerCase().startsWith('vi')) {
-      return 'VI';
-    }
-    return 'EN'; // Auto switch to English if not Vietnamese
-  });
+  const language = useSyncExternalStore(
+    subscribeLanguage,
+    getBrowserLanguage,
+    () => initialLanguage ?? 'VI',
+  );
 
   const setLanguage = (lang: string) => {
-    setLanguageState(lang);
     localStorage.setItem('language', lang);
+    languageListeners.forEach((listener) => listener());
   };
 
   const t = (path: string): string => {

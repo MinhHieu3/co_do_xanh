@@ -7,7 +7,7 @@
  *   dist/booking/index.html    -> "/booking"
  *   dist/news/<slug>/index.html
  *
- * Trình duyệt vẫn tải JS như cũ; main.tsx render lại lên #root nên hành vi không đổi.
+ * Trình duyệt hydrate HTML đã prerender để tránh xóa và vẽ lại nội dung phía client.
  */
 import { build } from "vite";
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
@@ -82,7 +82,7 @@ function fill(template, appHtml, meta, route) {
   const start = html.indexOf('<div id="root">');
   const end = html.lastIndexOf("</div>", html.indexOf("</body>"));
   if (start < 0 || end < 0) throw new Error("Không tìm thấy <div id=\"root\"> trong template");
-  return html.slice(0, start) + `<div id="root">${appHtml}` + html.slice(end);
+  return html.slice(0, start) + `<div id="root" data-prerendered="true" data-initial-language="${route === "/index-en.html" ? "EN" : "VI"}">${appHtml}` + html.slice(end);
 }
 
 let ok = 0;
