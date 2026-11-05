@@ -4,15 +4,7 @@ import { ebikeContent, BRAND } from "../data/ebikeContent";
 
 export function BrandMark() {
   return (
-    <img
-      src="/logo-240.webp"
-      srcSet="/logo-240.webp 240w, /logo-480.webp 480w, /logo.webp 900w"
-      sizes="156px"
-      width={240}
-      height={87}
-      alt={`${BRAND.top} ${BRAND.sub}`}
-      style={{ height: 56, width: "auto", objectFit: "contain" }}
-    />
+    <img src="/logo.webp" alt={`${BRAND.top} ${BRAND.sub}`} style={{ height: 56, width: "auto", objectFit: "contain" }} />
   );
 }
 
