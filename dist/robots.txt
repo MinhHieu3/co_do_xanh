@@ -3,3 +3,4 @@ Allow: /
 Disallow: /admin/
 
 Sitemap: https://xecodoxanh.com/sitemap.xml
+Agentmap: https://xecodoxanh.com/.well-known/ard.json

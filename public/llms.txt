@@ -1,0 +1,20 @@
+# Xe Cố Đô Xanh
+
+> Xe Cố Đô Xanh provides electric motorbike and e-bike rentals in Ninh Binh, Vietnam, with delivery to guest accommodation and local attractions.
+
+## Main pages
+
+- [Homepage - Vietnamese](https://xecodoxanh.com/): Rental overview, vehicle options, prices, delivery, and local destinations.
+- [Homepage - English](https://xecodoxanh.com/index-en.html): English-language rental information.
+- [Booking](https://xecodoxanh.com/booking): Choose a vehicle and submit a rental request.
+- [Pricing](https://xecodoxanh.com/pricing): Rental prices and included equipment.
+- [Travel guides](https://xecodoxanh.com/news): Ninh Binh itineraries and electric motorbike rental advice.
+- [Frequently asked questions](https://xecodoxanh.com/faq): Answers about rental requirements and service.
+- [Contact](https://xecodoxanh.com/contact): Contact and business information.
+
+## Business information
+
+- Business: Xe Cố Đô Xanh
+- Location: So 61, Ngo 281, Duong Dinh Tien Hoang, Phuong Hoa Lu, TP. Ninh Binh, Vietnam.
+- Phone: +84 866 399 986
+- Google Maps: https://maps.app.goo.gl/FZeDgZhhVbc6B5fu6

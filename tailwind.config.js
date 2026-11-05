@@ -20,8 +20,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Inter", "Segoe UI", "sans-serif"],
-        display: ["Outfit", "Inter", "sans-serif"],
+        sans: ["Be Vietnam Pro", "Segoe UI", "sans-serif"],
+        display: ["Fraunces", "Be Vietnam Pro", "Georgia", "serif"],
       },
       animation: {
         "float": "float 3s ease-in-out infinite",

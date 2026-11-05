@@ -9,8 +9,8 @@
   --color-primary-light: #e2efe6;
   --color-secondary: #1d2b24;
   --color-accent: #ff5722;
-  --font-sans: "Inter", "Segoe UI", sans-serif;
-  --font-display: "Outfit", "Inter", sans-serif;
+  --font-sans: "Be Vietnam Pro", "Segoe UI", sans-serif;
+  --font-display: "Fraunces", "Be Vietnam Pro", Georgia, serif;
 }
 
 * {

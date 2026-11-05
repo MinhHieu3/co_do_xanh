@@ -88,10 +88,10 @@ export default function HomePage() {
   const usd = [PRICE.motoUsd, PRICE.ebikeUsd, PRICE.motoUsd, PRICE.motoUsd];
   const rideIds = ["vinfast-evo-lite", "xe-dap-phoenix-nam", "vinfast-evo", "vinfast-feliz-2"];
   const rideImgs = [
-    { s: "/ebike/img/ride-evo-lite-640.jpg", s2: "/ebike/img/ride-evo-lite-1100.jpg", w: 1100, h: 911, alt: "VinFast Evo Lite", q: "motorbike" },
+    { s: "/ebike/img/ride-evo-lite-640.webp", s2: "/ebike/img/ride-evo-lite-1100.webp", w: 1100, h: 911, alt: "VinFast Evo Lite", q: "motorbike" },
     { s: "/ebike/img/phoenix-pair-640.webp", s2: "/ebike/img/phoenix-pair-1100.webp", w: 1100, h: 688, alt: "Phoenix electric bicycles", q: "ebike" },
-    { s: "/ebike/img/ride-evo-640.jpg", s2: "/ebike/img/ride-evo-1100.jpg", w: 1100, h: 901, alt: "VinFast Evo", q: "evo" },
-    { s: "/ebike/img/ride-feliz2-640.jpg", s2: "/ebike/img/ride-feliz2-1100.jpg", w: 1100, h: 884, alt: "VinFast Feliz II", q: "feliz" },
+    { s: "/ebike/img/ride-evo-640.webp", s2: "/ebike/img/ride-evo-1100.webp", w: 1100, h: 901, alt: "VinFast Evo", q: "evo" },
+    { s: "/ebike/img/ride-feliz2-640.webp", s2: "/ebike/img/ride-feliz2-1100.webp", w: 1100, h: 884, alt: "VinFast Feliz II", q: "feliz" },
   ];
   const snapSrc = ["tam-coc", "trang-an", "hoa-lu", "bai-dinh"];
 
@@ -164,7 +164,7 @@ export default function HomePage() {
             {/* Thứ tự hiển thị: xe máy điện trước, xe đạp trợ lực (index 1) cuối cùng */}
             {[0, 2, 3, 1].map((i) => rideImgs[i]).map((r, pos) => { const i = [0, 2, 3, 1][pos]; return (
               <article className="ride" key={r.q}>
-                <img src={r.s} srcSet={i < 2 ? `${r.s} 640w, ${r.s2} 1100w` : undefined} sizes="(min-width: 820px) 520px, 92vw" width={r.w} height={r.h} alt={r.alt} loading="lazy" style={i >= 2 ? { objectFit: "cover" } : undefined} />
+                <img src={r.s} srcSet={`${r.s} 640w, ${r.s2} 1100w`} sizes="(min-width: 820px) 520px, 92vw" width={r.w} height={r.h} alt={r.alt} loading="lazy" decoding="async" style={i >= 2 ? { objectFit: "cover" } : undefined} />
                 <div className="ride-body">
                   <span className="kind">{c.rides.kind[i]}</span>
                   <h3>{c.rides.names[i]}</h3>
