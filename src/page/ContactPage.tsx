@@ -13,34 +13,21 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
-    const text = `
-📩 <b>TIN NHẮN LIÊN HỆ MỚI</b>
---------------------------------
-⏱ <b>Thời gian:</b> ${new Date().toLocaleString("vi-VN")}
-👤 <b>Người gửi:</b> ${formData.name}
-📞 <b>SĐT:</b> ${formData.phone}
-📌 <b>Tiêu đề:</b> ${formData.subject || "Không có"}
-📝 <b>Nội dung:</b>
-${formData.message}
-    `;
-    const TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    const CHAT = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-    if (!TOKEN || !CHAT) {
-      setTimeout(() => { setIsSubmitting(false); setShowSuccess(true); }, 1000);
-      return;
-    }
     try {
-      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+      const response = await fetch("/api/forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT, text, parse_mode: "HTML" }),
+        body: JSON.stringify({ kind: "contact", ...formData }),
       });
-      setIsSubmitting(false);
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.success !== true) throw new Error("Contact message was not delivered");
       setShowSuccess(true);
     } catch {
+      toast.error(L("Chưa gửi được tin nhắn. Vui lòng liên hệ qua số điện thoại bên dưới.", "Your message could not be sent. Please call the number below."));
+    } finally {
       setIsSubmitting(false);
-      toast.error(L("Có lỗi xảy ra khi gửi tin nhắn!", "An error occurred while sending the message!"));
     }
   };
 
@@ -70,20 +57,20 @@ ${formData.message}
                     <div className="fields two">
                       <div className="field">
                         <label htmlFor="c-name">{L("Họ và tên", "Full name")}</label>
-                        <input id="c-name" required placeholder={L("Nhập họ và tên của bạn", "Enter your full name")} value={formData.name} onChange={(e) => set("name", e.target.value)} />
+                        <input id="c-name" maxLength={100} required placeholder={L("Nhập họ và tên của bạn", "Enter your full name")} value={formData.name} onChange={(e) => set("name", e.target.value)} />
                       </div>
                       <div className="field">
                         <label htmlFor="c-phone">{L("Số điện thoại", "Phone")}</label>
-                        <input id="c-phone" type="tel" required placeholder={L("Nhập số điện thoại", "Enter your phone number")} value={formData.phone} onChange={(e) => set("phone", e.target.value)} />
+                        <input id="c-phone" type="tel" maxLength={32} required placeholder={L("Nhập số điện thoại", "Enter your phone number")} value={formData.phone} onChange={(e) => set("phone", e.target.value)} />
                       </div>
                     </div>
                     <div className="field">
                       <label htmlFor="c-subject">{L("Tiêu đề", "Subject")}</label>
-                      <input id="c-subject" placeholder={L("Bạn cần hỗ trợ điều gì?", "What do you need help with?")} value={formData.subject} onChange={(e) => set("subject", e.target.value)} />
+                      <input id="c-subject" maxLength={100} placeholder={L("Bạn cần hỗ trợ điều gì?", "What do you need help with?")} value={formData.subject} onChange={(e) => set("subject", e.target.value)} />
                     </div>
                     <div className="field">
                       <label htmlFor="c-msg">{L("Nội dung", "Message")}</label>
-                      <textarea id="c-msg" required placeholder={L("Viết nội dung bạn muốn nhắn cho chúng tôi...", "Write your message here...")} value={formData.message} onChange={(e) => set("message", e.target.value)} />
+                      <textarea id="c-msg" maxLength={1400} required placeholder={L("Viết nội dung bạn muốn nhắn cho chúng tôi...", "Write your message here...")} value={formData.message} onChange={(e) => set("message", e.target.value)} />
                     </div>
                   </div>
                 </fieldset>

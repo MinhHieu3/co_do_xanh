@@ -34,7 +34,7 @@ export default function PolicyPage() {
 
               <h2>3. Rental Period and Pricing</h2>
               <ul>
-                <li>1 Day rental is calculated as 24 hours from the time of pickup.</li>
+                <li>For Vinfast Evo Lite and Phoenix e-bikes, the rental ends at 23:59 on the final booked day. For other models, each rental day is 24 hours from pickup.</li>
                 <li>Late returns exceeding the agreed time will be subject to additional charges per hour.</li>
               </ul>
 
@@ -59,7 +59,7 @@ export default function PolicyPage() {
 
               <h2>3. Thời gian và Giá thuê</h2>
               <ul>
-                <li>1 Ngày thuê được tính là 24 giờ kể từ thời điểm nhận xe.</li>
+                <li>Với Vinfast Evo Lite và xe đạp trợ lực Phoenix, hạn trả xe là 23:59 của ngày thuê cuối cùng. Các mẫu xe khác tính mỗi ngày thuê là 24 giờ kể từ lúc nhận xe.</li>
                 <li>Trả xe quá giờ quy định sẽ bị tính thêm phụ phí theo giờ.</li>
               </ul>
 

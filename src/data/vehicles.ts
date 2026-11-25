@@ -33,6 +33,8 @@ export interface Vehicle {
   requiresLicense?: boolean;
 }
 
+export const EVO_LITE_ID = "vinfast-evo-lite";
+
 export const vehicles: Vehicle[] = [
   {
     id: "vinfast-evo",
@@ -110,7 +112,7 @@ export const vehicles: Vehicle[] = [
     }
   },
   {
-    id: "vinfast-evo-lite",
+    id: EVO_LITE_ID,
     name: "Vinfast Evo Lite",
     image: evoLiteImage,
     pricing: {
@@ -118,7 +120,7 @@ export const vehicles: Vehicle[] = [
 
     },
     pricingEn: {
-      day1: "$6/day",
+      day1: "150,000 VND/day",
     },
     hourlyPricing: {
       price: "100.000đ/ 5h"

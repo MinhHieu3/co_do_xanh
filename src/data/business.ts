@@ -20,3 +20,5 @@ export const BUSINESS = {
   opens: "07:00",
   closes: "22:00",
 } as const;
+
+export const DEFAULT_ORDER_API = "https://xe-co-do-xanh-be.hieubyipro.workers.dev/api";
