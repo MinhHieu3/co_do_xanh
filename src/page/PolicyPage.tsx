@@ -34,8 +34,7 @@ export default function PolicyPage() {
 
               <h2>3. Rental Period and Pricing</h2>
               <ul>
-                <li>VinFast Evo Lite and Phoenix pedal-assist bikes are rented by calendar day. The rental ends at 23:59 on the last rental day.</li>
-                <li>For other models, a rental day is 24 hours from pickup.</li>
+                <li>1 Day rental is calculated as 24 hours from the time of pickup.</li>
                 <li>Late returns exceeding the agreed time will be subject to additional charges per hour.</li>
               </ul>
 
