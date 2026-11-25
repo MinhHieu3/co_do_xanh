@@ -43,6 +43,6 @@ export default async function zaloWebhook(req: WebhookRequest, res: ServerRespon
   if (!update) return reply(res, 400);
 
   const code = process.env.ZALO_PAIRING_CODE?.trim();
-  recordZaloPairing(update, code, secret);
+  recordZaloPairing(update, code, secret, process.env.ZALO_GROUP_PAIRING_HASH);
   return reply(res, 200);
 }

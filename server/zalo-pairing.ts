@@ -23,21 +23,24 @@ function makeReceipt(chatId: string, secret: string) {
   return Buffer.concat([iv, cipher.getAuthTag(), ciphertext]).toString("base64url");
 }
 
-export function recordZaloPairing(update: unknown, code: string | undefined, secret: string) {
+export function recordZaloPairing(update: unknown, code: string | undefined, secret: string, groupCodeHash?: string) {
   if (!update || typeof update !== "object") return;
   const event = update as ZaloUpdate;
   const message = event.message;
   const id = message?.chat?.id;
-  if (
-    event.event_name === "message.text.received"
-    && code
-    && typeof message?.text === "string"
-    && message.text.trim() === code
-    && message.chat?.chat_type === "PRIVATE"
-    && typeof id === "string"
-    && /^[A-Za-z0-9._:-]{1,128}$/.test(id)
-  ) {
+  if (event.event_name !== "message.text.received" || typeof message?.text !== "string"
+    || typeof id !== "string" || !/^[A-Za-z0-9._:-]{1,128}$/.test(id)) return;
+
+  const text = message.text.trim();
+  if (message.chat?.chat_type === "PRIVATE" && code && matchesSecret(text, code)) {
     console.info("ZALO_PAIRING_RECEIPT", makeReceipt(id, secret));
   }
 
+  if (message.chat?.chat_type === "GROUP" && groupCodeHash) {
+    // Group messages can include a mention before or after the pairing code.
+    const groupCode = text.match(/\b(KETNOI-[A-Z0-9]{16})\b/i)?.[1].toUpperCase();
+    if (groupCode && matchesSecret(createHash("sha256").update(groupCode).digest("hex"), groupCodeHash)) {
+      console.info("ZALO_GROUP_PAIRING_RECEIPT", makeReceipt(id, secret));
+    }
+  }
 }

@@ -55,9 +55,8 @@ function readBooking(input: Record<string, unknown>, name: string, phone: string
   return { order, text, notes, total, mapLink };
 }
 
-async function sendZalo(env: Settings, text: string) {
+async function sendZalo(env: Settings, text: string, chatId = env.ZALO_CHAT_ID?.trim()) {
   const token = env.ZALO_BOT_TOKEN?.trim();
-  const chatId = env.ZALO_CHAT_ID?.trim();
   if (!token || !chatId) {
     console.warn("Zalo bot is missing its server configuration");
     return false;
@@ -128,7 +127,7 @@ export async function submitForm(value: unknown, env: Settings) {
   }
   if (booking.notes) text.push(`📝 ${booking.notes}`);
   if (booking.mapLink && [...text, booking.mapLink].join("\n").length <= 2000) text.push(booking.mapLink);
-  const notified = await sendZalo(env, text.join("\n"));
+  const notified = await sendZalo(env, text.join("\n"), env.ZALO_BOOKING_CHAT_ID?.trim() || undefined);
   if (!notified) console.warn("Order was saved but Zalo notification failed", { id });
 
   return json(200, { success: true, orderId: id });

@@ -3,6 +3,7 @@ import { matchesSecret, recordZaloPairing } from "../../server/zalo-pairing.ts";
 type Env = {
   ZALO_WEBHOOK_SECRET: string;
   ZALO_PAIRING_CODE?: string;
+  ZALO_GROUP_PAIRING_HASH?: string;
 };
 
 function respond(status: number, headers: Record<string, string> = {}) {
@@ -24,7 +25,7 @@ export default {
     try {
       const raw = await request.text();
       if (Buffer.byteLength(raw) > 8192) return respond(413);
-      recordZaloPairing(JSON.parse(raw || "{}"), env.ZALO_PAIRING_CODE?.trim(), secret);
+      recordZaloPairing(JSON.parse(raw || "{}"), env.ZALO_PAIRING_CODE?.trim(), secret, env.ZALO_GROUP_PAIRING_HASH);
     } catch {
       return respond(400);
     }
