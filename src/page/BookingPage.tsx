@@ -27,7 +27,7 @@ const bookingVehicles = [...vehicles].sort((a, b) => bookingPriority(a.id) - boo
 const dayPrice = (day1: string) => parseInt(day1.split("/")[0].replace(/\D/g, ""));
 
 export default function BookingPage() {
-  return <div className="eb"><BookingForm /></div>;
+  return <div className="eb booking-page"><BookingForm /></div>;
 }
 
 function BookingForm() {

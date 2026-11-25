@@ -49,3 +49,14 @@
 .eb input,.eb select,.eb textarea{border:2px solid var(--ink) !important;border-radius:10px !important;background:#fff !important;font-family:var(--sans)}
 .eb input:focus,.eb select:focus,.eb textarea:focus{outline:3px solid var(--ochre) !important;outline-offset:2px;box-shadow:none !important}
 .eb button[class*="bg-[#17493a]"],.eb a[class*="bg-[#17493a]"],.eb button[class*="from-[#17493a]"]{background:var(--ochre) !important;color:var(--ink) !important;border-radius:12px !important}
+
+/* Place the booking action above the site's mobile navigation. */
+@media (max-width: 859px) {
+  .booking-page .paybar {
+    bottom: calc(66px + env(safe-area-inset-bottom));
+    padding-bottom: 10px;
+  }
+  .booking-page:has(.paybar) {
+    padding-bottom: 66px;
+  }
+}
