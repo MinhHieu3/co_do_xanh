@@ -1,8 +1,8 @@
-import felizImage from "../assets/image/Vinfast Feliz II.webp";
-import evoImage from "../assets/image/vinfast_evo.jpg";
-import evoLiteImage from "../assets/image/Evo lite.png";
-import phoenixImageNam from "../assets/image/TLNAM.jpg";
-import phoenixImageNu from "../assets/image/TLN.jpg";
+const evoImage = "/ebike/img/ride-evo-640.jpg";
+const felizImage = "/ebike/img/ride-feliz2-640.jpg";
+const evoLiteImage = "/ebike/img/ride-evo-lite-640.jpg";
+const phoenixImageNam = "/ebike/img/phoenix-pair-640.webp";
+const phoenixImageNu = "/ebike/img/phoenix-pair-640.webp";
 
 
 export interface Vehicle {
@@ -29,11 +29,15 @@ export interface Vehicle {
     [key: string]: string;
   };
   isPopular?: boolean;
+  requiresLicense?: boolean;
 }
+
+export const EVO_LITE_ID = "vinfast-evo-lite";
 
 export const vehicles: Vehicle[] = [
   {
     id: "vinfast-evo",
+    requiresLicense: true,
     name: "Vinfast Evo",
     image: evoImage,
     pricing: {
@@ -70,6 +74,7 @@ export const vehicles: Vehicle[] = [
   },
   {
     id: "vinfast-feliz-2",
+    requiresLicense: true,
     name: "Vinfast Feliz II",
     image: felizImage,
     isPopular: true,
@@ -110,11 +115,11 @@ export const vehicles: Vehicle[] = [
     name: "Vinfast Evo Lite",
     image: evoLiteImage,
     pricing: {
-      day1: "150.000đ/ 24h",
+      day1: "150.000đ/ ngày",
 
     },
     pricingEn: {
-      day1: "$6/ 24h",
+      day1: "$6/ day",
     },
     hourlyPricing: {
       price: "100.000đ/ 5h"
@@ -147,11 +152,11 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Men)",
     image: phoenixImageNam,
     pricing: {
-      day1: "120.000đ/ 24h",
+      day1: "120.000đ/ ngày",
 
     },
     pricingEn: {
-      day1: "$5/ 24h",
+      day1: "$5/ day",
 
     },
     hourlyPricing: {
@@ -185,11 +190,11 @@ export const vehicles: Vehicle[] = [
     nameEn: "Phoenix E-Bike (Women)",
     image: phoenixImageNu,
     pricing: {
-      day1: "120.000đ/ 24h",
+      day1: "120.000đ/ ngày",
 
     },
     pricingEn: {
-      day1: "$5/ 24h",
+      day1: "$5/ day",
 
     },
     hourlyPricing: {
@@ -251,3 +256,13 @@ export const vehicles: Vehicle[] = [
   //   }
   // }
 ];
+
+// Units available per model. Both Phoenix e-bikes (men's / women's) share one pool.
+export const STOCK: Record<string, number> = {
+  "vinfast-evo": 5,
+  "vinfast-feliz-2": 10,
+  "vinfast-evo-lite": 10,
+  "xe-dap-phoenix": 5,
+};
+export const stockOf = (id: string): number =>
+  STOCK[id.startsWith("xe-dap-phoenix") ? "xe-dap-phoenix" : id] ?? 0;

@@ -1,0 +1,14 @@
+{
+  "name": "xecodoxanh-booking-forms",
+  "main": "index.ts",
+  "compatibility_date": "2026-11-25",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "https://xecodoxanh.com/api/forms",
+      "zone_name": "xecodoxanh.com"
+    }
+  ],
+  "observability": { "enabled": true }
+}
