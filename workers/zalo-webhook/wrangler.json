@@ -1,0 +1,15 @@
+{
+  "name": "xecodoxanh-zalo-webhook",
+  "main": "index.ts",
+  "compatibility_date": "2026-11-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "https://xecodoxanh.com/api/zalo-webhook",
+      "zone_name": "xecodoxanh.com"
+    }
+  ],
+  "observability": { "enabled": true }
+}

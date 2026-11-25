@@ -48,6 +48,7 @@ export default function Footer() {
                 <li><Link to="/booking">{f.links[0]}</Link></li>
                 <li><Link to="/news">{f.links[1]}</Link></li>
                 <li><Link to="/contact">{f.links[2]}</Link></li>
+                <li><Link to="/doi-pin">{language === "VI" ? "Bản đồ đổi pin" : "Battery swap map"}</Link></li>
                 <li><Link to="/policy">{f.links[3]}</Link></li>
                 <li><Link to="/privacy">{f.links[4]}</Link></li>
               </ul>

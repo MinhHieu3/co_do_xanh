@@ -25,7 +25,16 @@ export default function NewsPage() {
             {articles.map((a) => (
               <article className="ride" key={a.slug}>
                 <Link to={`/news/${a.slug}`} className="ride-link">
-                  <img src={a.image} alt={a[lang].title} loading="lazy" />
+                  <img
+                    src={a.thumbnail.path}
+                    srcSet={`${a.thumbnail.path} ${a.thumbnail.width}w, ${a.image} ${a.imageWidth}w`}
+                    sizes="(min-width: 820px) 520px, 92vw"
+                    width={a.imageWidth}
+                    height={a.imageHeight}
+                    alt={a[lang].title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="ride-body">
                     <span className="kind">{a.category[lang]} · {new Date(a.date).toLocaleDateString(lang === "VI" ? "vi-VN" : "en-GB")}</span>
                     <h3>{a[lang].title}</h3>

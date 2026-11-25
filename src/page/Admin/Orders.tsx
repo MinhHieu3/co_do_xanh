@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Space, Modal, message, Select, Form, Tag, Radio, Input, InputNumber } from 'antd';
 import { Car, CreditCard } from 'lucide-react';
 import { fetchApi } from './api';
+import { vehicles } from '../../data/vehicles';
 const qrImage = new URL('../../assets/image/IMG_8501.JPG', import.meta.url).href;
 
 const Orders: React.FC = () => {
@@ -60,7 +61,12 @@ const Orders: React.FC = () => {
     setAssigningOrderId(record.id);
     setIsAssignModalVisible(true);
     form.resetFields();
-    setAssignCategoryFilter(record.type_category || 'all');
+    const requested = typeof record.type_category === 'string'
+      ? record.type_category.replace(/\s*\(Thuê theo ngày\)$/, '').trim()
+      : '';
+    const canonical = vehicles.find(({ nameEn }) => nameEn === requested)?.name
+      ?? (requested === 'Vinfast Feliz S' ? 'Vinfast Feliz II' : requested);
+    setAssignCategoryFilter(categories.some((category: { type: string }) => category.type === canonical) ? canonical : 'all');
     loadAllAvailableVehicles();
   };
 
@@ -208,10 +214,7 @@ const Orders: React.FC = () => {
     if (assignCategoryFilter === 'all') return true;
     const cat: any = categories.find((c: any) => c.id === v.id_category);
     if (!cat) return false;
-    // Map Frontend category names to Backend if necessary
-    let mappedCategory = assignCategoryFilter;
-    if (mappedCategory === 'Vinfast Feliz S') mappedCategory = 'Vinfast Feliz II';
-    return cat.type === mappedCategory;
+    return cat.type === assignCategoryFilter;
   });
 
   return (

@@ -38,34 +38,55 @@ export default function HomePage() {
     return () => clearInterval(id);
   }, [language]);
 
-  // Load the hero video only after it is visible and the browser is idle.
   useEffect(() => {
-    const hv = videoRef.current;
-    if (!hv) return;
-    const conn = (navigator as any).connection || {};
-    const slow = conn.saveData || /(^|-)(2g|3g)$/.test(conn.effectiveType || "");
-    const still = window.innerWidth < 700 || slow || matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (still) return;
-    const start = () => {
-      hv.src = window.innerWidth < 700 ? "/ebike/video/hero-540.mp4" : "/ebike/video/hero-720.mp4";
-      hv.muted = true;
-      const p = hv.play();
-      p.catch(() => { });
-    };
-    const schedule = () => {
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(start, { timeout: 2000 });
-      } else {
-        setTimeout(start, 250);
+    const hero = videoRef.current;
+    if (!hero || !("IntersectionObserver" in window)) return;
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    if (window.innerWidth < 700 || connection?.saveData
+      || /(^|-)(2g|3g)$/.test(connection?.effectiveType ?? "")
+      || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let visible = false;
+    let cancelScheduled: (() => void) | undefined;
+    const play = () => { void hero.play().catch(() => {}); };
+    const updatePlayback = () => {
+      if (!visible || document.hidden) {
+        cancelScheduled?.();
+        cancelScheduled = undefined;
+        hero.pause();
+        return;
+      }
+      if (hero.hasAttribute("src")) {
+        if (hero.paused) play();
+      } else if (!cancelScheduled) {
+        const start = () => {
+          cancelScheduled = undefined;
+          hero.src = "/ebike/video/hero-720.mp4?v=2";
+          play();
+        };
+        if ("requestIdleCallback" in window) {
+          const id = window.requestIdleCallback(start, { timeout: 2000 });
+          cancelScheduled = () => window.cancelIdleCallback(id);
+        } else {
+          const id = setTimeout(start, 250);
+          cancelScheduled = () => clearTimeout(id);
+        }
       }
     };
     const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
+      visible = entry.isIntersecting;
+      updatePlayback();
+    }, { threshold: 0.25 });
+    observer.observe(hero);
+    document.addEventListener("visibilitychange", updatePlayback);
+    return () => {
       observer.disconnect();
-      schedule();
-    }, { rootMargin: "100px" });
-    observer.observe(hv);
-    return () => observer.disconnect();
+      document.removeEventListener("visibilitychange", updatePlayback);
+      cancelScheduled?.();
+      hero.pause();
+    };
   }, []);
 
   // Mobile book bar appears once the first button scrolls away
@@ -365,6 +386,7 @@ export default function HomePage() {
                 ))}
               </ol>
               <p className="reach-note">{c.reach.note}</p>
+              <Link className="link-arrow" to="/doi-pin">{language === "EN" ? "Find VinFast battery swap stations" : "Xem bản đồ đổi pin VinFast"}</Link>
             </div>
             <div className="snaps">
               {snapSrc.map((s, i) => (

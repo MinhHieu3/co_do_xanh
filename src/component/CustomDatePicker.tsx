@@ -18,17 +18,16 @@ const parse = (s: string) => {
 
 export default function CustomDatePicker({ id, value, min, onChange, lang }: Props) {
   const en = lang === "EN";
-  const [open, setOpen] = useState(false);
-  const base = parse(value || min);
-  const [view, setView] = useState({ y: base.y, m: base.m });
+  const [view, setView] = useState<{ y: number; m: number } | null>(null);
+  const open = view !== null;
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const close = (e: MouseEvent | TouchEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setView(null);
     };
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setView(null);
     document.addEventListener("mousedown", close);
     document.addEventListener("touchstart", close);
     document.addEventListener("keydown", esc);
@@ -40,32 +39,33 @@ export default function CustomDatePicker({ id, value, min, onChange, lang }: Pro
   }, [open]);
 
   const toggle = () => {
-    if (!open) {
-      const b = parse(value || min);
-      setView({ y: b.y, m: b.m });
+    if (open) {
+      setView(null);
+    } else if (min) {
+      const { y, m } = parse(value || min);
+      setView({ y, m });
     }
-    setOpen(!open);
   };
 
   const minP = parse(min);
-  const canPrev = view.y > minP.y || (view.y === minP.y && view.m > minP.m);
+  const canPrev = view && (view.y > minP.y || (view.y === minP.y && view.m > minP.m));
   const shift = (delta: number) => {
+    if (!view) return;
     const d = new Date(view.y, view.m + delta, 1);
     setView({ y: d.getFullYear(), m: d.getMonth() });
   };
 
-  const monthName = en
+  const monthName = view && (en
     ? new Date(view.y, view.m, 1).toLocaleString("en-US", { month: "long" })
-    : `Tháng ${view.m + 1}`;
+    : `Tháng ${view.m + 1}`);
   const weekdays = en ? ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] : ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-
-  const first = new Date(view.y, view.m, 1);
-  const offset = (first.getDay() + 6) % 7; // Monday-first
-  const daysInMonth = new Date(view.y, view.m + 1, 0).getDate();
-  const cells: (number | null)[] = [
-    ...Array(offset).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-  ];
+  let cells: (number | null)[] = [];
+  if (view) {
+    const first = new Date(view.y, view.m, 1);
+    const offset = (first.getDay() + 6) % 7;
+    const daysInMonth = new Date(view.y, view.m + 1, 0).getDate();
+    cells = [...Array(offset).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
+  }
 
   const display = value
     ? (() => { const p = parse(value); return `${pad(p.d)}/${pad(p.m + 1)}/${p.y}`; })()
@@ -86,7 +86,7 @@ export default function CustomDatePicker({ id, value, min, onChange, lang }: Pro
           <rect x="3" y="5" width="18" height="16" rx="3" /><path d="M8 3v4M16 3v4M3 10h18" />
         </svg>
       </button>
-      {open && (
+      {view && (
         <div className="cdate" role="dialog" aria-label={en ? "Choose date" : "Chọn ngày"}>
           <div className="cdate-head">
             <button type="button" className="cdate-nav" onClick={() => shift(-1)} disabled={!canPrev} aria-label={en ? "Previous month" : "Tháng trước"}>
@@ -111,14 +111,14 @@ export default function CustomDatePicker({ id, value, min, onChange, lang }: Pro
                   type="button"
                   disabled={disabled}
                   className={`cdate-day${s === value ? " selected" : ""}${s === min ? " today" : ""}`}
-                  onClick={() => { onChange(s); setOpen(false); }}
+                  onClick={() => { onChange(s); setView(null); }}
                 >
                   {d}
                 </button>
               );
             })}
           </div>
-          <button type="button" className="cdate-today" onClick={() => { onChange(min); setOpen(false); }}>
+          <button type="button" className="cdate-today" onClick={() => { onChange(min); setView(null); }}>
             {en ? "Today" : "Hôm nay"}
           </button>
         </div>

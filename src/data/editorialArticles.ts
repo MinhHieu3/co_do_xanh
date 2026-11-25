@@ -1,8 +1,11 @@
 export type EditorialSection = { h: string; p: string[] };
-export type EditorialLanguage = { title: string; desc: string; intro: string; sections: EditorialSection[]; conclusion: string };
+export type EditorialLanguage = { title: string; desc: string; intro: string; sections: EditorialSection[]; conclusionHeading?: string; conclusion: string };
 export type EditorialArticle = {
     slug: string;
     image: string;
+    imageWidth: number;
+    imageHeight: number;
+    thumbnail: { path: string; width: number };
     date: string;
     modified: string;
     category: { VI: string; EN: string };
@@ -12,8 +15,63 @@ export type EditorialArticle = {
 
 export const articles: EditorialArticle[] = [
     {
+        slug: "huong-dan-doi-pin-xe-may-dien-vinfast",
+        image: "/ebike/img/ride-evo-1100.webp",
+        imageWidth: 1100,
+        imageHeight: 901,
+        thumbnail: { path: "/ebike/img/ride-evo-640.webp", width: 640 },
+        date: "2026-11-25",
+        modified: "2026-11-25",
+        category: { VI: "Hướng dẫn sử dụng", EN: "How-to guides" },
+        VI: {
+            title: "Hướng dẫn đổi pin xe máy điện VinFast",
+            desc: "Ba bước đổi pin tại tủ V-Green. Quét mã QR, trả pin cũ và lắp pin đã sạc vào xe.",
+            intro: "Dựng xe chắc chắn và tắt khóa điện trước khi tháo hoặc lắp pin.",
+            sections: [
+                {
+                    h: "Bước 1. Quét mã QR trên màn hình",
+                    p: ["Dùng ứng dụng VinFast E-Scooter để quét mã QR trên màn hình tủ đổi pin, rồi làm theo hướng dẫn trên ứng dụng."]
+                },
+                {
+                    h: "Bước 2. Tháo pin cũ và đặt vào ngăn được chỉ định",
+                    p: ["Lấy pin cũ ra khỏi xe và đặt đúng chiều vào ngăn có đèn nhấp nháy. Đẩy pin thẳng vào hết hành trình cho đến khi khớp với chân tiếp xúc."]
+                },
+                {
+                    h: "Bước 3. Nhận pin đã sạc đầy và lắp vào xe",
+                    p: ["Sau khi xác nhận pin cũ, tủ sẽ tự động mở ngăn có pin đã sạc đầy. Lấy pin và đóng cửa ngăn. Đặt pin đúng chiều vào khoang pin của xe, cắm chắc giắc nối nếu xe dùng giắc rời, rồi đóng kín nắp khoang pin."]
+                }
+            ],
+            conclusionHeading: "Kiểm tra trước khi đi",
+            conclusion: "Bật khóa điện và kiểm tra đồng hồ hiển thị pin đầy, không có cảnh báo lỗi."
+        },
+        EN: {
+            title: "How to Swap the Battery on a VinFast Electric Motorbike",
+            desc: "Swap your battery at a V-Green cabinet in three steps. Scan the QR code, return the old battery and install the charged one.",
+            intro: "Park the scooter securely and turn off the ignition before removing or installing a battery.",
+            sections: [
+                {
+                    h: "Step 1. Scan the QR code on the screen",
+                    p: ["Use the VinFast E-Scooter app to scan the QR code on the cabinet screen, then follow the prompts in the app."]
+                },
+                {
+                    h: "Step 2. Remove the old battery and place it into the designated slot",
+                    p: ["Insert the old battery into the cabinet slot with the blinking light. Push it straight and firmly all the way in until it locks into the contact pins."]
+                },
+                {
+                    h: "Step 3. Collect the fully charged battery and install it into the scooter",
+                    p: ["Once the system verifies the old battery, the cabinet will automatically open a slot with a fully charged battery. Collect the battery and close the cabinet slot. Place the new battery into the scooter’s compartment in the correct orientation, firmly plug in the connector if your model has a separate plug, and close the compartment cover securely."]
+                }
+            ],
+            conclusionHeading: "Check before riding",
+            conclusion: "Turn on the ignition and make sure the dashboard displays a full battery level with no error warnings."
+        }
+    },
+    {
         slug: "5-dieu-can-biet-truoc-khi-du-lich-ninh-binh",
-        image: "/ebike/img/post.jpg",
+        image: "/ebike/img/post-1100.webp",
+        imageWidth: 1100,
+        imageHeight: 734,
+        thumbnail: { path: "/ebike/img/post-640.webp", width: 640 },
         date: "2026-10-28",
         modified: "2026-10-28",
         category: { VI: "Kinh nghiệm", EN: "Travel tips" },
@@ -105,8 +163,11 @@ export const articles: EditorialArticle[] = [
     {
         slug: "gia-thue-xe-may-dien-ninh-binh",
         image: "/ebike/img/motorbikes-1100.webp",
+        imageWidth: 1100,
+        imageHeight: 687,
+        thumbnail: { path: "/ebike/img/motorbikes-640.webp", width: 640 },
         date: "2026-10-10",
-        modified: "2026-10-15",
+        modified: "2026-11-25",
         category: { VI: "Giá & thủ tục", EN: "Prices & rules" },
         VI: {
             title: "Giá thuê xe máy điện Ninh Bình 2026: đọc bảng giá thế nào để chọn đúng xe?",
@@ -115,13 +176,13 @@ export const articles: EditorialArticle[] = [
             sections: [
                 {
                     h: "Mức giá tham khảo hiện tại", p: [
-                        "Theo bảng giá đang công bố, xe máy điện có giá 150.000 đồng mỗi 24 giờ; xe đạp trợ lực Phoenix có giá 120.000 đồng mỗi 24 giờ. Với nhu cầu ngắn hơn, mức thuê 5 giờ lần lượt là 100.000 đồng cho xe máy điện và 80.000 đồng cho xe đạp trợ lực. Giá có thể được điều chỉnh theo thời điểm, tình trạng xe hoặc chương trình của cửa hàng, vì vậy hãy xác nhận lại trước ngày nhận.",
+                        "Theo bảng giá đang công bố, xe máy điện có giá 150.000 đồng/ngày và xe đạp trợ lực Phoenix có giá 120.000 đồng/ngày. Evo Lite và Phoenix tính đến 23:59 ngày thuê cuối, còn Evo và Feliz II tính mỗi ngày thuê là 24 giờ. Với nhu cầu ngắn hơn, mức thuê 5 giờ lần lượt là 100.000 đồng cho xe máy điện và 80.000 đồng cho xe đạp trợ lực. Giá có thể được điều chỉnh theo thời điểm, tình trạng xe hoặc chương trình của cửa hàng, vì vậy hãy xác nhận lại trước ngày nhận.",
                         "Các mức trên giúp so sánh hai lựa chọn cơ bản, nhưng không tự động bao gồm mọi tình huống phát sinh. Nếu lịch trình chưa chắc chắn, hãy hỏi cách tính khi trả muộn, gia hạn thêm giờ hoặc đổi sang thuê theo ngày. Xác nhận bằng tin nhắn giúp cả hai bên cùng nắm rõ thỏa thuận."
                     ]
                 },
                 {
                     h: "Chọn thời lượng theo lịch trình, không chỉ theo giá thấp", p: [
-                        "Gói 5 giờ phù hợp hơn khi bạn chỉ cần di chuyển trong một nửa ngày hoặc kết hợp xe với tour thuyền, điểm tham quan có thời gian cố định. Gói 24 giờ thuận tiện nếu muốn chủ động dừng ăn, nghỉ hoặc đổi kế hoạch mà không phải căn từng giờ. Hãy tính cả thời gian nhận và trả xe theo quy định của cửa hàng.",
+                        "Gói 5 giờ phù hợp hơn khi bạn chỉ cần di chuyển trong một nửa ngày hoặc kết hợp xe với tour thuyền, điểm tham quan có thời gian cố định. Gói thuê theo ngày thuận tiện nếu muốn chủ động dừng ăn, nghỉ hoặc đổi kế hoạch mà không phải căn từng giờ. Hãy tính cả thời gian nhận và trả xe theo quy định của cửa hàng.",
                         "Xe đạp trợ lực thường hợp với những cung đường ngắn, tốc độ thư thả và hành lý gọn. Xe máy điện phù hợp hơn khi quãng đường dự kiến dài, cần di chuyển giữa các cụm điểm hoặc đi cùng người thân. Số người đi, loại bằng lái cần có và khả năng điều khiển xe cũng nên được cân nhắc trước khi quyết định."
                     ]
                 },
@@ -144,7 +205,7 @@ export const articles: EditorialArticle[] = [
                     ]
                 }
             ],
-            conclusion: "Tóm lại, mức giá hiện công bố tại Xe Cố Đô Xanh bắt đầu từ 80.000 đồng cho 5 giờ với xe đạp trợ lực và 100.000 đồng cho 5 giờ với xe máy điện; thuê 24 giờ lần lượt là 120.000 và 150.000 đồng. Hãy xác nhận giá, điều kiện giao nhận và pin theo đúng ngày đi trước khi chốt lịch."
+            conclusion: "Tóm lại, mức giá hiện công bố tại Xe Cố Đô Xanh bắt đầu từ 80.000 đồng cho 5 giờ với xe đạp trợ lực và 100.000 đồng cho 5 giờ với xe máy điện; thuê theo ngày lần lượt là 120.000 và 150.000 đồng. Hãy xác nhận giá, điều kiện giao nhận và pin theo đúng ngày đi trước khi chốt lịch."
         },
         EN: {
             title: "Electric Motorbike Rental Prices in Ninh Binh 2026: How to Compare Your Options",
@@ -153,7 +214,7 @@ export const articles: EditorialArticle[] = [
             sections: [
                 {
                     h: "Current published rates", p: [
-                        "The published rate is VND 150,000 per 24 hours for an electric motorbike and VND 120,000 per 24 hours for a Phoenix pedal-assist e-bike. For a shorter outing, the five-hour rates are VND 100,000 and VND 80,000 respectively. Prices may change with dates, availability or promotions, so confirm the rate with the rental shop before pickup.",
+                        "The published rate is VND 150,000 per day for an electric motorbike and VND 120,000 per day for a Phoenix pedal-assist e-bike. Evo Lite and Phoenix rentals end at 23:59 on the last rental day. Evo and Feliz II are rented in 24-hour periods. For a shorter outing, the five-hour rates are VND 100,000 and VND 80,000 respectively. Prices may change with dates, availability or promotions, so confirm the rate with the rental shop before pickup.",
                         "These figures make it easier to compare the two basic options, but they do not answer every question about extra time or a changed return plan. Ask how late returns, extensions and a switch from hourly to daily rental are handled. A written message gives both sides a clear record of the arrangement."
                     ]
                 },
@@ -188,6 +249,9 @@ export const articles: EditorialArticle[] = [
     {
         slug: "lich-trinh-tam-coc-trang-an-1-ngay",
         image: "/ebike/img/place-trang-an-640.webp",
+        imageWidth: 640,
+        imageHeight: 480,
+        thumbnail: { path: "/ebike/img/place-trang-an-400.webp", width: 400 },
         date: "2026-10-08",
         modified: "2026-10-15",
         category: { VI: "Cẩm nang du lịch", EN: "Travel guide" },
@@ -271,6 +335,9 @@ export const articles: EditorialArticle[] = [
     {
         slug: "thue-xe-may-dien-co-can-bang-lai-khong",
         image: "/ebike/img/riders-900.webp",
+        imageWidth: 900,
+        imageHeight: 675,
+        thumbnail: { path: "/ebike/img/riders-520.webp", width: 520 },
         date: "2026-10-06",
         modified: "2026-10-15",
         category: { VI: "Giá & thủ tục", EN: "Prices & rules" },
@@ -354,6 +421,9 @@ export const articles: EditorialArticle[] = [
     {
         slug: "dia-diem-du-lich-ninh-binh-khoang-cach",
         image: "/ebike/img/place-hoa-lu-640.webp",
+        imageWidth: 640,
+        imageHeight: 480,
+        thumbnail: { path: "/ebike/img/place-hoa-lu-400.webp", width: 400 },
         date: "2026-10-04",
         modified: "2026-10-15",
         category: { VI: "Điểm đến", EN: "Destinations" },
@@ -452,7 +522,7 @@ export const rentalGuide = {
     title: "Kinh nghiệm thuê xe máy điện ở Ninh Bình: từ chọn xe đến chuẩn bị hành trình",
     desc: "Cẩm nang thực tế giúp chọn xe, xác nhận giá và giấy tờ, kiểm tra pin cùng lên kế hoạch khám phá Ninh Bình an toàn hơn.",
     date: "2026-10-06",
-    modified: "2026-10-15",
+    modified: "2026-11-25",
     intro: "Thuê xe giúp du khách chủ động hơn giữa những điểm tham quan nằm rải rác quanh Ninh Bình, nhưng sự thuận tiện chỉ có ý nghĩa khi phương tiện phù hợp và điều kiện thuê được hiểu rõ. Trước khi đặt, cần xác định lịch trình, số người đi, loại xe phù hợp và các thông tin phải xác nhận tại nơi cho thuê. Cẩm nang này đi theo đúng trình tự đó để bạn chuẩn bị từ lúc chọn xe cho tới khi kết thúc chuyến đi.",
     sections: [
         {
@@ -469,7 +539,7 @@ export const rentalGuide = {
         },
         {
             h: "Xác nhận giá, giấy tờ và điều kiện thuê", p: [
-                "Giá công bố hiện tại tại Xe Cố Đô Xanh là 150.000 đồng/24 giờ cho xe máy điện và 120.000 đồng/24 giờ cho xe đạp trợ lực; gói 5 giờ tương ứng 100.000 và 80.000 đồng. Hãy xác nhận mức giá áp dụng cho ngày thuê, thời điểm bắt đầu/kết thúc và cách tính khi trả muộn hoặc gia hạn.",
+                "Giá công bố hiện tại tại Xe Cố Đô Xanh là 150.000 đồng/ngày cho xe máy điện và 120.000 đồng/ngày cho xe đạp trợ lực. Evo Lite và Phoenix tính đến 23:59 ngày thuê cuối, còn Evo và Feliz II tính theo từng 24 giờ. Gói 5 giờ tương ứng 100.000 và 80.000 đồng. Hãy xác nhận mức giá áp dụng cho ngày thuê, thời điểm bắt đầu/kết thúc và cách tính khi trả muộn hoặc gia hạn.",
                 "Hỏi rõ giấy tờ tùy thân cần mang, điều kiện đặt cọc/thanh toán, phụ kiện đi kèm, vị trí giao nhận và đầu mối hỗ trợ. Với yêu cầu bằng lái, căn cứ phải là phân loại và giấy tờ của đúng chiếc xe; đừng suy luận từ tên model hay lời quảng cáo."
             ]
         },
@@ -515,7 +585,7 @@ export const rentalGuide = {
             },
             {
                 h: "Confirm price, documents and rental terms", p: [
-                    "Xe Co Do Xanh currently publishes VND 150,000 per 24 hours for electric motorbikes and VND 120,000 per 24 hours for pedal-assist e-bikes; five-hour rentals are VND 100,000 and VND 80,000 respectively. Confirm the rate for your date, the rental start and end times, and how late returns or extensions are charged.",
+                    "Xe Co Do Xanh currently publishes VND 150,000 per day for electric motorbikes and VND 120,000 per day for pedal-assist e-bikes. Evo Lite and Phoenix rentals end at 23:59 on the last rental day. Evo and Feliz II are rented in 24-hour periods. Five-hour rentals are VND 100,000 and VND 80,000 respectively. Confirm the rate for your date, the rental start and end times, and how late returns or extensions are charged.",
                     "Ask which identification is required, how deposits and payment work, which accessories are included, where pickup and return take place, and who to contact for help. Licence requirements should be based on the classification and documents of the specific vehicle, not inferred from a model name or advertisement."
                 ]
             },

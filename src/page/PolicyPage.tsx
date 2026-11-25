@@ -34,7 +34,8 @@ export default function PolicyPage() {
 
               <h2>3. Rental Period and Pricing</h2>
               <ul>
-                <li>1 Day rental is calculated as 24 hours from the time of pickup.</li>
+                <li>VinFast Evo Lite and Phoenix pedal-assist bikes are rented by calendar day. The rental ends at 23:59 on the last rental day.</li>
+                <li>For other models, a rental day is 24 hours from pickup.</li>
                 <li>Late returns exceeding the agreed time will be subject to additional charges per hour.</li>
               </ul>
 
@@ -59,7 +60,8 @@ export default function PolicyPage() {
 
               <h2>3. Thời gian và Giá thuê</h2>
               <ul>
-                <li>1 Ngày thuê được tính là 24 giờ kể từ thời điểm nhận xe.</li>
+                <li>VinFast Evo Lite và xe đạp trợ lực Phoenix tính theo ngày lịch. Thời gian thuê kết thúc lúc 23:59 ngày thuê cuối.</li>
+                <li>Với các dòng xe khác, một ngày thuê được tính là 24 giờ kể từ lúc nhận xe.</li>
                 <li>Trả xe quá giờ quy định sẽ bị tính thêm phụ phí theo giờ.</li>
               </ul>
 

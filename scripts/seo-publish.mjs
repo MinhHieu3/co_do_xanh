@@ -51,10 +51,11 @@ async function http(url, opts = {}, tries = 3) {
 const STATIC_PAGES = [
   { path: "/", lastmod: "2026-11-05", priority: "1.0", changefreq: "weekly", alt: true },
   { path: "/index-en.html", lastmod: "2026-11-05", priority: "0.9", changefreq: "weekly", alt: true },
-  { path: "/booking", lastmod: "2026-10-15", priority: "0.8", changefreq: "monthly" },
-  { path: "/pricing", lastmod: "2026-10-27", priority: "0.8", changefreq: "monthly" },
-  { path: "/news", lastmod: "2026-10-15", priority: "0.8", changefreq: "weekly" },
+  { path: "/booking", lastmod: "2026-11-25", priority: "0.8", changefreq: "monthly" },
+  { path: "/pricing", lastmod: "2026-11-25", priority: "0.8", changefreq: "monthly" },
+  { path: "/news", lastmod: "2026-11-25", priority: "0.8", changefreq: "weekly" },
   { path: "/contact", lastmod: "2026-10-27", priority: "0.7", changefreq: "monthly" },
+  { path: "/doi-pin", lastmod: "2026-11-23", priority: "0.7", changefreq: "weekly" },
   { path: "/faq", lastmod: "2026-10-15", priority: "0.7", changefreq: "monthly" },
   { path: "/policy", lastmod: "2026-10-15", priority: "0.4", changefreq: "yearly" },
   { path: "/privacy", lastmod: "2026-10-15", priority: "0.3", changefreq: "yearly" },
@@ -62,9 +63,9 @@ const STATIC_PAGES = [
 
 function collectUrls() {
   const posts = [
-    ...articles.map((a) => ({ slug: a.slug, lastmod: a.updated ?? a.date })),
-    { slug: "kinh-nghiem-thue-xe-may-dien-ninh-binh", lastmod: rentalGuide.updated ?? rentalGuide.date },
-  ].filter((p) => p.lastmod <= TODAY) // bài hẹn ngày đăng trong tương lai chưa vào sitemap
+    ...articles.map((a) => ({ slug: a.slug, date: a.date, lastmod: a.modified })),
+    { slug: "kinh-nghiem-thue-xe-may-dien-ninh-binh", date: rentalGuide.date, lastmod: rentalGuide.modified },
+  ].filter((p) => p.date <= TODAY) // bài hẹn ngày đăng trong tương lai chưa vào sitemap
     .map((p) => ({ path: `/news/${p.slug}`, lastmod: p.lastmod, priority: "0.7", changefreq: "monthly" }));
   return [...STATIC_PAGES, ...posts];
 }

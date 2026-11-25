@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { fetchApi } from './api';
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -9,15 +10,13 @@ const Login: React.FC = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const BASE_URL = import.meta.env.VITE_API_URL || 'https://co_do_xanh_v2.hieubyipro.workers.dev/api';
-      const response = await fetch(`${BASE_URL}/auth/login`, {
+      const response = await fetchApi('/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
       const data = await response.json();
 
-      if (data.success && data.token) {
+      if (response.ok && data.success && data.token) {
         localStorage.setItem('admin_token', data.token);
         message.success('Đăng nhập thành công');
         navigate('/admin');

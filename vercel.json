@@ -5,9 +5,9 @@
     { "source": "/index-en", "destination": "/index-en.html", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/:page(booking|pricing|contact|news|faq|policy|privacy)", "destination": "/:page/index.html" },
+    { "source": "/:page(booking|pricing|contact|news|doi-pin|faq|policy|privacy)", "destination": "/:page/index.html" },
     { "source": "/news/:slug", "destination": "/news/:slug/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

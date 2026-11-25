@@ -1,11 +1,8 @@
 import { createContext, useContext, useSyncExternalStore, type ReactNode } from 'react';
-import { vi } from '../locales/vi';
-import { en } from '../locales/en';
 
 interface LanguageContextType {
   language: string;
   setLanguage: (lang: string) => void;
-  t: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -39,22 +36,8 @@ export const LanguageProvider = ({ children, initialLanguage }: { children: Reac
     languageListeners.forEach((listener) => listener());
   };
 
-  const t = (path: string): string => {
-    const keys = path.split('.');
-    let current: any = language === 'EN' ? en : vi;
-
-    for (const key of keys) {
-      if (current[key] === undefined) {
-        console.warn(`Translation key not found: ${path}`);
-        return path;
-      }
-      current = current[key];
-    }
-    return current;
-  };
-
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage }}>
       {children}
     </LanguageContext.Provider>
   );

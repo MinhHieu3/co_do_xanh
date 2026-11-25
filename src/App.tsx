@@ -14,55 +14,74 @@ const KinhNghiemThueXe = lazy(() => import("./page/EditorialGuidePage"));
 const ArticlePage = lazy(() => import("./page/ArticlePage"));
 const PolicyPage = lazy(() => import("./page/PolicyPage"));
 const FaqPage = lazy(() => import("./page/FaqPage"));
+const BatterySwapPage = lazy(() => import("./page/BatterySwapPage"));
 const PrivacyPage = lazy(() => import("./page/PrivacyPage"));
 import { LanguageProvider } from "./context/LanguageContext";
 import { Toaster } from 'react-hot-toast';
 import { useLanguage } from "./context/LanguageContext";
-import { getRouteMeta } from "./seo/routeMeta";
+import { getRouteMeta, type RouteMeta } from "./seo/routeMeta";
+
+function applyRouteMetadata(meta: RouteMeta, isEnglish: boolean) {
+  document.title = meta.title;
+  document.documentElement.lang = isEnglish ? "en" : "vi";
+
+  const tags = [
+    ["name", "description", meta.description],
+    ["property", "og:title", meta.title],
+    ["property", "og:description", meta.description],
+    ["property", "og:image", meta.image],
+    ["property", "og:url", meta.canonical],
+  ];
+  for (const [attribute, key, value] of tags) {
+    let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+    if (!element) {
+      element = document.createElement("meta");
+      element.setAttribute(attribute, key);
+      document.head.appendChild(element);
+    }
+    element.content = value;
+  }
+
+  let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+  }
+  canonical.href = meta.canonical;
+
+  document.head.querySelectorAll("script[data-route-schema]").forEach((script) => script.remove());
+  for (const schema of meta.schemas) {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.routeSchema = "";
+    script.text = JSON.stringify(schema);
+    document.head.appendChild(script);
+  }
+}
 
 function RouteMetadata() {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const { language } = useLanguage();
 
   useEffect(() => {
-    const path = location.pathname;
-    const meta = getRouteMeta(path, language === "EN");
-    document.title = meta.title;
-
-    const setMeta = (selector: string, attribute: string, key: string, value: string) => {
-      let element = document.head.querySelector<HTMLMetaElement>(selector);
-      if (!element) {
-        element = document.createElement("meta");
-        element.setAttribute(attribute, key);
-        document.head.appendChild(element);
-      }
-      element.content = value;
-    };
-    setMeta('meta[name="description"]', "name", "description", meta.description);
-    setMeta('meta[property="og:title"]', "property", "og:title", meta.title);
-    setMeta('meta[property="og:description"]', "property", "og:description", meta.description);
-    setMeta('meta[property="og:url"]', "property", "og:url", meta.canonical);
-
-    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
+    const isEnglish = language === "EN";
+    if (!pathname.startsWith("/news/")) {
+      applyRouteMetadata(getRouteMeta(pathname, isEnglish), isEnglish);
+      return;
     }
-    canonical.href = meta.canonical;
 
-    // Xoá schema do prerender chèn sẵn, rồi chèn schema theo route + ngôn ngữ hiện tại
-    document.head.querySelectorAll("script[data-route-schema]").forEach((s) => s.remove());
-    const added = meta.schemas.map((schema) => {
-      const s = document.createElement("script");
-      s.type = "application/ld+json";
-      s.dataset.routeSchema = "";
-      s.text = JSON.stringify(schema);
-      document.head.appendChild(s);
-      return s;
-    });
-    return () => added.forEach((s) => s.remove());
-  }, [language, location.pathname]);
+    let active = true;
+    void import("./seo/editorialRouteMeta").then(
+      ({ getEditorialRouteMeta }) => {
+        if (active) applyRouteMetadata(getEditorialRouteMeta(pathname, isEnglish), isEnglish);
+      },
+      () => {
+        if (active) applyRouteMetadata(getRouteMeta(pathname, isEnglish), isEnglish);
+      },
+    );
+    return () => { active = false; };
+  }, [language, pathname]);
 
   return null;
 }
@@ -106,6 +125,7 @@ function App({ initialLanguage }: { initialLanguage?: "VI" | "EN" } = {}) {
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/kinh-nghiem-thue-xe-may-dien-ninh-binh" element={<KinhNghiemThueXe />} />
               <Route path="/news/:slug" element={<ArticlePage />} />
+              <Route path="/doi-pin" element={<BatterySwapPage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/policy" element={<PolicyPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />

@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useSyncExternalStore } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { vehicles, stockOf } from "../data/vehicles";
+import { vehicles, stockOf, EVO_LITE_ID } from "../data/vehicles";
+import { getBookingDates, usesCalendarDay } from "../data/bookingDates";
 import { useLanguage } from "../context/LanguageContext";
-import toast from "react-hot-toast";
 import CustomSelect from "../component/CustomSelect";
 import CustomDatePicker from "../component/CustomDatePicker";
 import { SHOW_PRICE, contactLabel } from "../config";
@@ -11,11 +11,18 @@ const Tick = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
 );
 
-const todayInput = () => {
-  const n = new Date();
-  n.setMinutes(n.getMinutes() - n.getTimezoneOffset());
-  return n.toISOString().slice(0, 10);
+const businessDate = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+const bookingMinute = () => Math.floor(Date.now() / 60_000);
+const serverBookingMinute = () => null;
+const subscribeBookingClock = (update: () => void) => {
+  const timer = window.setInterval(update, 30_000);
+  return () => window.clearInterval(timer);
 };
+function bookingPriority(id: string) {
+  if (id === EVO_LITE_ID) return 0;
+  return id.startsWith("xe-dap-phoenix-") ? 1 : 2;
+}
+const bookingVehicles = [...vehicles].sort((a, b) => bookingPriority(a.id) - bookingPriority(b.id));
 const dayPrice = (day1: string) => parseInt(day1.split("/")[0].replace(/\D/g, ""));
 
 export default function BookingPage() {
@@ -24,11 +31,13 @@ export default function BookingPage() {
   const location = useLocation();
 
   const [selectedVehicle, setSelectedVehicle] = useState<string>(() =>
-    location.state && (location.state as any).selectedVehicle ? (location.state as any).selectedVehicle : vehicles[0].id
+    location.state && (location.state as any).selectedVehicle ? (location.state as any).selectedVehicle : EVO_LITE_ID
   );
-  const [startDate, setStartDate] = useState(todayInput());
+  const nowMinute = useSyncExternalStore(subscribeBookingClock, bookingMinute, serverBookingMinute);
+  const today = nowMinute === null ? "" : businessDate.format(nowMinute * 60_000);
+  const [chosenDate, setStartDate] = useState<string>();
+  const startDate = chosenDate ?? today;
   const [days, setDays] = useState(1);
-  const [nowTs] = useState(() => Date.now());
   const [windowStart, setWindowStart] = useState("7");
   const [form0, setForm0] = useState({
     name: "", phone: "", email: "", pickupDate: "", dropoffDate: "",
@@ -40,16 +49,8 @@ export default function BookingPage() {
   const [error, setError] = useState("");
 
   const selectedVehicleData = useMemo(() => vehicles.find((v) => v.id === selectedVehicle), [selectedVehicle]);
-  const fmt = (d: Date, h: number) =>
-    `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()} ${String(h).padStart(2, "0")}:00`;
-  // 1 ngày = 24h: giao lúc windowStart giờ ngày đầu, thu lại lúc windowStart giờ sau đúng `days` ngày
-  let pickupDate = "", dropoffDate = "";
-  if (startDate) {
-    const [y, m, d] = startDate.split("-").map(Number);
-    pickupDate = fmt(new Date(y, m - 1, d), Number(windowStart));
-    dropoffDate = fmt(new Date(y, m - 1, d + days), Number(windowStart));
-  }
-  const formData = { ...form0, pickupDate, dropoffDate };
+  const dates = getBookingDates(startDate, days, Number(windowStart), selectedVehicle);
+  const formData = { ...form0, pickupDate: dates?.pickupDate ?? "", dropoffDate: dates?.dropoffDate ?? "" };
   const set = (k: string, v: string) => setForm0((p) => ({ ...p, [k]: v }));
   const maxQty = stockOf(selectedVehicle);
   const qty = Math.min(parseInt(formData.quantity) || 1, Math.max(1, maxQty));
@@ -66,102 +67,62 @@ export default function BookingPage() {
     if (!formData.name.trim()) return L("Vui lòng nhập họ và tên.", "Please enter your full name.");
     if (!formData.phone.trim()) return L("Số điện thoại là bắt buộc — chúng tôi cần liên hệ xác nhận giờ giao xe.", "Phone number is required — we need it to confirm delivery time.");
     if (formData.phone.replace(/\D/g, "").length < 7) return L("Số điện thoại không hợp lệ — vui lòng kiểm tra lại.", "Phone number looks invalid — please check it.");
-    if (qty > maxQty) return L(`Chỉ còn ${maxQty} xe loại này.`, `Only ${maxQty} of this ride available.`);
+    if (!selectedVehicleData || qty > maxQty) return L(`Chỉ còn ${maxQty} xe loại này.`, `Only ${maxQty} of this ride available.`);
     if (formData.pickupLocation === "Giao tận nơi" && !formData.deliveryAddress.trim()) return L("Vui lòng nhập tên khách sạn hoặc homestay để chúng tôi biết nơi giao xe.", "Please enter your hotel or homestay name so we know where to deliver.");
     if (!startDate) return L("Vui lòng chọn ngày nhận xe!", "Please choose your first day!");
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const [y, m, d] = startDate.split("-").map(Number);
-    if (new Date(y, m - 1, d) < today) return L("Ngày nhận xe không được ở quá khứ.", "The first day cannot be in the past.");
+    if (startDate < businessDate.format(new Date())) return L("Ngày nhận xe không được ở quá khứ.", "The first day cannot be in the past.");
     return "";
   };
 
   const executeBooking = async () => {
     setIsSubmitting(true);
-    const vInfo = selectedVehicleData;
-    const vehicleName = language === "EN" && vInfo?.nameEn ? vInfo.nameEn : vInfo?.name || selectedVehicle;
-    const typeLabel = "Thuê theo ngày";
-    const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+    setError("");
+    const unconfirmed = L(
+      "Hệ thống chưa xác nhận được đơn. Vui lòng liên hệ cửa hàng để kiểm tra trước khi gửi lại.",
+      "We could not confirm your booking. Please contact the shop to check before submitting again.",
+    );
     try {
-      const BASE_URL = import.meta.env.VITE_API_URL;
-      const orderData = {
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        time_start: formData.pickupDate,
-        time_end: formData.dropoffDate,
-        quantity: formData.quantity,
-        location: formData.pickupLocation === "Giao tận nơi" ? formData.deliveryAddress : formData.pickupLocation,
-        type_category: `${vehicleName} (${typeLabel})`,
-        des_1: `Loại hình: ${typeLabel}. ${formData.notes}`,
-      };
-      const apiResponse = await fetch(`${BASE_URL}/orders`, {
+      const response = await fetch("/api/forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify({
+          kind: "booking",
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          vehicleId: selectedVehicle,
+          startDate,
+          days,
+          windowStart,
+          quantity: qty,
+          pickupLocation: formData.pickupLocation,
+          deliveryAddress: formData.deliveryAddress,
+          notes: formData.notes,
+        }),
       });
-      const apiResult = await apiResponse.json();
-      if (!apiResult.success) throw new Error("Lỗi khi lưu đơn hàng vào hệ thống");
-
-      // Xây dựng tin nhắn Telegram theo định dạng mới
-      const orderCode: string = apiResult.id || apiResult.order_id || "";
-      const [sy, sm, sd] = startDate.split("-").map(Number);
-      const bookDate = new Date(sy, sm - 1, sd);
-      const dayNames = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
-      const dayOfWeek = dayNames[bookDate.getDay()];
-      const dateStr = `${String(sd).padStart(2, "0")}/${String(sm).padStart(2, "0")}`;
-      const wStart = Number(windowStart);
-      const timeWindow = `${wStart}:00 đến ${wStart + 2}:00`;
-      const location = formData.pickupLocation === "Giao tận nơi" ? formData.deliveryAddress : "Tại cửa hàng";
-      const endDate = new Date(sy, sm - 1, sd + days);
-      const endDay = String(endDate.getDate()).padStart(2, "0");
-      const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
-      const returnNote = `thu lại lúc ${wStart}:00 ngày ${endDay}/${endMonth}`;
-      // Tạo link Google Maps từ địa chỉ giao xe
-      const mapQuery = formData.pickupLocation === "Giao tận nơi" && formData.deliveryAddress.trim()
-        ? `${formData.deliveryAddress.trim()}, Ninh Binh, Vietnam`
-        : null;
-      const mapLink = mapQuery
-        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
-        : null;
-      const message = [
-        `🆕 <b>ĐƠN MỚI</b>`,
-        ``,
-        `📅 ${dayOfWeek} ${dateStr}, giao từ ${timeWindow}`,
-        `🏨 ${location}`,
-        mapLink ? `📍 <a href="${mapLink}">Xem trên Google Maps</a>` : null,
-        `👤 ${formData.name}`,
-        `📱 ${formData.phone}`,
-        `🛵 ${qty} ${vehicleName}`,
-        `⏳ ${days} ngày, ${returnNote}`,
-        SHOW_PRICE ? `💵 Thu của khách: ${est.total.toLocaleString("vi-VN")}đ` : null,
-        formData.notes ? `📝 ${formData.notes}` : null,
-        orderCode ? `Mã đơn: ${orderCode}` : null,
-      ].filter(Boolean).join("\n");
-
-      if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: "HTML" }),
-        });
-        if (!response.ok) console.error("Gửi tin nhắn Telegram thất bại");
-      } else {
-        console.warn("Chưa cấu hình Telegram Bot Token hoặc Chat ID.");
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.success !== true) {
+        if (response.status === 400 && result?.success === false) {
+          setError(L("Vui lòng kiểm tra lại ngày thuê, số lượng xe và thông tin liên hệ.", "Please check the rental date, vehicle quantity and contact details."));
+        } else if (result === null) {
+          setError(L("Trang này chưa kết nối được với hệ thống đặt xe. Vui lòng liên hệ cửa hàng.", "This page could not connect to the booking service. Please contact the shop."));
+        } else {
+          setError(unconfirmed);
+        }
+        return;
       }
-      setIsSubmitting(false);
       setShowSuccess(true);
       window.scrollTo(0, 0);
-    } catch (e) {
-      console.error(e);
+    } catch {
+      setError(unconfirmed);
+    } finally {
       setIsSubmitting(false);
-      toast.error(L("Có lỗi xảy ra khi gửi yêu cầu. Vui lòng gọi điện trực tiếp cho chúng tôi!", "Something went wrong. Please call us directly!"));
     }
   };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (website) return; // bot
+    if (isSubmitting || website) return; // honeypot
     const msg = validate();
     setError(msg);
     if (msg) return;
@@ -207,14 +168,16 @@ export default function BookingPage() {
     );
   }
 
-  const vn = new Date(nowTs + 7 * 3600 * 1000);
-  const nowMin = vn.getUTCHours() * 60 + vn.getUTCMinutes();
-  const leftMin = nowMin < 360 ? 360 - nowMin : 360 + 1440 - nowMin;
-  const whenTxt = nowMin < 360 ? L("sáng nay", "this morning") : L("sáng mai", "tomorrow morning");
-  const hh = Math.floor(leftMin / 60), mm = leftMin % 60;
-  const cutoffLine = language === "EN"
-    ? `Book within ${hh > 0 ? `${hh} h ` : ""}${mm} min for delivery ${whenTxt}`
-    : `Đặt trong ${hh > 0 ? `${hh} giờ ` : ""}${mm} phút nữa để nhận xe ${whenTxt}`;
+  let cutoffLine = L("Đặt trước 6:00 để nhận xe trong buổi sáng.", "Book before 6 am for morning delivery.");
+  if (nowMinute !== null) {
+    const nowMin = (nowMinute + 7 * 60) % (24 * 60);
+    const leftMin = nowMin < 360 ? 360 - nowMin : 360 + 1440 - nowMin;
+    const whenTxt = nowMin < 360 ? L("sáng nay", "this morning") : L("sáng mai", "tomorrow morning");
+    const hh = Math.floor(leftMin / 60), mm = leftMin % 60;
+    cutoffLine = language === "EN"
+      ? `Book within ${hh > 0 ? `${hh} h ` : ""}${mm} min for delivery ${whenTxt}`
+      : `Đặt trong ${hh > 0 ? `${hh} giờ ` : ""}${mm} phút nữa để nhận xe ${whenTxt}`;
+  }
 
   const submitLabel = isSubmitting ? L("Đang gửi...", "Sending...") : L("Xác nhận đặt xe", "Reserve my ride");
 
@@ -233,17 +196,35 @@ export default function BookingPage() {
             <div>
               <fieldset>
                 <legend><i>1</i> {L("Bạn muốn đi xe nào?", "What would you like to ride?")}</legend>
-                {vehicles.map((v) => {
+                {bookingVehicles.map((v) => {
                   const active = v.id === selectedVehicle;
                   return (
                     <div
-                      className="pick"
+                      className="pick relative"
                       key={v.id}
-                      onClick={() => { setSelectedVehicle(v.id); set("quantity", String(Math.min(qty, Math.max(1, stockOf(v.id))))); }}
-                      style={{ cursor: "pointer", borderColor: active ? "var(--jungle)" : undefined, boxShadow: active ? "4px 4px 0 var(--ochre)" : undefined }}
+                      style={{ borderColor: active ? "var(--jungle)" : undefined, boxShadow: active ? "4px 4px 0 var(--ochre)" : undefined }}
                     >
+                      <input
+                        type="radio"
+                        name="vehicle"
+                        className="peer sr-only"
+                        id={`booking-${v.id}`}
+                        value={v.id}
+                        checked={active}
+                        aria-describedby={`booking-details-${v.id}`}
+                        onChange={() => {
+                          setSelectedVehicle(v.id);
+                          set("quantity", String(Math.min(qty, Math.max(1, stockOf(v.id)))));
+                        }}
+                      />
+                      <label
+                        htmlFor={`booking-${v.id}`}
+                        className="absolute inset-0 cursor-pointer rounded-xl peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ochre)]"
+                      >
+                        <span className="sr-only">{vName(v)}</span>
+                      </label>
                       <img src={v.image} width={84} height={64} alt="" style={{ objectFit: "contain", background: "#fff" }} />
-                      <div>
+                      <div id={`booking-details-${v.id}`}>
                         <b>{vName(v)}</b>
                         {v.requiresLicense && (
                           <small style={{ color: "var(--red-text)", fontWeight: 600 }}>{L("⚠ Cần giấy phép lái xe", "⚠ Driving licence required")}</small>
@@ -252,10 +233,10 @@ export default function BookingPage() {
                         <small style={{ color: stockOf(v.id) <= 3 ? "var(--red-text)" : "var(--jungle)", fontWeight: 600 }}>{L(`Còn ${stockOf(v.id)} xe`, `${stockOf(v.id)} available`)}</small>
                       </div>
                       {active ? (
-                        <div className="stepper" onClick={(e) => e.stopPropagation()}>
-                          <button type="button" aria-label="less" onClick={() => set("quantity", String(Math.max(1, qty - 1)))}>&minus;</button>
+                        <div className="stepper relative z-10">
+                          <button type="button" aria-label={L("Giảm số lượng", "Decrease quantity")} onClick={() => set("quantity", String(Math.max(1, qty - 1)))}>&minus;</button>
                           <output aria-live="polite">{qty}</output>
-                          <button type="button" aria-label="more" disabled={qty >= maxQty} onClick={() => set("quantity", String(Math.min(maxQty, qty + 1)))}>+</button>
+                          <button type="button" aria-label={L("Tăng số lượng", "Increase quantity")} disabled={qty >= maxQty} onClick={() => set("quantity", String(Math.min(maxQty, qty + 1)))}>+</button>
                         </div>
                       ) : (
                         <span className="tag" style={{ justifySelf: "end" }}>{L("Chọn", "Select")}</span>
@@ -270,7 +251,7 @@ export default function BookingPage() {
                 <div className="fields three">
                   <div className="field">
                     <label htmlFor="f-date">{L("Ngày nhận xe", "First day")}</label>
-                    <CustomDatePicker id="f-date" min={todayInput()} value={startDate} onChange={setStartDate} lang={language} />
+                    <CustomDatePicker id="f-date" min={today} value={startDate} onChange={setStartDate} lang={language} />
                   </div>
                   <div className="field">
                     <label htmlFor="f-days">{L("Số ngày thuê", "How long")}</label>
@@ -284,7 +265,11 @@ export default function BookingPage() {
                   </div>
                 </div>
                 <p className="hint" style={{ marginTop: 10 }}>
-                  {L("Nhân viên giao xe cho nhiều khách sạn trong một vòng, nên xe có thể đến bất kỳ lúc nào trong khung giờ bạn chọn. 1 ngày = 24 giờ: thuê lúc 7h hôm nay, trả lúc 7h ngày mai.", "The driver delivers to several hotels on one round, so your ride can arrive at any moment within your window. Each day is 24 hours: pick up at 7 am today, return at 7 am tomorrow.")}
+                  {L("Xe có thể được giao bất kỳ lúc nào trong khung giờ bạn chọn.", "Your ride can arrive at any time within the selected delivery window.")}
+                  {" "}
+                  {usesCalendarDay(selectedVehicle)
+                    ? L("Thuê theo ngày lịch. Gói một ngày kết thúc lúc 23:59 cùng ngày nhận xe.", "Rentals are priced by calendar day. A one-day rental ends at 23:59 on the pickup date.")
+                    : L("Một ngày thuê kéo dài 24 giờ kể từ giờ nhận xe.", "A rental day runs for 24 hours from pickup.")}
                 </p>
                 <p className="deadline">{cutoffLine}</p>
               </fieldset>

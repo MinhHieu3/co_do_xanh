@@ -1,17 +1,12 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://xe-co-do-xanh-be.hieubyipro.workers.dev/api';
+import { DEFAULT_ORDER_API } from '../../data/business';
 
-export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
+const baseUrl = (import.meta.env.VITE_API_URL?.trim() || DEFAULT_ORDER_API).replace(/\/+$/, '');
+
+export const fetchApi = (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('admin_token');
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
+  const headers = new Headers(options.headers);
+  if (token && !headers.has('Authorization')) headers.set('Authorization', `Bearer ${token}`);
+  if (options.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  return response;
+  return fetch(`${baseUrl}${endpoint}`, { ...options, headers });
 };

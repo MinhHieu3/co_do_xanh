@@ -1,6 +1,5 @@
 import { Calendar, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { rentalGuide } from "../data/editorialArticles";
 import imgCover from "../assets/dulich/ninhbinh_slider_1.webp";
@@ -9,42 +8,6 @@ export default function EditorialGuidePage() {
     const { language } = useLanguage();
     const lang = language === "EN" ? "EN" : "VI";
     const article = lang === "EN" ? rentalGuide.EN : rentalGuide;
-
-    useEffect(() => {
-        const title = `${article.title} | Xe Cố Đô Xanh`;
-        document.title = title;
-
-        const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-        if (description) description.content = article.desc;
-
-        const ogTitle = document.querySelector<HTMLMetaElement>('meta[property="og:title"]');
-        if (ogTitle) ogTitle.content = title;
-
-        const ogDescription = document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
-        if (ogDescription) ogDescription.content = article.desc;
-
-        const schema = document.createElement("script");
-        schema.type = "application/ld+json";
-        schema.text = JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: article.title,
-            description: article.desc,
-            image: `https://xecodoxanh.com${imgCover}`,
-            datePublished: rentalGuide.date,
-            dateModified: rentalGuide.modified,
-            inLanguage: lang === "VI" ? "vi" : "en",
-            mainEntityOfPage: "https://xecodoxanh.com/news/kinh-nghiem-thue-xe-may-dien-ninh-binh",
-            author: { "@type": "Organization", name: "Xe Cố Đô Xanh" },
-            publisher: {
-                "@type": "Organization",
-                name: "Xe Cố Đô Xanh",
-                logo: { "@type": "ImageObject", url: "https://xecodoxanh.com/og-image.png" },
-            },
-        });
-        document.head.appendChild(schema);
-        return () => schema.remove();
-    }, [article, lang]);
 
     return (
         <div className="w-full min-h-screen pt-4 pb-20">

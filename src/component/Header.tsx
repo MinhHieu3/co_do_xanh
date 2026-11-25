@@ -1,3 +1,4 @@
+import { MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { ebikeContent, BRAND } from "../data/ebikeContent";
@@ -12,6 +13,8 @@ export default function Header() {
   const { language, setLanguage } = useLanguage();
   const c = ebikeContent[language as "VI" | "EN"].nav;
   const { pathname, hash } = useLocation();
+
+  const swapLabel = language === "VI" ? "Bản đồ đổi pin" : "Battery swap map";
 
   // Xác định link nào đang active
   const activeHash = hash || "";
@@ -30,11 +33,15 @@ export default function Header() {
           <Link to="/#day" aria-current={hashActive("#day")}>{c.day}</Link>
           <Link to="/#rides" aria-current={hashActive("#rides")}>{c.rides}</Link>
           <Link to="/#reach" aria-current={hashActive("#reach")}>{c.reach}</Link>
+          <Link to="/doi-pin" aria-current={pathActive("/doi-pin")}>{swapLabel}</Link>
           <Link to="/faq" aria-current={pathActive("/faq")}>{c.faq}</Link>
           <Link to="/news" aria-current={pathActive("/news")}>{language === "VI" ? "Tin tức" : "News"}</Link>
           <Link to="/contact" aria-current={pathActive("/contact")}>{language === "VI" ? "Liên hệ" : "Contact"}</Link>
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Link className="text-inherit p-2 min-[860px]:hidden" to="/doi-pin" aria-label={swapLabel} aria-current={pathActive("/doi-pin")}>
+            <MapPin size={20} aria-hidden="true" />
+          </Link>
           <button
             type="button"
             className="btn btn-sm lang-btn"

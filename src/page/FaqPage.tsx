@@ -22,6 +22,7 @@ export default function FaqPage() {
             </details>
           ))}
         </div>
+        <p><Link className="link-arrow" to="/doi-pin">{language === "EN" ? "Find VinFast battery swap stations" : "Xem bản đồ đổi pin VinFast"}</Link></p>
         <p className="faq-more"><Link className="link-arrow" to="/booking">{c.closing.cta}</Link></p>
       </div>
     </>

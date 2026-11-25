@@ -72,9 +72,12 @@ function fill(template, appHtml, meta, route) {
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
     .replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/, `$1${esc(meta.title)}$2`)
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
+    .replace(/(<meta\s+property="og:image"\s+content=")[^"]*(")/, `$1${esc(meta.image)}$2`)
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*(")/, `$1${meta.canonical}$2`);
   if (route === "/" || route === "/index-en.html") {
     html = html.replace("</head>", '  <link rel="preload" as="image" href="/ebike/img/hero-poster-720.webp" fetchpriority="high" />\n</head>');
+  } else {
+    html = html.replace(/^\s*<link rel="alternate" hreflang="[^"]+"[^>]*>\n/gm, "\n");
   }
   const schemas = meta.schemas.map((s) => `<script type="application/ld+json" data-route-schema>${jsonLd(s)}</script>`).join("\n  ");
   html = html.replace("</head>", `  <meta property="og:url" content="${meta.canonical}" />\n  ${schemas}\n</head>`);

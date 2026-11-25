@@ -61,13 +61,11 @@ const Dashboard: React.FC = () => {
     if (dateRange && dateRange[0] && dateRange[1]) {
       query = `?start=${dateRange[0].startOf('day').toISOString()}&end=${dateRange[1].endOf('day').toISOString()}`;
     }
-    const token = localStorage.getItem('token');
-    const baseUrl = import.meta.env.VITE_API_URL || 'https://xe-co-do-xanh-be.hieubyipro.workers.dev/api';
-
-    fetch(`${baseUrl}/statistics/export-excel${query}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.blob())
+    fetchApi(`/statistics/export-excel${query}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Report download failed');
+        return res.blob();
+      })
       .then(blob => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

@@ -6,10 +6,10 @@ import { StrictMode } from "react";
 import { prerender } from "react-dom/static";
 import { StaticRouter } from "react-router-dom";
 import App from "./App";
-import { getRouteMeta } from "./seo/routeMeta";
+import { getEditorialRouteMeta } from "./seo/editorialRouteMeta";
 import { articles, rentalGuide } from "./data/editorialArticles";
 
-export { getRouteMeta };
+export { getEditorialRouteMeta as getRouteMeta };
 
 /** Các route công khai cần prerender (không gồm /admin) */
 export function publicRoutes(): string[] {
@@ -17,7 +17,7 @@ export function publicRoutes(): string[] {
   const posts = [...articles.map((a) => ({ slug: a.slug, date: a.date })), { slug: "kinh-nghiem-thue-xe-may-dien-ninh-binh", date: rentalGuide.date }]
     .filter((p) => p.date <= today)
     .map((p) => `/news/${p.slug}`);
-  return ["/", "/index-en.html", "/booking", "/pricing", "/contact", "/news", "/faq", "/policy", "/privacy", ...posts];
+  return ["/", "/index-en.html", "/booking", "/pricing", "/contact", "/news", "/doi-pin", "/faq", "/policy", "/privacy", ...posts];
 }
 
 async function streamToString(stream: ReadableStream<Uint8Array>) {
